@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import time
 
+from codec.sz16flag import Sz16flag
 #  #
 #  Copyright (C) 2021 ZinoHome, Inc. All Rights Reserved
 #  #
@@ -9,13 +10,11 @@ import time
 #  @Author  : Zhang Jun
 #  @Email   : ibmzhangjun@139.com
 #  @Software: MACDA
-from codec.nb67 import Nb67
 from utils.log import log as log
 import simplejson as json
 
 if __name__ == '__main__':
-    #rdict = Nb67.from_file('whole_frame.bin').__dict__.copy()
-    rdict = Nb67.from_file_to_dict('whole_frame.binwhole_frame.bin')
+    rdict = Sz16flag.from_file_to_dict('sz16')
     for k,v in rdict.items():
         log.debug('%s = [%s]' % (k,v))
     log.debug(len(rdict.items()))
