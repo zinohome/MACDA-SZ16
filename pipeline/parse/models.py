@@ -15,18 +15,6 @@ from core.settings import settings
 input_topic = app.topic(settings.SOURCE_TOPIC_NAME, value_serializer='raw')
 
 class ACSignal(faust.Record):
-    msg_header_code01: int
-    msg_header_code02: int
-    msg_length: int
-    msg_src_dvc_no: int
-    msg_host_dvc_no: int
-    msg_type: int
-    msg_frame_no: int
-    msg_line_no: int
-    msg_train_type: int
-    msg_train_no: int
-    msg_carriage_no: int
-    msg_protocal_version: int
     dvc_flag: int
     dvc_train_no: int
     dvc_carriage_no: int
@@ -38,19 +26,22 @@ class ACSignal(faust.Record):
     dvc_second: int
     cfbk_ef_u11: int
     cfbk_cf_u11: int
+    cfbk_cf_u12: int
     cfbk_comp_u11: int
     cfbk_comp_u12: int
     cfbk_ap_u11: int
+    cfbk_ap_u12: int
     cfbk_ef_u21: int
     cfbk_cf_u21: int
+    cfbk_cf_u22: int
     cfbk_comp_u21: int
     cfbk_comp_u22: int
     cfbk_ap_u21: int
+    cfbk_ap_u22: int
     cfbk_tpp_u1: int
     cfbk_tpp_u2: int
     cfbk_ev_u1: int
     cfbk_ev_u2: int
-    cfbk_ewd: int
     bocflt_ef_u11: int
     bocflt_ef_u12: int
     bocflt_cf_u11: int
@@ -67,16 +58,19 @@ class ACSignal(faust.Record):
     bscflt_vent_u12: int
     bflt_fad_u11: int
     bflt_fad_u12: int
+    bflt_fad_u13: int
+    bflt_fad_u14: int
     bflt_rad_u11: int
     bflt_rad_u12: int
+    bflt_rad_u13: int
+    bflt_rad_u14: int
     bflt_ap_u11: int
+    bflt_ap_u12: int
     bflt_expboard_u1: int
     bflt_frstemp_u1: int
     bflt_rnttemp_u1: int
     bflt_splytemp_u11: int
     bflt_splytemp_u12: int
-    bflt_coiltemp_u11: int
-    bflt_coiltemp_u12: int
     bflt_insptemp_u11: int
     bflt_insptemp_u12: int
     bflt_lowpres_u11: int
@@ -100,16 +94,19 @@ class ACSignal(faust.Record):
     bscflt_vent_u22: int
     bflt_fad_u21: int
     bflt_fad_u22: int
+    bflt_fad_u23: int
+    bflt_fad_u24: int
     bflt_rad_u21: int
     bflt_rad_u22: int
+    bflt_rad_u23: int
+    bflt_rad_u24: int
     bflt_ap_u21: int
+    bflt_ap_u22: int
     bflt_expboard_u2: int
     bflt_frstemp_u2: int
     bflt_rnttemp_u2: int
     bflt_splytemp_u21: int
     bflt_splytemp_u22: int
-    bflt_coiltemp_u21: int
-    bflt_coiltemp_u22: int
     bflt_insptemp_u21: int
     bflt_insptemp_u22: int
     bflt_lowpres_u21: int
@@ -119,27 +116,46 @@ class ACSignal(faust.Record):
     bflt_diffpres_u2: int
     bflt_emergivt: int
     bflt_vehtemp_u1: int
+    bflt_vehhum_u1: int
     bflt_vehtemp_u2: int
+    bflt_vehhum_u2: int
     bflt_airmon_u1: int
     bflt_airmon_u2: int
     bflt_currentmon: int
     bflt_tcms: int
+    bscflt_ef_u1: int
+    bscflt_cf_u1: int
+    bscflt_vfd_pw_u11: int
+    bscflt_vfd_pw_u12: int
+    bscflt_ef_u2: int
+    bscflt_cf_u2: int
+    bscflt_vfd_pw_u21: int
+    bscflt_vfd_pw_u22: int
+    bflt_ef_cnt_u1: int
+    bflt_cf_cnt_u11: int
+    bflt_cf_cnt_u12: int
+    bflt_vfd_cnt_u11: int
+    bflt_vfd_cnt_u12: int
+    bflt__ev_cnt_u1: int
+    bflt_ef_cnt_u2: int
+    bflt_cf_cnt_u21: int
+    bflt_cf_cnt_u22: int
+    bflt_vfd_cnt_u21: int
+    bflt_vfd_cnt_u22: int
+    bflt__ev_cnt_u2: int
     bflt_tempover: int
-    bflt_powersupply_u1: int
-    bflt_powersupply_u2: int
-    bflt_exhaustfan: int
-    bflt_exhaustval: int
-    fas_sys: int
-    ras_sys: int
+    fas_sys: float
+    ras_sys: float
     tic: int
     load: int
     tveh_1: int
+    humdity_1: int
     tveh_2: int
+    humdity_2: int
     aq_t_u1: int
     aq_h_u1: int
     aq_co2_u1: int
     aq_tvoc_u1: int
-    aq_formald_u1: int
     aq_pm2_5_u1: int
     aq_pm10_u1: int
     wmode_u1: int
@@ -152,13 +168,12 @@ class ACSignal(faust.Record):
     i_cp_u11: int
     v_cp_u11: int
     p_cp_u11: int
-    suckt_u11: int
+    suckt_u11: float
     suckp_u11: int
     sp_u11: int
     eevpos_u11: int
     highpress_u11: int
     sas_u11: int
-    ices_u11: int
     f_cp_u12: int
     i_cp_u12: int
     v_cp_u12: int
@@ -169,12 +184,10 @@ class ACSignal(faust.Record):
     eevpos_u12: int
     highpress_u12: int
     sas_u12: int
-    ices_u12: int
     aq_t_u2: int
     aq_h_u2: int
     aq_co2_u2: int
     aq_tvoc_u2: int
-    aq_formald_u2: int
     aq_pm2_5_u2: int
     aq_pm10_u2: int
     wmode_u2: int
@@ -193,7 +206,6 @@ class ACSignal(faust.Record):
     eevpos_u21: int
     highpress_u21: int
     sas_u21: int
-    ices_u21: int
     f_cp_u22: int
     i_cp_u22: int
     v_cp_u22: int
@@ -204,7 +216,6 @@ class ACSignal(faust.Record):
     eevpos_u22: int
     highpress_u22: int
     sas_u22: int
-    ices_u22: int
     i_ef_u11: int
     i_ef_u12: int
     i_cf_u11: int
@@ -215,35 +226,44 @@ class ACSignal(faust.Record):
     i_cf_u22: int
     i_hvac_u1: int
     i_hvac_u2: int
-    i_exufan: int
     dwpower: int
     dwemerg_op_tm: int
     dwemerg_op_cnt: int
     dwef_op_tm_u11: int
+    dwef_op_tm_u12: int
     dwcf_op_tm_u11: int
+    dwcf_op_tm_u12: int
     dwcp_op_tm_u11: int
     dwcp_op_tm_u12: int
+    dwap_op_tm_u11: int
+    dwap_op_tm_u12: int
     dwfad_op_cnt_u1: int
     dwrad_op_cnt_u1: int
     dwef_op_cnt_u11: int
     dwcf_op_cnt_u11: int
+    dwcf_op_cnt_u12: int
     dwcp_op_cnt_u11: int
     dwcp_op_cnt_u12: int
+    dwap_op_cnt_u11: int
+    dwap_op_cnt_u12: int
     dwef_op_tm_u21: int
     dwcf_op_tm_u21: int
+    dwcf_op_tm_u22: int
     dwcp_op_tm_u21: int
     dwcp_op_tm_u22: int
+    dwap_op_tm_u21: int
+    dwap_op_tm_u22: int
     dwfad_op_cnt_u2: int
     dwrad_op_cnt_u2: int
     dwef_op_cnt_u21: int
     dwcf_op_cnt_u21: int
+    dwcf_op_cnt_u22: int
     dwcp_op_cnt_u21: int
     dwcp_op_cnt_u22: int
-    dwexufan_op_tm: int
-    dwexufan_op_cnt: int
-    dwdmpexu_op_cnt: int
-    msg_calc_dvc_no: int
-    msg_calc_train_no: int
+    dwap_op_cnt_u21: int
+    dwap_op_cnt_u22: int
+    msg_calc_train_no: str
+    msg_calc_dvc_no: str
     msg_calc_dvc_time: str
     msg_calc_parse_time: str
 
@@ -251,18 +271,6 @@ json_schema = {
         "type": "struct",
         "name": "ACSignal",
         "fields": [
-            {"name": "msg_header_code01", "type": "int"},
-            {"name": "msg_header_code02", "type": "int"},
-            {"name": "msg_length", "type": "int"},
-            {"name": "msg_src_dvc_no", "type": "int"},
-            {"name": "msg_host_dvc_no", "type": "int"},
-            {"name": "msg_type", "type": "int"},
-            {"name": "msg_frame_no", "type": "int"},
-            {"name": "msg_line_no", "type": "int"},
-            {"name": "msg_train_type", "type": "int"},
-            {"name": "msg_train_no", "type": "int"},
-            {"name": "msg_carriage_no", "type": "int"},
-            {"name": "msg_protocal_version", "type": "int"},
             {"name": "dvc_flag", "type": "int"},
             {"name": "dvc_train_no", "type": "int"},
             {"name": "dvc_carriage_no", "type": "int"},
@@ -274,19 +282,22 @@ json_schema = {
             {"name": "dvc_second", "type": "int"},
             {"name": "cfbk_ef_u11", "type": "int"},
             {"name": "cfbk_cf_u11", "type": "int"},
+            {"name": "cfbk_cf_u12", "type": "int"},
             {"name": "cfbk_comp_u11", "type": "int"},
             {"name": "cfbk_comp_u12", "type": "int"},
             {"name": "cfbk_ap_u11", "type": "int"},
+            {"name": "cfbk_ap_u12", "type": "int"},
             {"name": "cfbk_ef_u21", "type": "int"},
             {"name": "cfbk_cf_u21", "type": "int"},
+            {"name": "cfbk_cf_u22", "type": "int"},
             {"name": "cfbk_comp_u21", "type": "int"},
             {"name": "cfbk_comp_u22", "type": "int"},
             {"name": "cfbk_ap_u21", "type": "int"},
+            {"name": "cfbk_ap_u22", "type": "int"},
             {"name": "cfbk_tpp_u1", "type": "int"},
             {"name": "cfbk_tpp_u2", "type": "int"},
             {"name": "cfbk_ev_u1", "type": "int"},
             {"name": "cfbk_ev_u2", "type": "int"},
-            {"name": "cfbk_ewd", "type": "int"},
             {"name": "bocflt_ef_u11", "type": "int"},
             {"name": "bocflt_ef_u12", "type": "int"},
             {"name": "bocflt_cf_u11", "type": "int"},
@@ -303,16 +314,19 @@ json_schema = {
             {"name": "bscflt_vent_u12", "type": "int"},
             {"name": "bflt_fad_u11", "type": "int"},
             {"name": "bflt_fad_u12", "type": "int"},
+            {"name": "bflt_fad_u13", "type": "int"},
+            {"name": "bflt_fad_u14", "type": "int"},
             {"name": "bflt_rad_u11", "type": "int"},
             {"name": "bflt_rad_u12", "type": "int"},
+            {"name": "bflt_rad_u13", "type": "int"},
+            {"name": "bflt_rad_u14", "type": "int"},
             {"name": "bflt_ap_u11", "type": "int"},
+            {"name": "bflt_ap_u12", "type": "int"},
             {"name": "bflt_expboard_u1", "type": "int"},
             {"name": "bflt_frstemp_u1", "type": "int"},
             {"name": "bflt_rnttemp_u1", "type": "int"},
             {"name": "bflt_splytemp_u11", "type": "int"},
             {"name": "bflt_splytemp_u12", "type": "int"},
-            {"name": "bflt_coiltemp_u11", "type": "int"},
-            {"name": "bflt_coiltemp_u12", "type": "int"},
             {"name": "bflt_insptemp_u11", "type": "int"},
             {"name": "bflt_insptemp_u12", "type": "int"},
             {"name": "bflt_lowpres_u11", "type": "int"},
@@ -336,16 +350,19 @@ json_schema = {
             {"name": "bscflt_vent_u22", "type": "int"},
             {"name": "bflt_fad_u21", "type": "int"},
             {"name": "bflt_fad_u22", "type": "int"},
+            {"name": "bflt_fad_u23", "type": "int"},
+            {"name": "bflt_fad_u24", "type": "int"},
             {"name": "bflt_rad_u21", "type": "int"},
             {"name": "bflt_rad_u22", "type": "int"},
+            {"name": "bflt_rad_u23", "type": "int"},
+            {"name": "bflt_rad_u24", "type": "int"},
             {"name": "bflt_ap_u21", "type": "int"},
+            {"name": "bflt_ap_u22", "type": "int"},
             {"name": "bflt_expboard_u2", "type": "int"},
             {"name": "bflt_frstemp_u2", "type": "int"},
             {"name": "bflt_rnttemp_u2", "type": "int"},
             {"name": "bflt_splytemp_u21", "type": "int"},
             {"name": "bflt_splytemp_u22", "type": "int"},
-            {"name": "bflt_coiltemp_u21", "type": "int"},
-            {"name": "bflt_coiltemp_u22", "type": "int"},
             {"name": "bflt_insptemp_u21", "type": "int"},
             {"name": "bflt_insptemp_u22", "type": "int"},
             {"name": "bflt_lowpres_u21", "type": "int"},
@@ -355,27 +372,46 @@ json_schema = {
             {"name": "bflt_diffpres_u2", "type": "int"},
             {"name": "bflt_emergivt", "type": "int"},
             {"name": "bflt_vehtemp_u1", "type": "int"},
+            {"name": "bflt_vehhum_u1", "type": "int"},
             {"name": "bflt_vehtemp_u2", "type": "int"},
+            {"name": "bflt_vehhum_u2", "type": "int"},
             {"name": "bflt_airmon_u1", "type": "int"},
             {"name": "bflt_airmon_u2", "type": "int"},
             {"name": "bflt_currentmon", "type": "int"},
             {"name": "bflt_tcms", "type": "int"},
+            {"name": "bscflt_ef_u1", "type": "int"},
+            {"name": "bscflt_cf_u1", "type": "int"},
+            {"name": "bscflt_vfd_pw_u11", "type": "int"},
+            {"name": "bscflt_vfd_pw_u12", "type": "int"},
+            {"name": "bscflt_ef_u2", "type": "int"},
+            {"name": "bscflt_cf_u2", "type": "int"},
+            {"name": "bscflt_vfd_pw_u21", "type": "int"},
+            {"name": "bscflt_vfd_pw_u22", "type": "int"},
+            {"name": "bflt_ef_cnt_u1", "type": "int"},
+            {"name": "bflt_cf_cnt_u11", "type": "int"},
+            {"name": "bflt_cf_cnt_u12", "type": "int"},
+            {"name": "bflt_vfd_cnt_u11", "type": "int"},
+            {"name": "bflt_vfd_cnt_u12", "type": "int"},
+            {"name": "bflt__ev_cnt_u1", "type": "int"},
+            {"name": "bflt_ef_cnt_u2", "type": "int"},
+            {"name": "bflt_cf_cnt_u21", "type": "int"},
+            {"name": "bflt_cf_cnt_u22", "type": "int"},
+            {"name": "bflt_vfd_cnt_u21", "type": "int"},
+            {"name": "bflt_vfd_cnt_u22", "type": "int"},
+            {"name": "bflt__ev_cnt_u2", "type": "int"},
             {"name": "bflt_tempover", "type": "int"},
-            {"name": "bflt_powersupply_u1", "type": "int"},
-            {"name": "bflt_powersupply_u2", "type": "int"},
-            {"name": "bflt_exhaustfan", "type": "int"},
-            {"name": "bflt_exhaustval", "type": "int"},
-            {"name": "fas_sys", "type": "int"},
-            {"name": "ras_sys", "type": "int"},
+            {"name": "fas_sys", "type": "float"},
+            {"name": "ras_sys", "type": "float"},
             {"name": "tic", "type": "int"},
             {"name": "load", "type": "int"},
             {"name": "tveh_1", "type": "int"},
+            {"name": "humdity_1", "type": "int"},
             {"name": "tveh_2", "type": "int"},
+            {"name": "humdity_2", "type": "int"},
             {"name": "aq_t_u1", "type": "int"},
             {"name": "aq_h_u1", "type": "int"},
             {"name": "aq_co2_u1", "type": "int"},
             {"name": "aq_tvoc_u1", "type": "int"},
-            {"name": "aq_formald_u1", "type": "int"},
             {"name": "aq_pm2_5_u1", "type": "int"},
             {"name": "aq_pm10_u1", "type": "int"},
             {"name": "wmode_u1", "type": "int"},
@@ -388,13 +424,12 @@ json_schema = {
             {"name": "i_cp_u11", "type": "int"},
             {"name": "v_cp_u11", "type": "int"},
             {"name": "p_cp_u11", "type": "int"},
-            {"name": "suckt_u11", "type": "int"},
+            {"name": "suckt_u11", "type": "float"},
             {"name": "suckp_u11", "type": "int"},
             {"name": "sp_u11", "type": "int"},
             {"name": "eevpos_u11", "type": "int"},
             {"name": "highpress_u11", "type": "int"},
             {"name": "sas_u11", "type": "int"},
-            {"name": "ices_u11", "type": "int"},
             {"name": "f_cp_u12", "type": "int"},
             {"name": "i_cp_u12", "type": "int"},
             {"name": "v_cp_u12", "type": "int"},
@@ -405,12 +440,10 @@ json_schema = {
             {"name": "eevpos_u12", "type": "int"},
             {"name": "highpress_u12", "type": "int"},
             {"name": "sas_u12", "type": "int"},
-            {"name": "ices_u12", "type": "int"},
             {"name": "aq_t_u2", "type": "int"},
             {"name": "aq_h_u2", "type": "int"},
             {"name": "aq_co2_u2", "type": "int"},
             {"name": "aq_tvoc_u2", "type": "int"},
-            {"name": "aq_formald_u2", "type": "int"},
             {"name": "aq_pm2_5_u2", "type": "int"},
             {"name": "aq_pm10_u2", "type": "int"},
             {"name": "wmode_u2", "type": "int"},
@@ -429,7 +462,6 @@ json_schema = {
             {"name": "eevpos_u21", "type": "int"},
             {"name": "highpress_u21", "type": "int"},
             {"name": "sas_u21", "type": "int"},
-            {"name": "ices_u21", "type": "int"},
             {"name": "f_cp_u22", "type": "int"},
             {"name": "i_cp_u22", "type": "int"},
             {"name": "v_cp_u22", "type": "int"},
@@ -440,7 +472,6 @@ json_schema = {
             {"name": "eevpos_u22", "type": "int"},
             {"name": "highpress_u22", "type": "int"},
             {"name": "sas_u22", "type": "int"},
-            {"name": "ices_u22", "type": "int"},
             {"name": "i_ef_u11", "type": "int"},
             {"name": "i_ef_u12", "type": "int"},
             {"name": "i_cf_u11", "type": "int"},
@@ -451,37 +482,46 @@ json_schema = {
             {"name": "i_cf_u22", "type": "int"},
             {"name": "i_hvac_u1", "type": "int"},
             {"name": "i_hvac_u2", "type": "int"},
-            {"name": "i_exufan", "type": "int"},
             {"name": "dwpower", "type": "int"},
             {"name": "dwemerg_op_tm", "type": "int"},
             {"name": "dwemerg_op_cnt", "type": "int"},
             {"name": "dwef_op_tm_u11", "type": "int"},
+            {"name": "dwef_op_tm_u12", "type": "int"},
             {"name": "dwcf_op_tm_u11", "type": "int"},
+            {"name": "dwcf_op_tm_u12", "type": "int"},
             {"name": "dwcp_op_tm_u11", "type": "int"},
             {"name": "dwcp_op_tm_u12", "type": "int"},
+            {"name": "dwap_op_tm_u11", "type": "int"},
+            {"name": "dwap_op_tm_u12", "type": "int"},
             {"name": "dwfad_op_cnt_u1", "type": "int"},
             {"name": "dwrad_op_cnt_u1", "type": "int"},
             {"name": "dwef_op_cnt_u11", "type": "int"},
             {"name": "dwcf_op_cnt_u11", "type": "int"},
+            {"name": "dwcf_op_cnt_u12", "type": "int"},
             {"name": "dwcp_op_cnt_u11", "type": "int"},
             {"name": "dwcp_op_cnt_u12", "type": "int"},
+            {"name": "dwap_op_cnt_u11", "type": "int"},
+            {"name": "dwap_op_cnt_u12", "type": "int"},
             {"name": "dwef_op_tm_u21", "type": "int"},
             {"name": "dwcf_op_tm_u21", "type": "int"},
+            {"name": "dwcf_op_tm_u22", "type": "int"},
             {"name": "dwcp_op_tm_u21", "type": "int"},
             {"name": "dwcp_op_tm_u22", "type": "int"},
+            {"name": "dwap_op_tm_u21", "type": "int"},
+            {"name": "dwap_op_tm_u22", "type": "int"},
             {"name": "dwfad_op_cnt_u2", "type": "int"},
             {"name": "dwrad_op_cnt_u2", "type": "int"},
             {"name": "dwef_op_cnt_u21", "type": "int"},
             {"name": "dwcf_op_cnt_u21", "type": "int"},
+            {"name": "dwcf_op_cnt_u22", "type": "int"},
             {"name": "dwcp_op_cnt_u21", "type": "int"},
             {"name": "dwcp_op_cnt_u22", "type": "int"},
-            {"name": "dwexufan_op_tm", "type": "int"},
-            {"name": "dwexufan_op_cnt", "type": "int"},
-            {"name": "dwdmpexu_op_cnt", "type": "int"},
-            {"name": "msg_calc_dvc_no", "type": "int"},
-            {"name": "msg_calc_train_no", "type": "int"},
-            {"name": "msg_calc_dvc_time", "type": "string"},
-            {"name": "msg_calc_parse_time", "type": "string"}
+            {"name": "dwap_op_cnt_u21", "type": "int"},
+            {"name": "dwap_op_cnt_u22", "type": "int"},
+            {"name": "msg_calc_train_no", "type": "str"},
+            {"name": "msg_calc_dvc_no", "type": "str"},
+            {"name": "msg_calc_dvc_time", "type": "str"},
+            {"name": "msg_calc_parse_time", "type": "str"}
         ]
     }
 

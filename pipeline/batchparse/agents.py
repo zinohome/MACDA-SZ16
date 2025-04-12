@@ -10,7 +10,7 @@
 import binascii
 import simplejson as json
 from app import app
-from codec.nb67 import Nb67
+from codec.sz16 import Sz16
 from core.settings import settings
 from pipeline.fetcher.models import output_schema
 from pipeline.batchparse.models import input_topic, output_topic, json_schema
@@ -31,11 +31,11 @@ async def parse_signal(stream):
                 # Parse data and send to parsed topic
                 parsed_dict = {}
                 if src_mode.strip().lower() == 'bin':
-                    parsed_dict = Nb67.from_bytes_to_dict(data)
+                    parsed_dict = Sz16.from_bytes_to_dict(data)
                 else:
                     datadict = json.loads(str(data, encoding='utf-8'))
                     if 'message_data' in datadict.keys():
-                        parsed_dict = Nb67.from_bytes_to_dict(binascii.a2b_hex(datadict['message_data']))
+                        parsed_dict = Sz16.from_bytes_to_dict(binascii.a2b_hex(datadict['message_data']))
                     else:
                         log.debug("-------------------- No message data --------------------")
                 out_record = {"schema": jschema, "payload": parsed_dict}
@@ -54,11 +54,11 @@ async def parse_signal(stream):
                 # Parse data and send to parsed topic
                 parsed_dict = {}
                 if src_mode.strip().lower() == 'bin':
-                    parsed_dict = Nb67.from_bytes_to_dict(data)
+                    parsed_dict = Sz16.from_bytes_to_dict(data)
                 else:
                     datadict = json.loads(str(data, encoding='utf-8'))
                     if 'message_data' in datadict.keys():
-                        parsed_dict = Nb67.from_bytes_to_dict(binascii.a2b_hex(datadict['message_data']))
+                        parsed_dict = Sz16.from_bytes_to_dict(binascii.a2b_hex(datadict['message_data']))
                     else:
                         log.debug("-------------------- No message data --------------------")
                 out_record = {"schema": jschema, "payload": parsed_dict}
