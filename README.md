@@ -1,5 +1,5 @@
-# MACDA-NB67
-MACDA-NB67
+# MACDA-SZ16
+MACDA-SZ16
 
 venv/bin/faust -A app worker -l info --web-port=6000 
 faust -A app worker -l info --web-port=6000
