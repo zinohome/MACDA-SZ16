@@ -1,0 +1,321 @@
+version: '3.7'
+services:
+  redpanda:
+    # NOTE: Please use the latest version here!
+    image: harbor.naivehero.top/macda/redpanda:v24.2.6
+    container_name: redpanda
+    hostname: redpanda
+    restart: unless-stopped
+    command:
+    - redpanda start
+    - --smp 1
+    - --reserve-memory 0M
+    - --overprovisioned
+    - --node-id 0
+    - --kafka-addr PLAINTEXT://0.0.0.0:29092,OUTSIDE://0.0.0.0:9092
+    - --advertise-kafka-addr PLAINTEXT://redpanda:29092,OUTSIDE://192.168.32.17:9092
+    - --pandaproxy-addr PLAINTEXT://0.0.0.0:28082,OUTSIDE://0.0.0.0:8082
+    - --advertise-pandaproxy-addr PLAINTEXT://redpanda:28082,OUTSIDE://192.168.32.17:8082
+    volumes:
+      - "/data/MACDA/redpanda/data:/var/lib/redpanda/data"
+    ports:
+    #  - 8081:8081
+    #  - 8082:8082
+      - 9092:9092
+    #  - 9644:9644
+    #  - 28082:28082
+    #  - 29092:29092
+    #healthcheck:
+    #    test: ["CMD", "netstat", "-anp", "|", "grep 9092", "||", "exit 1"]
+    #    interval: 30s
+    #    timeout: 5s
+    #    retries: 5
+    networks:
+      - macdanet
+  redpanda-console:
+    image: harbor.naivehero.top/macda/redpanda-console:v2.7.2
+    container_name: redpanda-console
+    hostname: redpanda-console
+    restart: unless-stopped
+    entrypoint: /bin/sh
+    command: -c "echo \"$$CONSOLE_CONFIG_FILE\" > /tmp/config.yml; /app/console"
+    environment:
+      CONFIG_FILEPATH: /tmp/config.yml
+      CONSOLE_CONFIG_FILE: |
+        kafka:
+          brokers: ["redpanda:29092"]
+          schemaRegistry:
+            enabled: true
+            urls: ["http://redpanda:8081"]
+        redpanda:
+          adminApi:
+            enabled: true
+            urls: ["http://redpanda:9644"]
+        connect:
+          enabled: true
+          clusters:
+            - name: kafka-connect
+              url: http://kafka-connect:8083
+    #ports:
+    #  - 8080:8080
+    depends_on:
+      - redpanda
+    #healthcheck:
+    #    test: ["CMD", "netstat", "-anp", "|", "grep 8080", "||", "exit 1"]
+    #    interval: 30s
+    #    timeout: 5s
+    #    retries: 5
+    networks:
+      - macdanet
+  kafka-connect:
+    image: harbor.naivehero.top/macda/kafka-connect:latest
+    hostname: kafka-connect
+    container_name: kafka-connect
+    restart: unless-stopped
+    depends_on:
+      - redpanda
+    #ports:
+    #  - '8083:8083'
+    volumes:
+      - "/data/MACDA/connect/data:/data"
+    environment:
+      CONNECT_REST_ADVERTISED_HOST_NAME: "kafka-connect"
+      CONNECT_BOOTSTRAP_SERVERS: "redpanda:29092"
+      CONNECT_GROUP_ID: "kafka-connect-group"
+      CONNECT_CONFIG_STORAGE_TOPIC: "kafka-connect_config"
+      CONNECT_OFFSET_STORAGE_TOPIC: "kafka-connect_offsets"
+      CONNECT_STATUS_STORAGE_TOPIC: "kafka-connect_status"
+      # Cannot be higher than the number of brokers in the Kafka cluster
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_KEY_CONVERTER: "org.apache.kafka.connect.converters.ByteArrayConverter"
+      CONNECT_VALUE_CONVERTER: "org.apache.kafka.connect.converters.ByteArrayConverter"
+      CONNECT_PLUGIN_PATH: "/app/libs"
+      # Logging
+      # Connect client overrides
+      CONNECT_TASK_SHUTDOWN_GRACEFUL_TIMEOUT_MS: 30000
+      CONNECT_OFFSET_FLUSH_INTERVAL_MS: 900000
+      CONNECT_CONSUMER_MAX_POLL_RECORDS: 500
+    #healthcheck:
+    #    test: ["CMD", "netstat", "-anp", "|", "grep 8083", "||", "exit 1"]
+    #    interval: 30s
+    #    timeout: 5s
+    #    retries: 5
+    networks:
+      - macdanet
+  connect-starter:
+    image: harbor.naivehero.top/baseimages/passenger-full:latest
+    hostname: connect-starter
+    container_name: connect-starter
+    volumes:
+      - "/data/MACDA/scripts/createminioconn.sh:/tmp/createminioconn.sh"
+    depends_on:
+      - kafka-connect
+    entrypoint: >
+      /bin/sh -c "
+      /bin/bash /tmp/createminioconn.sh;
+      exit 0;
+      "
+    networks:
+      - macdanet
+  kafka-ui:
+    image: harbor.naivehero.top/macda/kafka-ui:latest
+    hostname: kafka-ui
+    container_name: kafka-ui
+    restart: unless-stopped
+    depends_on:
+      - redpanda
+    #ports:
+    #  - "8180:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: redpanda
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: redpanda:29092
+      KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: "true"
+      KAFKA_CLUSTERS_0_KSQLDBSERVER: "ksqldb-server:8088"
+      KAFKA_CLUSTERS_0_SCHEMAREGISTRY: "http://redpanda:8081"
+      KAFKA_CLUSTERS_0_KAFKACONNECT_0_NAME: "kafka-connect"
+      KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS: "http://kafka-connect:8083"
+    #healthcheck:
+    #    test: ["CMD", "netstat", "-anp", "|", "grep 8180", "||", "exit 1"]
+    #    interval: 30s
+    #    timeout: 5s
+    #    retries: 5
+    networks:
+      - macdanet
+  ksqldb-server:
+    image: harbor.naivehero.top/macda/ksqldb-server:0.29.0
+    hostname: ksqldb-server
+    container_name: ksqldb-server
+    restart: unless-stopped
+    depends_on:
+      - redpanda
+    #ports:
+    #  - "8088:8088"
+    environment:
+      KSQL_LISTENERS: http://0.0.0.0:8088
+      KSQL_BOOTSTRAP_SERVERS: redpanda:29092
+      KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: "true"
+      KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE: "true"
+    #healthcheck:
+    #    test: ["CMD", "netstat", "-anp", "|", "grep 8088", "||", "exit 1"]
+    #    interval: 30s
+    #    timeout: 5s
+    #    retries: 5
+    networks:
+      - macdanet
+  ksqldb-cli:
+    image: harbor.naivehero.top/macda/ksqldb-cli:0.29.0
+    container_name: ksqldb-cli
+    hostname: ksqldb-cli
+    restart: unless-stopped
+    depends_on:
+      - ksqldb-server
+    entrypoint: /bin/sh
+    tty: true
+    networks:
+      - macdanet
+  mirror-maker:
+    image: harbor.naivehero.top/macda/mirror-maker2:2.8.1
+    container_name: mirror-maker
+    hostname: mirror-maker
+    restart: unless-stopped
+    depends_on:
+      - redpanda
+    environment:
+      SOURCE: "192.168.32.17:39092"
+      TOPICS: "signal-in"
+      DESTINATION: "redpanda:29092"
+      REPLICATION_FACTOR: "1"
+      INTERNAL_REPLICATION_FACTOR: "1"
+    networks:
+      - macdanet
+  minio:
+    # NOTE: Please use the latest version here!
+    image: harbor.naivehero.top/macda/minio:latest
+    container_name: minio
+    hostname: minio
+    restart: unless-stopped
+    command: server --console-address ":9001" /data
+    environment:
+      MINIO_ROOT_USER: "macdaminio"
+      MINIO_ROOT_PASSWORD: "bgt56yhnPassw0rd"
+    #ports:
+    #- 9000:9000
+    #- 9001:9001
+    volumes:
+      - "/data/MACDA/minio/data:/data"
+    #healthcheck:
+    #    test: ["CMD", "netstat", "-anp", "|", "grep 9001", "||", "exit 1"]
+    #    interval: 30s
+    #    timeout: 5s
+    #    retries: 5
+    networks:
+      - macdanet
+  createbuckets:
+    image: harbor.naivehero.top/macda/mc:latest
+    container_name: createbuckets
+    hostname: createbuckets
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc config host add minio http://minio:9000 macdaminio bgt56yhnPassw0rd;
+      /usr/bin/mc mb minio/macda-archive-bucket;
+      exit 0;
+      "
+    networks:
+      - macdanet
+  timescaledb:
+    image: harbor.naivehero.top/macda/timescaledb-ha:pg14-2.9
+    container_name: timescaledb
+    hostname: timescaledb
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: "passw0rd"
+    ports:
+      - 5432:5432
+    volumes:
+      - "/data/MACDA/timescaledb/data:/home/postgres/pgdata"
+    #healthcheck:
+    #    test: ["CMD", "netstat", "-anp", "|", "grep 5432", "||", "exit 1"]
+    #    interval: 30s
+    #    timeout: 5s
+    #    retries: 5
+    networks:
+      - macdanet
+  graphql:
+    image: harbor.naivehero.top/macda/graphql-engine:v2.40.0
+    container_name: graphql
+    hostname: graphql
+    restart: unless-stopped
+    depends_on:
+    - timescaledb
+    #ports:
+    #- "8180:8080"
+    environment:
+      ## postgres database to store Hasura metadata
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:passw0rd@timescaledb:5432/postgres
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:passw0rd@timescaledb:5432/postgres
+      PG_DATABASE_URL: postgres://postgres:passw0rd@timescaledb:5432/postgres
+      ## enable the console served by server
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
+      ## enable debugging mode. It is recommended to disable this in production
+      HASURA_GRAPHQL_DEV_MODE: "false"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      ## uncomment next line to run console offline (i.e load console assets from server instead of CDN)
+      HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
+      ## uncomment next line to set an admin secret
+      HASURA_GRAPHQL_ADMIN_SECRET: passw0rd
+      HASURA_GRAPHQL_ENABLE_TELEMETRY: false
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
+      HASURA_GRAPHQL_ENABLE_ALLOWLIST: true
+      HASURA_GRAPHQL_METADATA_DEFAULTS: '{"backend_configs":{"dataconnector":{"athena":{"uri":"http://data-connector-agent:8081/api/v1/athena"},"mariadb":{"uri":"http://data-connector-agent:8081/api/v1/mariadb"},"mysql8":{"uri":"http://data-connector-agent:8081/api/v1/mysql"},"oracle":{"uri":"http://data-connector-agent:8081/api/v1/oracle"},"snowflake":{"uri":"http://data-connector-agent:8081/api/v1/snowflake"}}}}'
+    networks:
+      - macdanet
+  pgadmin:
+    image: harbor.naivehero.top/macda/pgadmin4:8.10
+    container_name: pgadmin
+    hostname: pgadmin
+    restart: unless-stopped
+    depends_on:
+      - timescaledb
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@macda.com"
+      PGADMIN_DEFAULT_PASSWORD: "passw0rd"
+    #ports:
+    #  - 8280:80
+    volumes:
+      - "/data/MACDA/pgadmin:/var/lib/pgadmin"
+    #healthcheck:
+    #    test: ["CMD", "netstat", "-anp", "|", "grep 8280", "||", "exit 1"]
+    #    interval: 30s
+    #    timeout: 5s
+    #    retries: 5
+    networks:
+      - macdanet
+  desktop:
+    # latest, slim, full
+    image: harbor.naivehero.top/kasmweb/ubuntu-noble-desktop-ime:1.16.0
+    container_name: desktop
+    hostname: desktop
+    restart: unless-stopped
+    shm_size: "1536m"
+    ports:
+      - 10000:6901
+    environment:
+      - LANG=zh_CN.UTF-8
+      - LANGUAGE=zh_CN.UTF-8
+      - LC_ALL=zh_CN.UTF-8
+      - GTK_IM_MODULE=ibus
+      - QT_IM_MODULE=ibus
+      - XMODIFIERS='@im=ibus'
+      - VNC_PW=passw0rd
+    volumes:
+      - /data/MACDA/desktop/UserHome:/home/kasm-user/
+      - /data/MACDA/desktop/UserData:/UserData
+    networks:
+      - macdanet
+networks:
+  macdanet:
+    driver: bridge
