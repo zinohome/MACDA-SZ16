@@ -1,4 +1,5 @@
 # This is a generated file! Please edit source .ksy file and use kaitai-struct-compiler to rebuild
+import time
 
 import kaitaistruct
 from kaitaistruct import KaitaiStruct, KaitaiStream, BytesIO
@@ -9,8 +10,8 @@ from utils.log import log as log
 if getattr(kaitaistruct, 'API_VERSION', (0, 9)) < (0, 9):
     raise Exception("Incompatible Kaitai Struct Python API: 0.9 or later is required, but you have %s" % (kaitaistruct.__version__))
 
-div10list = ['fas_sys','ras_sys','tic','tveh_1','tveh_2','aq_t_u1','presdiff_u1','fas_u1','ras_u1','f_cp_u11','i_cp_u11','v_cp_u11','p_cp_u11','suckt_u11','suckp_u11','sp_u11','highpress_u11','sas_u11','ices_u11','f_cp_u12','i_cp_u12','v_cp_u12','p_cp_u12','suckt_u12','suckp_u12','sp_u12','highpress_u12','sas_u12','ices_u12','aq_t_u2','aq_h_u2','presdiff_u2','fas_u2','ras_u2','f_cp_u21','i_cp_u21','v_cp_u21','p_cp_u21','suckt_u21','suckp_u21','sp_u21','highpress_u21','sas_u21','ices_u21','f_cp_u22','i_cp_u22','v_cp_u22','p_cp_u22','suckt_u22','suckp_u22','sp_u22','highpress_u22','sas_u22','ices_u22','i_ef_u11','i_ef_u12','i_cf_u11','i_cf_u12','i_ef_u21','i_ef_u22','i_cf_u21','i_cf_u22','i_hvac_u1','i_hvac_u2','i_exufan']
-div100list = ['']
+div10list = ['fas_sys','ras_sys','tic','tveh_1','tveh_2','aq_t_u1','presdiff_u1','fas_u1','ras_u1','f_cp_u11','i_cp_u11','v_cp_u11','p_cp_u11','suckt_u11','suckp_u11','sp_u11','highpress_u11','sas_u11','ices_u11','f_cp_u12','i_cp_u12','v_cp_u12','p_cp_u12','suckt_u12','suckp_u12','sp_u12','highpress_u12','sas_u12','ices_u12','aq_t_u2','presdiff_u2','fas_u2','ras_u2','f_cp_u21','i_cp_u21','v_cp_u21','p_cp_u21','suckt_u21','suckp_u21','sp_u21','highpress_u21','sas_u21','ices_u21','f_cp_u22','i_cp_u22','v_cp_u22','p_cp_u22','suckt_u22','suckp_u22','sp_u22','highpress_u22','sas_u22','ices_u22','i_ef_u11','i_ef_u12','i_cf_u11','i_cf_u12','i_ef_u21','i_ef_u22','i_cf_u21','i_cf_u22','i_hvac_u1','i_hvac_u2','i_exufan']
+div100list = ['humdity_1','aq_h_u1','fadpos_u1','radpos_u1','humdity_2','aq_h_u2','fadpos_u1','radpos_u2']
 
 class Sz16(KaitaiStruct):
     def __init__(self, _io, _parent=None, _root=None):
@@ -325,30 +326,15 @@ class Sz16(KaitaiStruct):
         trainno = int(str(Sz16dict['dvc_train_no'])[-3:])
         Sz16dict['msg_calc_train_no'] = f"{str(lineno)}{str(trainno).zfill(3)}"
         Sz16dict['msg_calc_dvc_no'] = f"{str(lineno)}{str(trainno).zfill(3)}{str(Sz16dict['dvc_carriage_no']).zfill(2)}"
-        '''
-        if dev_mode:
-            Sz16dict[
-                'msg_calc_dvc_no'] = f"0{Sz16dict['msg_line_no']}0{str(Sz16dict['msg_train_no']).zfill(2)}0{Sz16dict['msg_carriage_no']}"
-            Sz16dict[
-                'msg_calc_train_no'] = f"0{Sz16dict['msg_line_no']}0{str(Sz16dict['msg_train_no']).zfill(2)}"
-        else:
-            Sz16dict[
-                'msg_calc_dvc_no'] = f"{str(Sz16dict['msg_train_no']).zfill(5)}0{Sz16dict['msg_carriage_no']}"
-            Sz16dict[
-                'msg_calc_train_no'] = f"{str(Sz16dict['msg_train_no']).zfill(5)}"
-        '''
         Sz16dict[
-            'msg_calc_dvc_time'] = f"20{Sz16dict['msg_src_dvc_year']}-{Sz16dict['msg_src_dvc_month']}-{Sz16dict['msg_src_dvc_day']} {Sz16dict['msg_src_dvc_hour']}:{Sz16dict['msg_src_dvc_minute']}:{Sz16dict['msg_src_dvc_second']}"
+            'msg_calc_dvc_time'] = f"20{Sz16dict['dvc_year']}-{Sz16dict['dvc_month']}-{Sz16dict['dvc_day']} {Sz16dict['dvc_hour']}:{Sz16dict['dvc_minute']}:{Sz16dict['dvc_second']}"
         Sz16dict['msg_calc_parse_time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         keylst = list(Sz16dict.keys()).copy()
         for k in keylst:
-            if k.startswith('ig_rsv') or k.startswith('wrsv') or k.startswith('humdity') or k.__contains__('rsv_'):
+            if k.startswith('ig_rsv') or k.startswith('wrsv') or k.__contains__('rsv_'):
                 #log.debug(k)
                 del Sz16dict[k]
-        for k in ('_io', '_parent', '_root',
-                    'msg_reversed1', 'msg_reversed2', 'msg_reversed3', 'msg_reversed4', 'msg_reversed5',
-                    'msg_src_dvc_year', 'msg_src_dvc_month', 'msg_src_dvc_day',
-                    'msg_src_dvc_hour', 'msg_src_dvc_minute', 'msg_src_dvc_second'):
+        for k in ('_io', '_parent', '_root'):
             if k in Sz16dict:
                 del Sz16dict[k]
         for key,value in Sz16dict.items():
@@ -376,30 +362,15 @@ class Sz16(KaitaiStruct):
         trainno = int(str(Sz16dict['dvc_train_no'])[-3:])
         Sz16dict['msg_calc_train_no'] = f"{str(lineno)}{str(trainno).zfill(3)}"
         Sz16dict['msg_calc_dvc_no'] = f"{str(lineno)}{str(trainno).zfill(3)}{str(Sz16dict['dvc_carriage_no']).zfill(2)}"
-        '''
-        if dev_mode:
-            Sz16dict[
-                'msg_calc_dvc_no'] = f"0{Sz16dict['msg_line_no']}0{str(Sz16dict['msg_train_no']).zfill(2)}0{Sz16dict['msg_carriage_no']}"
-            Sz16dict[
-                'msg_calc_train_no'] = f"0{Sz16dict['msg_line_no']}0{str(Sz16dict['msg_train_no']).zfill(2)}"
-        else:
-            Sz16dict[
-                'msg_calc_dvc_no'] = f"{str(Sz16dict['msg_train_no']).zfill(5)}0{Sz16dict['msg_carriage_no']}"
-            Sz16dict[
-                'msg_calc_train_no'] = f"{str(Sz16dict['msg_train_no']).zfill(5)}"
-        '''
         Sz16dict[
-            'msg_calc_dvc_time'] = f"20{Sz16dict['msg_src_dvc_year']}-{Sz16dict['msg_src_dvc_month']}-{Sz16dict['msg_src_dvc_day']} {Sz16dict['msg_src_dvc_hour']}:{Sz16dict['msg_src_dvc_minute']}:{Sz16dict['msg_src_dvc_second']}"
+            'msg_calc_dvc_time'] = f"20{Sz16dict['dvc_year']}-{Sz16dict['dvc_month']}-{Sz16dict['dvc_day']} {Sz16dict['dvc_hour']}:{Sz16dict['dvc_minute']}:{Sz16dict['dvc_second']}"
         Sz16dict['msg_calc_parse_time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         keylst = list(Sz16dict.keys()).copy()
         for k in keylst:
-            if k.startswith('ig_rsv') or k.startswith('wrsv') or k.startswith('humdity') or k.__contains__('rsv_'):
+            if k.startswith('ig_rsv') or k.startswith('wrsv') or k.__contains__('rsv_'):
                 # log.debug(k)
                 del Sz16dict[k]
-        for k in ('_io', '_parent', '_root',
-                  'msg_reversed1', 'msg_reversed2', 'msg_reversed3', 'msg_reversed4', 'msg_reversed5',
-                  'msg_src_dvc_year', 'msg_src_dvc_month', 'msg_src_dvc_day',
-                  'msg_src_dvc_hour', 'msg_src_dvc_minute', 'msg_src_dvc_second'):
+        for k in ('_io', '_parent', '_root'):
             if k in Sz16dict:
                 del Sz16dict[k]
         for key,value in Sz16dict.items():

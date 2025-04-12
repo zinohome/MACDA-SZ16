@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import time
-
-from codec.sz16flag import Sz16flag
 #  #
 #  Copyright (C) 2021 ZinoHome, Inc. All Rights Reserved
 #  #
@@ -10,6 +7,9 @@ from codec.sz16flag import Sz16flag
 #  @Author  : Zhang Jun
 #  @Email   : ibmzhangjun@139.com
 #  @Software: MACDA
+import time
+
+from codec.sz16flag import Sz16flag
 from utils.log import log as log
 import simplejson as json
 

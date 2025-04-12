@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-import time
+# -*- coding:utf-8 -*-
 
-#  #
-#  Copyright (C) 2021 ZinoHome, Inc. All Rights Reserved
-#  #
-#  @Time    : 2021
-#  @Author  : Zhang Jun
-#  @Email   : ibmzhangjun@139.com
-#  @Software: MACDA
-from codec.nb67 import Nb67
+# @Time    : 2025/04/12 17:42
+# @Author  : ZhangJun
+# @FileName: sz16validate.py
+
+from codec.sz16 import Sz16
 from utils.log import log as log
 import simplejson as json
+import time
 
 if __name__ == '__main__':
-    #rdict = Nb67.from_file('whole_frame.bin').__dict__.copy()
-    rdict = Nb67.from_file_to_dict('whole_frame.binwhole_frame.bin')
+    rdict = Sz16.from_file_to_dict('sz16')
     for k,v in rdict.items():
         log.debug('%s = [%s]' % (k,v))
     log.debug(len(rdict.items()))
@@ -26,7 +22,3 @@ if __name__ == '__main__':
     log.debug(str(int(time.mktime(time.strptime(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), "%Y-%m-%d %H:%M:%S")))))
     log.debug(int(time.time()))  # 秒级时间戳
     log.debug(str(int(round(time.time() * 1000))))  # 毫秒级时间戳
-
-
-
-
