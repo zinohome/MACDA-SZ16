@@ -1,3 +1,0 @@
-[submodule ".github/push_artifacts"]
-	path = .github/push_artifacts
-	url = https://github.com/kaitai-io/push_artifacts.git
