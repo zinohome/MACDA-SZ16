@@ -26,7 +26,7 @@ run_mode = settings.RUN_MODE
 #app.discover('pipeline.parse')
 #app.discover('pipeline.batchparse')
 #app.discover('pipeline.store')
-app.discover('pipeline.batchstore')
+#app.discover('pipeline.batchstore')
 #app.discover('pipeline.status')
 #app.discover('pipeline.lifereport')
 #app.discover('pipeline.statisreport')
@@ -42,9 +42,11 @@ elif run_mode.strip().lower() == 'store':
     app.discover('pipeline.batchstore')
 else:
     # run predict
-    app.discover('pipeline.status','pipeline.lifereport','pipeline.predict', 'pipeline.faultreport')
-    #app.discover('pipeline.status','pipeline.lifereport')
-    #app.discover('pipeline.predict', 'pipeline.faultreport')
+    #app.discover('pipeline.status')
+    #app.discover('pipeline.lifereport')
+    app.discover('pipeline.predict')
+    #app.discover('pipeline.faultreport')
+    #app.discover('pipeline.status','pipeline.lifereport','pipeline.predict', 'pipeline.faultreport')
 '''
 
     #app.discover('pipeline.predict', 'pipeline.faultreport','pipeline.statisreport')

@@ -48,137 +48,135 @@ class TSutil(metaclass=Cached):
                 msg_calc_parse_time TEXT NOT NULL,
                 msg_calc_dvc_no TEXT NOT NULL,
                 msg_calc_train_no TEXT NOT NULL,
-                dvc_flag DOUBLE PRECISION NULL,
-                dvc_train_no DOUBLE PRECISION NULL,
-                dvc_carriage_no DOUBLE PRECISION NULL,
-                dvc_year DOUBLE PRECISION NULL,
-                dvc_month DOUBLE PRECISION NULL,
-                dvc_day DOUBLE PRECISION NULL,
-                dvc_hour DOUBLE PRECISION NULL,
-                dvc_minute DOUBLE PRECISION NULL,
-                dvc_second DOUBLE PRECISION NULL,
-                cfbk_ef_u11 DOUBLE PRECISION NULL,
-                cfbk_cf_u11 DOUBLE PRECISION NULL,
-                cfbk_cf_u12 DOUBLE PRECISION NULL,
-                cfbk_comp_u11 DOUBLE PRECISION NULL,
-                cfbk_comp_u12 DOUBLE PRECISION NULL,
-                cfbk_ap_u11 DOUBLE PRECISION NULL,
-                cfbk_ap_u12 DOUBLE PRECISION NULL,
-                cfbk_ef_u21 DOUBLE PRECISION NULL,
-                cfbk_cf_u21 DOUBLE PRECISION NULL,
-                cfbk_cf_u22 DOUBLE PRECISION NULL,
-                cfbk_comp_u21 DOUBLE PRECISION NULL,
-                cfbk_comp_u22 DOUBLE PRECISION NULL,
-                cfbk_ap_u21 DOUBLE PRECISION NULL,
-                cfbk_ap_u22 DOUBLE PRECISION NULL,
-                cfbk_tpp_u1 DOUBLE PRECISION NULL,
-                cfbk_tpp_u2 DOUBLE PRECISION NULL,
-                cfbk_ev_u1 DOUBLE PRECISION NULL,
-                cfbk_ev_u2 DOUBLE PRECISION NULL,
-                cfbk_ewd DOUBLE PRECISION NULL,
-                cfbk_exufan DOUBLE PRECISION NULL,
-                bocflt_ef_u11 DOUBLE PRECISION NULL,
-                bocflt_ef_u12 DOUBLE PRECISION NULL,
-                bocflt_cf_u11 DOUBLE PRECISION NULL,
-                bocflt_cf_u12 DOUBLE PRECISION NULL,
-                bflt_vfd_u11 DOUBLE PRECISION NULL,
-                bflt_vfd_com_u11 DOUBLE PRECISION NULL,
-                bflt_vfd_u12 DOUBLE PRECISION NULL,
-                bflt_vfd_com_u12 DOUBLE PRECISION NULL,
-                blpflt_comp_u11 DOUBLE PRECISION NULL,
-                bscflt_comp_u11 DOUBLE PRECISION NULL,
-                bscflt_vent_u11 DOUBLE PRECISION NULL,
-                blpflt_comp_u12 DOUBLE PRECISION NULL,
-                bscflt_comp_u12 DOUBLE PRECISION NULL,
-                bscflt_vent_u12 DOUBLE PRECISION NULL,
-                bflt_fad_u11 DOUBLE PRECISION NULL,
-                bflt_fad_u12 DOUBLE PRECISION NULL,
-                bflt_fad_u13 DOUBLE PRECISION NULL,
-                bflt_fad_u14 DOUBLE PRECISION NULL,
-                bflt_rad_u11 DOUBLE PRECISION NULL,
-                bflt_rad_u12 DOUBLE PRECISION NULL,
-                bflt_rad_u13 DOUBLE PRECISION NULL,
-                bflt_rad_u14 DOUBLE PRECISION NULL,
-                bflt_ap_u11 DOUBLE PRECISION NULL,
-                bflt_ap_u12 DOUBLE PRECISION NULL,
-                bflt_expboard_u1 DOUBLE PRECISION NULL,
-                bflt_frstemp_u1 DOUBLE PRECISION NULL,
-                bflt_rnttemp_u1 DOUBLE PRECISION NULL,
-                bflt_splytemp_u11 DOUBLE PRECISION NULL,
-                bflt_splytemp_u12 DOUBLE PRECISION NULL,
-                bflt_insptemp_u11 DOUBLE PRECISION NULL,
-                bflt_insptemp_u12 DOUBLE PRECISION NULL,
-                bflt_lowpres_u11 DOUBLE PRECISION NULL,
-                bflt_lowpres_u12 DOUBLE PRECISION NULL,
-                bflt_highpres_u11 DOUBLE PRECISION NULL,
-                bflt_highpres_u12 DOUBLE PRECISION NULL,
-                bflt_diffpres_u1 DOUBLE PRECISION NULL,
-                bocflt_ef_u21 DOUBLE PRECISION NULL,
-                bocflt_ef_u22 DOUBLE PRECISION NULL,
-                bocflt_cf_u21 DOUBLE PRECISION NULL,
-                bocflt_cf_u22 DOUBLE PRECISION NULL,
-                bflt_vfd_u21 DOUBLE PRECISION NULL,
-                bflt_vfd_com_u21 DOUBLE PRECISION NULL,
-                bflt_vfd_u22 DOUBLE PRECISION NULL,
-                bflt_vfd_com_u22 DOUBLE PRECISION NULL,
-                blpflt_comp_u21 DOUBLE PRECISION NULL,
-                bscflt_comp_u21 DOUBLE PRECISION NULL,
-                bscflt_vent_u21 DOUBLE PRECISION NULL,
-                blpflt_comp_u22 DOUBLE PRECISION NULL,
-                bscflt_comp_u22 DOUBLE PRECISION NULL,
-                bscflt_vent_u22 DOUBLE PRECISION NULL,
-                bflt_fad_u21 DOUBLE PRECISION NULL,
-                bflt_fad_u22 DOUBLE PRECISION NULL,
-                bflt_fad_u23 DOUBLE PRECISION NULL,
-                bflt_fad_u24 DOUBLE PRECISION NULL,
-                bflt_rad_u21 DOUBLE PRECISION NULL,
-                bflt_rad_u22 DOUBLE PRECISION NULL,
-                bflt_rad_u23 DOUBLE PRECISION NULL,
-                bflt_rad_u24 DOUBLE PRECISION NULL,
-                bflt_ap_u21 DOUBLE PRECISION NULL,
-                bflt_ap_u22 DOUBLE PRECISION NULL,
-                bflt_expboard_u2 DOUBLE PRECISION NULL,
-                bflt_frstemp_u2 DOUBLE PRECISION NULL,
-                bflt_rnttemp_u2 DOUBLE PRECISION NULL,
-                bflt_splytemp_u21 DOUBLE PRECISION NULL,
-                bflt_splytemp_u22 DOUBLE PRECISION NULL,
-                bflt_insptemp_u21 DOUBLE PRECISION NULL,
-                bflt_insptemp_u22 DOUBLE PRECISION NULL,
-                bflt_lowpres_u21 DOUBLE PRECISION NULL,
-                bflt_lowpres_u22 DOUBLE PRECISION NULL,
-                bflt_highpres_u21 DOUBLE PRECISION NULL,
-                bflt_highpres_u22 DOUBLE PRECISION NULL,
-                bflt_diffpres_u2 DOUBLE PRECISION NULL,
-                bflt_emergivt DOUBLE PRECISION NULL,
-                bflt_vehtemp_u1 DOUBLE PRECISION NULL,
-                bflt_vehhum_u1 DOUBLE PRECISION NULL,
-                bflt_vehtemp_u2 DOUBLE PRECISION NULL,
-                bflt_vehhum_u2 DOUBLE PRECISION NULL,
-                bflt_airmon_u1 DOUBLE PRECISION NULL,
-                bflt_airmon_u2 DOUBLE PRECISION NULL,
-                bflt_currentmon DOUBLE PRECISION NULL,
-                bflt_tcms DOUBLE PRECISION NULL,
-                bscflt_ef_u1 DOUBLE PRECISION NULL,
-                bscflt_cf_u1 DOUBLE PRECISION NULL,
-                bscflt_vfd_pw_u11 DOUBLE PRECISION NULL,
-                bscflt_vfd_pw_u12 DOUBLE PRECISION NULL,
-                bscflt_ef_u2 DOUBLE PRECISION NULL,
-                bscflt_cf_u2 DOUBLE PRECISION NULL,
-                bscflt_vfd_pw_u21 DOUBLE PRECISION NULL,
-                bscflt_vfd_pw_u22 DOUBLE PRECISION NULL,
-                bflt_ef_cnt_u1 DOUBLE PRECISION NULL,
-                bflt_cf_cnt_u11 DOUBLE PRECISION NULL,
-                bflt_cf_cnt_u12 DOUBLE PRECISION NULL,
-                bflt_vfd_cnt_u11 DOUBLE PRECISION NULL,
-                bflt_vfd_cnt_u12 DOUBLE PRECISION NULL,
-                bflt__ev_cnt_u1 DOUBLE PRECISION NULL,
-                bflt_ef_cnt_u2 DOUBLE PRECISION NULL,
-                bflt_cf_cnt_u21 DOUBLE PRECISION NULL,
-                bflt_cf_cnt_u22 DOUBLE PRECISION NULL,
-                bflt_vfd_cnt_u21 DOUBLE PRECISION NULL,
-                bflt_vfd_cnt_u22 DOUBLE PRECISION NULL,
-                bflt__ev_cnt_u2 DOUBLE PRECISION NULL,
-                bflt_tempover DOUBLE PRECISION NULL,
+                dvc_flag INTEGER NULL,
+                dvc_train_no INTEGER NULL,
+                dvc_carriage_no INTEGER NULL,
+                dvc_year INTEGER NULL,
+                dvc_month INTEGER NULL,
+                dvc_day INTEGER NULL,
+                dvc_hour INTEGER NULL,
+                dvc_minute INTEGER NULL,
+                dvc_second INTEGER NULL,
+                cfbk_ef_u11 INTEGER NULL,
+                cfbk_cf_u11 INTEGER NULL,
+                cfbk_cf_u12 INTEGER NULL,
+                cfbk_comp_u11 INTEGER NULL,
+                cfbk_comp_u12 INTEGER NULL,
+                cfbk_ap_u11 INTEGER NULL,
+                cfbk_ap_u12 INTEGER NULL,
+                cfbk_ef_u21 INTEGER NULL,
+                cfbk_cf_u21 INTEGER NULL,
+                cfbk_cf_u22 INTEGER NULL,
+                cfbk_comp_u21 INTEGER NULL,
+                cfbk_comp_u22 INTEGER NULL,
+                cfbk_ap_u21 INTEGER NULL,
+                cfbk_ap_u22 INTEGER NULL,
+                cfbk_tpp_u1 INTEGER NULL,
+                cfbk_tpp_u2 INTEGER NULL,
+                cfbk_ev_u1 INTEGER NULL,
+                cfbk_ev_u2 INTEGER NULL,
+                bocflt_ef_u11 INTEGER NULL,
+                bocflt_ef_u12 INTEGER NULL,
+                bocflt_cf_u11 INTEGER NULL,
+                bocflt_cf_u12 INTEGER NULL,
+                bflt_vfd_u11 INTEGER NULL,
+                bflt_vfd_com_u11 INTEGER NULL,
+                bflt_vfd_u12 INTEGER NULL,
+                bflt_vfd_com_u12 INTEGER NULL,
+                blpflt_comp_u11 INTEGER NULL,
+                bscflt_comp_u11 INTEGER NULL,
+                bscflt_vent_u11 INTEGER NULL,
+                blpflt_comp_u12 INTEGER NULL,
+                bscflt_comp_u12 INTEGER NULL,
+                bscflt_vent_u12 INTEGER NULL,
+                bflt_fad_u11 INTEGER NULL,
+                bflt_fad_u12 INTEGER NULL,
+                bflt_fad_u13 INTEGER NULL,
+                bflt_fad_u14 INTEGER NULL,
+                bflt_rad_u11 INTEGER NULL,
+                bflt_rad_u12 INTEGER NULL,
+                bflt_rad_u13 INTEGER NULL,
+                bflt_rad_u14 INTEGER NULL,
+                bflt_ap_u11 INTEGER NULL,
+                bflt_ap_u12 INTEGER NULL,
+                bflt_expboard_u1 INTEGER NULL,
+                bflt_frstemp_u1 INTEGER NULL,
+                bflt_rnttemp_u1 INTEGER NULL,
+                bflt_splytemp_u11 INTEGER NULL,
+                bflt_splytemp_u12 INTEGER NULL,
+                bflt_insptemp_u11 INTEGER NULL,
+                bflt_insptemp_u12 INTEGER NULL,
+                bflt_lowpres_u11 INTEGER NULL,
+                bflt_lowpres_u12 INTEGER NULL,
+                bflt_highpres_u11 INTEGER NULL,
+                bflt_highpres_u12 INTEGER NULL,
+                bflt_diffpres_u1 INTEGER NULL,
+                bocflt_ef_u21 INTEGER NULL,
+                bocflt_ef_u22 INTEGER NULL,
+                bocflt_cf_u21 INTEGER NULL,
+                bocflt_cf_u22 INTEGER NULL,
+                bflt_vfd_u21 INTEGER NULL,
+                bflt_vfd_com_u21 INTEGER NULL,
+                bflt_vfd_u22 INTEGER NULL,
+                bflt_vfd_com_u22 INTEGER NULL,
+                blpflt_comp_u21 INTEGER NULL,
+                bscflt_comp_u21 INTEGER NULL,
+                bscflt_vent_u21 INTEGER NULL,
+                blpflt_comp_u22 INTEGER NULL,
+                bscflt_comp_u22 INTEGER NULL,
+                bscflt_vent_u22 INTEGER NULL,
+                bflt_fad_u21 INTEGER NULL,
+                bflt_fad_u22 INTEGER NULL,
+                bflt_fad_u23 INTEGER NULL,
+                bflt_fad_u24 INTEGER NULL,
+                bflt_rad_u21 INTEGER NULL,
+                bflt_rad_u22 INTEGER NULL,
+                bflt_rad_u23 INTEGER NULL,
+                bflt_rad_u24 INTEGER NULL,
+                bflt_ap_u21 INTEGER NULL,
+                bflt_ap_u22 INTEGER NULL,
+                bflt_expboard_u2 INTEGER NULL,
+                bflt_frstemp_u2 INTEGER NULL,
+                bflt_rnttemp_u2 INTEGER NULL,
+                bflt_splytemp_u21 INTEGER NULL,
+                bflt_splytemp_u22 INTEGER NULL,
+                bflt_insptemp_u21 INTEGER NULL,
+                bflt_insptemp_u22 INTEGER NULL,
+                bflt_lowpres_u21 INTEGER NULL,
+                bflt_lowpres_u22 INTEGER NULL,
+                bflt_highpres_u21 INTEGER NULL,
+                bflt_highpres_u22 INTEGER NULL,
+                bflt_diffpres_u2 INTEGER NULL,
+                bflt_emergivt INTEGER NULL,
+                bflt_vehtemp_u1 INTEGER NULL,
+                bflt_vehhum_u1 INTEGER NULL,
+                bflt_vehtemp_u2 INTEGER NULL,
+                bflt_vehhum_u2 INTEGER NULL,
+                bflt_airmon_u1 INTEGER NULL,
+                bflt_airmon_u2 INTEGER NULL,
+                bflt_currentmon INTEGER NULL,
+                bflt_tcms INTEGER NULL,
+                bscflt_ef_u1 INTEGER NULL,
+                bscflt_cf_u1 INTEGER NULL,
+                bscflt_vfd_pw_u11 INTEGER NULL,
+                bscflt_vfd_pw_u12 INTEGER NULL,
+                bscflt_ef_u2 INTEGER NULL,
+                bscflt_cf_u2 INTEGER NULL,
+                bscflt_vfd_pw_u21 INTEGER NULL,
+                bscflt_vfd_pw_u22 INTEGER NULL,
+                bflt_ef_cnt_u1 INTEGER NULL,
+                bflt_cf_cnt_u11 INTEGER NULL,
+                bflt_cf_cnt_u12 INTEGER NULL,
+                bflt_vfd_cnt_u11 INTEGER NULL,
+                bflt_vfd_cnt_u12 INTEGER NULL,
+                bflt_ev_cnt_u1 INTEGER NULL,
+                bflt_ef_cnt_u2 INTEGER NULL,
+                bflt_cf_cnt_u21 INTEGER NULL,
+                bflt_cf_cnt_u22 INTEGER NULL,
+                bflt_vfd_cnt_u21 INTEGER NULL,
+                bflt_vfd_cnt_u22 INTEGER NULL,
+                bflt_ev_cnt_u2 INTEGER NULL,
+                bflt_tempover INTEGER NULL,
                 fas_sys DOUBLE PRECISION NULL,
                 ras_sys DOUBLE PRECISION NULL,
                 tic DOUBLE PRECISION NULL,
@@ -305,137 +303,135 @@ class TSutil(metaclass=Cached):
                 msg_calc_parse_time TIMESTAMPTZ NOT NULL,
                 msg_calc_dvc_no TEXT NOT NULL,
                 msg_calc_train_no TEXT NOT NULL,
-                dvc_flag DOUBLE PRECISION NULL,
-                dvc_train_no DOUBLE PRECISION NULL,
-                dvc_carriage_no DOUBLE PRECISION NULL,
-                dvc_year DOUBLE PRECISION NULL,
-                dvc_month DOUBLE PRECISION NULL,
-                dvc_day DOUBLE PRECISION NULL,
-                dvc_hour DOUBLE PRECISION NULL,
-                dvc_minute DOUBLE PRECISION NULL,
-                dvc_second DOUBLE PRECISION NULL,
-                cfbk_ef_u11 DOUBLE PRECISION NULL,
-                cfbk_cf_u11 DOUBLE PRECISION NULL,
-                cfbk_cf_u12 DOUBLE PRECISION NULL,
-                cfbk_comp_u11 DOUBLE PRECISION NULL,
-                cfbk_comp_u12 DOUBLE PRECISION NULL,
-                cfbk_ap_u11 DOUBLE PRECISION NULL,
-                cfbk_ap_u12 DOUBLE PRECISION NULL,
-                cfbk_ef_u21 DOUBLE PRECISION NULL,
-                cfbk_cf_u21 DOUBLE PRECISION NULL,
-                cfbk_cf_u22 DOUBLE PRECISION NULL,
-                cfbk_comp_u21 DOUBLE PRECISION NULL,
-                cfbk_comp_u22 DOUBLE PRECISION NULL,
-                cfbk_ap_u21 DOUBLE PRECISION NULL,
-                cfbk_ap_u22 DOUBLE PRECISION NULL,
-                cfbk_tpp_u1 DOUBLE PRECISION NULL,
-                cfbk_tpp_u2 DOUBLE PRECISION NULL,
-                cfbk_ev_u1 DOUBLE PRECISION NULL,
-                cfbk_ev_u2 DOUBLE PRECISION NULL,
-                cfbk_ewd DOUBLE PRECISION NULL,
-                cfbk_exufan DOUBLE PRECISION NULL,
-                bocflt_ef_u11 DOUBLE PRECISION NULL,
-                bocflt_ef_u12 DOUBLE PRECISION NULL,
-                bocflt_cf_u11 DOUBLE PRECISION NULL,
-                bocflt_cf_u12 DOUBLE PRECISION NULL,
-                bflt_vfd_u11 DOUBLE PRECISION NULL,
-                bflt_vfd_com_u11 DOUBLE PRECISION NULL,
-                bflt_vfd_u12 DOUBLE PRECISION NULL,
-                bflt_vfd_com_u12 DOUBLE PRECISION NULL,
-                blpflt_comp_u11 DOUBLE PRECISION NULL,
-                bscflt_comp_u11 DOUBLE PRECISION NULL,
-                bscflt_vent_u11 DOUBLE PRECISION NULL,
-                blpflt_comp_u12 DOUBLE PRECISION NULL,
-                bscflt_comp_u12 DOUBLE PRECISION NULL,
-                bscflt_vent_u12 DOUBLE PRECISION NULL,
-                bflt_fad_u11 DOUBLE PRECISION NULL,
-                bflt_fad_u12 DOUBLE PRECISION NULL,
-                bflt_fad_u13 DOUBLE PRECISION NULL,
-                bflt_fad_u14 DOUBLE PRECISION NULL,
-                bflt_rad_u11 DOUBLE PRECISION NULL,
-                bflt_rad_u12 DOUBLE PRECISION NULL,
-                bflt_rad_u13 DOUBLE PRECISION NULL,
-                bflt_rad_u14 DOUBLE PRECISION NULL,
-                bflt_ap_u11 DOUBLE PRECISION NULL,
-                bflt_ap_u12 DOUBLE PRECISION NULL,
-                bflt_expboard_u1 DOUBLE PRECISION NULL,
-                bflt_frstemp_u1 DOUBLE PRECISION NULL,
-                bflt_rnttemp_u1 DOUBLE PRECISION NULL,
-                bflt_splytemp_u11 DOUBLE PRECISION NULL,
-                bflt_splytemp_u12 DOUBLE PRECISION NULL,
-                bflt_insptemp_u11 DOUBLE PRECISION NULL,
-                bflt_insptemp_u12 DOUBLE PRECISION NULL,
-                bflt_lowpres_u11 DOUBLE PRECISION NULL,
-                bflt_lowpres_u12 DOUBLE PRECISION NULL,
-                bflt_highpres_u11 DOUBLE PRECISION NULL,
-                bflt_highpres_u12 DOUBLE PRECISION NULL,
-                bflt_diffpres_u1 DOUBLE PRECISION NULL,
-                bocflt_ef_u21 DOUBLE PRECISION NULL,
-                bocflt_ef_u22 DOUBLE PRECISION NULL,
-                bocflt_cf_u21 DOUBLE PRECISION NULL,
-                bocflt_cf_u22 DOUBLE PRECISION NULL,
-                bflt_vfd_u21 DOUBLE PRECISION NULL,
-                bflt_vfd_com_u21 DOUBLE PRECISION NULL,
-                bflt_vfd_u22 DOUBLE PRECISION NULL,
-                bflt_vfd_com_u22 DOUBLE PRECISION NULL,
-                blpflt_comp_u21 DOUBLE PRECISION NULL,
-                bscflt_comp_u21 DOUBLE PRECISION NULL,
-                bscflt_vent_u21 DOUBLE PRECISION NULL,
-                blpflt_comp_u22 DOUBLE PRECISION NULL,
-                bscflt_comp_u22 DOUBLE PRECISION NULL,
-                bscflt_vent_u22 DOUBLE PRECISION NULL,
-                bflt_fad_u21 DOUBLE PRECISION NULL,
-                bflt_fad_u22 DOUBLE PRECISION NULL,
-                bflt_fad_u23 DOUBLE PRECISION NULL,
-                bflt_fad_u24 DOUBLE PRECISION NULL,
-                bflt_rad_u21 DOUBLE PRECISION NULL,
-                bflt_rad_u22 DOUBLE PRECISION NULL,
-                bflt_rad_u23 DOUBLE PRECISION NULL,
-                bflt_rad_u24 DOUBLE PRECISION NULL,
-                bflt_ap_u21 DOUBLE PRECISION NULL,
-                bflt_ap_u22 DOUBLE PRECISION NULL,
-                bflt_expboard_u2 DOUBLE PRECISION NULL,
-                bflt_frstemp_u2 DOUBLE PRECISION NULL,
-                bflt_rnttemp_u2 DOUBLE PRECISION NULL,
-                bflt_splytemp_u21 DOUBLE PRECISION NULL,
-                bflt_splytemp_u22 DOUBLE PRECISION NULL,
-                bflt_insptemp_u21 DOUBLE PRECISION NULL,
-                bflt_insptemp_u22 DOUBLE PRECISION NULL,
-                bflt_lowpres_u21 DOUBLE PRECISION NULL,
-                bflt_lowpres_u22 DOUBLE PRECISION NULL,
-                bflt_highpres_u21 DOUBLE PRECISION NULL,
-                bflt_highpres_u22 DOUBLE PRECISION NULL,
-                bflt_diffpres_u2 DOUBLE PRECISION NULL,
-                bflt_emergivt DOUBLE PRECISION NULL,
-                bflt_vehtemp_u1 DOUBLE PRECISION NULL,
-                bflt_vehhum_u1 DOUBLE PRECISION NULL,
-                bflt_vehtemp_u2 DOUBLE PRECISION NULL,
-                bflt_vehhum_u2 DOUBLE PRECISION NULL,
-                bflt_airmon_u1 DOUBLE PRECISION NULL,
-                bflt_airmon_u2 DOUBLE PRECISION NULL,
-                bflt_currentmon DOUBLE PRECISION NULL,
-                bflt_tcms DOUBLE PRECISION NULL,
-                bscflt_ef_u1 DOUBLE PRECISION NULL,
-                bscflt_cf_u1 DOUBLE PRECISION NULL,
-                bscflt_vfd_pw_u11 DOUBLE PRECISION NULL,
-                bscflt_vfd_pw_u12 DOUBLE PRECISION NULL,
-                bscflt_ef_u2 DOUBLE PRECISION NULL,
-                bscflt_cf_u2 DOUBLE PRECISION NULL,
-                bscflt_vfd_pw_u21 DOUBLE PRECISION NULL,
-                bscflt_vfd_pw_u22 DOUBLE PRECISION NULL,
-                bflt_ef_cnt_u1 DOUBLE PRECISION NULL,
-                bflt_cf_cnt_u11 DOUBLE PRECISION NULL,
-                bflt_cf_cnt_u12 DOUBLE PRECISION NULL,
-                bflt_vfd_cnt_u11 DOUBLE PRECISION NULL,
-                bflt_vfd_cnt_u12 DOUBLE PRECISION NULL,
-                bflt__ev_cnt_u1 DOUBLE PRECISION NULL,
-                bflt_ef_cnt_u2 DOUBLE PRECISION NULL,
-                bflt_cf_cnt_u21 DOUBLE PRECISION NULL,
-                bflt_cf_cnt_u22 DOUBLE PRECISION NULL,
-                bflt_vfd_cnt_u21 DOUBLE PRECISION NULL,
-                bflt_vfd_cnt_u22 DOUBLE PRECISION NULL,
-                bflt__ev_cnt_u2 DOUBLE PRECISION NULL,
-                bflt_tempover DOUBLE PRECISION NULL,
+                dvc_flag INTEGER NULL,
+                dvc_train_no INTEGER NULL,
+                dvc_carriage_no INTEGER NULL,
+                dvc_year INTEGER NULL,
+                dvc_month INTEGER NULL,
+                dvc_day INTEGER NULL,
+                dvc_hour INTEGER NULL,
+                dvc_minute INTEGER NULL,
+                dvc_second INTEGER NULL,
+                cfbk_ef_u11 INTEGER NULL,
+                cfbk_cf_u11 INTEGER NULL,
+                cfbk_cf_u12 INTEGER NULL,
+                cfbk_comp_u11 INTEGER NULL,
+                cfbk_comp_u12 INTEGER NULL,
+                cfbk_ap_u11 INTEGER NULL,
+                cfbk_ap_u12 INTEGER NULL,
+                cfbk_ef_u21 INTEGER NULL,
+                cfbk_cf_u21 INTEGER NULL,
+                cfbk_cf_u22 INTEGER NULL,
+                cfbk_comp_u21 INTEGER NULL,
+                cfbk_comp_u22 INTEGER NULL,
+                cfbk_ap_u21 INTEGER NULL,
+                cfbk_ap_u22 INTEGER NULL,
+                cfbk_tpp_u1 INTEGER NULL,
+                cfbk_tpp_u2 INTEGER NULL,
+                cfbk_ev_u1 INTEGER NULL,
+                cfbk_ev_u2 INTEGER NULL,
+                bocflt_ef_u11 INTEGER NULL,
+                bocflt_ef_u12 INTEGER NULL,
+                bocflt_cf_u11 INTEGER NULL,
+                bocflt_cf_u12 INTEGER NULL,
+                bflt_vfd_u11 INTEGER NULL,
+                bflt_vfd_com_u11 INTEGER NULL,
+                bflt_vfd_u12 INTEGER NULL,
+                bflt_vfd_com_u12 INTEGER NULL,
+                blpflt_comp_u11 INTEGER NULL,
+                bscflt_comp_u11 INTEGER NULL,
+                bscflt_vent_u11 INTEGER NULL,
+                blpflt_comp_u12 INTEGER NULL,
+                bscflt_comp_u12 INTEGER NULL,
+                bscflt_vent_u12 INTEGER NULL,
+                bflt_fad_u11 INTEGER NULL,
+                bflt_fad_u12 INTEGER NULL,
+                bflt_fad_u13 INTEGER NULL,
+                bflt_fad_u14 INTEGER NULL,
+                bflt_rad_u11 INTEGER NULL,
+                bflt_rad_u12 INTEGER NULL,
+                bflt_rad_u13 INTEGER NULL,
+                bflt_rad_u14 INTEGER NULL,
+                bflt_ap_u11 INTEGER NULL,
+                bflt_ap_u12 INTEGER NULL,
+                bflt_expboard_u1 INTEGER NULL,
+                bflt_frstemp_u1 INTEGER NULL,
+                bflt_rnttemp_u1 INTEGER NULL,
+                bflt_splytemp_u11 INTEGER NULL,
+                bflt_splytemp_u12 INTEGER NULL,
+                bflt_insptemp_u11 INTEGER NULL,
+                bflt_insptemp_u12 INTEGER NULL,
+                bflt_lowpres_u11 INTEGER NULL,
+                bflt_lowpres_u12 INTEGER NULL,
+                bflt_highpres_u11 INTEGER NULL,
+                bflt_highpres_u12 INTEGER NULL,
+                bflt_diffpres_u1 INTEGER NULL,
+                bocflt_ef_u21 INTEGER NULL,
+                bocflt_ef_u22 INTEGER NULL,
+                bocflt_cf_u21 INTEGER NULL,
+                bocflt_cf_u22 INTEGER NULL,
+                bflt_vfd_u21 INTEGER NULL,
+                bflt_vfd_com_u21 INTEGER NULL,
+                bflt_vfd_u22 INTEGER NULL,
+                bflt_vfd_com_u22 INTEGER NULL,
+                blpflt_comp_u21 INTEGER NULL,
+                bscflt_comp_u21 INTEGER NULL,
+                bscflt_vent_u21 INTEGER NULL,
+                blpflt_comp_u22 INTEGER NULL,
+                bscflt_comp_u22 INTEGER NULL,
+                bscflt_vent_u22 INTEGER NULL,
+                bflt_fad_u21 INTEGER NULL,
+                bflt_fad_u22 INTEGER NULL,
+                bflt_fad_u23 INTEGER NULL,
+                bflt_fad_u24 INTEGER NULL,
+                bflt_rad_u21 INTEGER NULL,
+                bflt_rad_u22 INTEGER NULL,
+                bflt_rad_u23 INTEGER NULL,
+                bflt_rad_u24 INTEGER NULL,
+                bflt_ap_u21 INTEGER NULL,
+                bflt_ap_u22 INTEGER NULL,
+                bflt_expboard_u2 INTEGER NULL,
+                bflt_frstemp_u2 INTEGER NULL,
+                bflt_rnttemp_u2 INTEGER NULL,
+                bflt_splytemp_u21 INTEGER NULL,
+                bflt_splytemp_u22 INTEGER NULL,
+                bflt_insptemp_u21 INTEGER NULL,
+                bflt_insptemp_u22 INTEGER NULL,
+                bflt_lowpres_u21 INTEGER NULL,
+                bflt_lowpres_u22 INTEGER NULL,
+                bflt_highpres_u21 INTEGER NULL,
+                bflt_highpres_u22 INTEGER NULL,
+                bflt_diffpres_u2 INTEGER NULL,
+                bflt_emergivt INTEGER NULL,
+                bflt_vehtemp_u1 INTEGER NULL,
+                bflt_vehhum_u1 INTEGER NULL,
+                bflt_vehtemp_u2 INTEGER NULL,
+                bflt_vehhum_u2 INTEGER NULL,
+                bflt_airmon_u1 INTEGER NULL,
+                bflt_airmon_u2 INTEGER NULL,
+                bflt_currentmon INTEGER NULL,
+                bflt_tcms INTEGER NULL,
+                bscflt_ef_u1 INTEGER NULL,
+                bscflt_cf_u1 INTEGER NULL,
+                bscflt_vfd_pw_u11 INTEGER NULL,
+                bscflt_vfd_pw_u12 INTEGER NULL,
+                bscflt_ef_u2 INTEGER NULL,
+                bscflt_cf_u2 INTEGER NULL,
+                bscflt_vfd_pw_u21 INTEGER NULL,
+                bscflt_vfd_pw_u22 INTEGER NULL,
+                bflt_ef_cnt_u1 INTEGER NULL,
+                bflt_cf_cnt_u11 INTEGER NULL,
+                bflt_cf_cnt_u12 INTEGER NULL,
+                bflt_vfd_cnt_u11 INTEGER NULL,
+                bflt_vfd_cnt_u12 INTEGER NULL,
+                bflt_ev_cnt_u1 INTEGER NULL,
+                bflt_ef_cnt_u2 INTEGER NULL,
+                bflt_cf_cnt_u21 INTEGER NULL,
+                bflt_cf_cnt_u22 INTEGER NULL,
+                bflt_vfd_cnt_u21 INTEGER NULL,
+                bflt_vfd_cnt_u22 INTEGER NULL,
+                bflt_ev_cnt_u2 INTEGER NULL,
+                bflt_tempover INTEGER NULL,
                 fas_sys DOUBLE PRECISION NULL,
                 ras_sys DOUBLE PRECISION NULL,
                 tic DOUBLE PRECISION NULL,
@@ -558,8 +554,8 @@ class TSutil(metaclass=Cached):
             """
             create_pro_json_table = "CREATE TABLE IF NOT EXISTS pro_macda_json (msg_calc_dvc_time TIMESTAMPTZ NOT NULL, msg_calc_parse_time TEXT NOT NULL, msg_calc_dvc_no TEXT NOT NULL, msg_calc_train_no TEXT NOT NULL, Indicators JSON);"
             create_dev_json_table = "CREATE TABLE IF NOT EXISTS dev_macda_json (msg_calc_dvc_time TEXT NOT NULL, msg_calc_parse_time TIMESTAMPTZ NOT NULL, msg_calc_dvc_no TEXT NOT NULL, msg_calc_train_no TEXT NOT NULL, Indicators JSON);"
-            create_pro_predict_table = "CREATE TABLE IF NOT EXISTS pro_predict (msg_calc_dvc_time TIMESTAMPTZ NOT NULL, msg_calc_parse_time TEXT NOT NULL, msg_calc_dvc_no TEXT NOT NULL, msg_calc_train_no TEXT NOT NULL, ref_leak_u11 integer NOT NULL DEFAULT 0, ref_leak_u12 integer NOT NULL DEFAULT 0, ref_leak_u21 integer NOT NULL DEFAULT 0, ref_leak_u22 integer NOT NULL DEFAULT 0, f_cp_u1 integer NOT NULL DEFAULT 0, f_cp_u2 integer NOT NULL DEFAULT 0, f_fas integer NOT NULL DEFAULT 0, f_ras integer NOT NULL DEFAULT 0, cabin_overtemp integer NOT NULL DEFAULT 0, f_presdiff_u1 integer NOT NULL DEFAULT 0, f_presdiff_u2 integer NOT NULL DEFAULT 0, f_ef_u11 integer NOT NULL DEFAULT 0, f_ef_u12 integer NOT NULL DEFAULT 0, f_ef_u21 integer NOT NULL DEFAULT 0, f_ef_u22 integer NOT NULL DEFAULT 0, f_cf_u11 integer NOT NULL DEFAULT 0, f_cf_u12 integer NOT NULL DEFAULT 0, f_cf_u21 integer NOT NULL DEFAULT 0, f_cf_u22 integer NOT NULL DEFAULT 0, f_exufan integer NOT NULL DEFAULT 0, f_fas_u11 integer NOT NULL DEFAULT 0, f_fas_u12 integer NOT NULL DEFAULT 0, f_fas_u21 integer NOT NULL DEFAULT 0, f_fas_u22 integer NOT NULL DEFAULT 0, f_aq_u1 integer NOT NULL DEFAULT 0, f_aq_u2 integer NOT NULL DEFAULT 0);"
-            create_dev_predict_table = "CREATE TABLE IF NOT EXISTS dev_predict (msg_calc_dvc_time TEXT NOT NULL, msg_calc_parse_time TIMESTAMPTZ NOT NULL, msg_calc_dvc_no TEXT NOT NULL, msg_calc_train_no TEXT NOT NULL, ref_leak_u11 integer NOT NULL DEFAULT 0, ref_leak_u12 integer NOT NULL DEFAULT 0, ref_leak_u21 integer NOT NULL DEFAULT 0, ref_leak_u22 integer NOT NULL DEFAULT 0, f_cp_u1 integer NOT NULL DEFAULT 0, f_cp_u2 integer NOT NULL DEFAULT 0, f_fas integer NOT NULL DEFAULT 0, f_ras integer NOT NULL DEFAULT 0, cabin_overtemp integer NOT NULL DEFAULT 0, f_presdiff_u1 integer NOT NULL DEFAULT 0, f_presdiff_u2 integer NOT NULL DEFAULT 0, f_ef_u11 integer NOT NULL DEFAULT 0, f_ef_u12 integer NOT NULL DEFAULT 0, f_ef_u21 integer NOT NULL DEFAULT 0, f_ef_u22 integer NOT NULL DEFAULT 0, f_cf_u11 integer NOT NULL DEFAULT 0, f_cf_u12 integer NOT NULL DEFAULT 0, f_cf_u21 integer NOT NULL DEFAULT 0, f_cf_u22 integer NOT NULL DEFAULT 0, f_exufan integer NOT NULL DEFAULT 0, f_fas_u11 integer NOT NULL DEFAULT 0, f_fas_u12 integer NOT NULL DEFAULT 0, f_fas_u21 integer NOT NULL DEFAULT 0, f_fas_u22 integer NOT NULL DEFAULT 0, f_aq_u1 integer NOT NULL DEFAULT 0, f_aq_u2 integer NOT NULL DEFAULT 0);"
+            create_pro_predict_table = "CREATE TABLE IF NOT EXISTS pro_predict (msg_calc_dvc_time TIMESTAMPTZ NOT NULL, msg_calc_parse_time TEXT NOT NULL, msg_calc_dvc_no TEXT NOT NULL, msg_calc_train_no TEXT NOT NULL, ref_leak_u11 integer NOT NULL DEFAULT 0, ref_leak_u12 integer NOT NULL DEFAULT 0, ref_leak_u21 integer NOT NULL DEFAULT 0, ref_leak_u22 integer NOT NULL DEFAULT 0, f_cp_u1 integer NOT NULL DEFAULT 0, f_cp_u2 integer NOT NULL DEFAULT 0, f_fas integer NOT NULL DEFAULT 0, f_ras integer NOT NULL DEFAULT 0, cabin_overtemp integer NOT NULL DEFAULT 0, f_presdiff_u1 integer NOT NULL DEFAULT 0, f_presdiff_u2 integer NOT NULL DEFAULT 0, f_ef_u11 integer NOT NULL DEFAULT 0, f_ef_u12 integer NOT NULL DEFAULT 0, f_ef_u21 integer NOT NULL DEFAULT 0, f_ef_u22 integer NOT NULL DEFAULT 0, f_cf_u11 integer NOT NULL DEFAULT 0, f_cf_u12 integer NOT NULL DEFAULT 0, f_cf_u21 integer NOT NULL DEFAULT 0, f_cf_u22 integer NOT NULL DEFAULT 0, f_fas_u11 integer NOT NULL DEFAULT 0, f_fas_u12 integer NOT NULL DEFAULT 0, f_fas_u21 integer NOT NULL DEFAULT 0, f_fas_u22 integer NOT NULL DEFAULT 0, f_aq_u1 integer NOT NULL DEFAULT 0, f_aq_u2 integer NOT NULL DEFAULT 0);"
+            create_dev_predict_table = "CREATE TABLE IF NOT EXISTS dev_predict (msg_calc_dvc_time TEXT NOT NULL, msg_calc_parse_time TIMESTAMPTZ NOT NULL, msg_calc_dvc_no TEXT NOT NULL, msg_calc_train_no TEXT NOT NULL, ref_leak_u11 integer NOT NULL DEFAULT 0, ref_leak_u12 integer NOT NULL DEFAULT 0, ref_leak_u21 integer NOT NULL DEFAULT 0, ref_leak_u22 integer NOT NULL DEFAULT 0, f_cp_u1 integer NOT NULL DEFAULT 0, f_cp_u2 integer NOT NULL DEFAULT 0, f_fas integer NOT NULL DEFAULT 0, f_ras integer NOT NULL DEFAULT 0, cabin_overtemp integer NOT NULL DEFAULT 0, f_presdiff_u1 integer NOT NULL DEFAULT 0, f_presdiff_u2 integer NOT NULL DEFAULT 0, f_ef_u11 integer NOT NULL DEFAULT 0, f_ef_u12 integer NOT NULL DEFAULT 0, f_ef_u21 integer NOT NULL DEFAULT 0, f_ef_u22 integer NOT NULL DEFAULT 0, f_cf_u11 integer NOT NULL DEFAULT 0, f_cf_u12 integer NOT NULL DEFAULT 0, f_cf_u21 integer NOT NULL DEFAULT 0, f_cf_u22 integer NOT NULL DEFAULT 0, f_fas_u11 integer NOT NULL DEFAULT 0, f_fas_u12 integer NOT NULL DEFAULT 0, f_fas_u21 integer NOT NULL DEFAULT 0, f_fas_u22 integer NOT NULL DEFAULT 0, f_aq_u1 integer NOT NULL DEFAULT 0, f_aq_u2 integer NOT NULL DEFAULT 0);"
             cur = conn.cursor()
             cur.execute(create_pro_table)
             cur.execute(create_dev_table)
@@ -706,9 +702,9 @@ class TSutil(metaclass=Cached):
     def get_predict_data(self, mode):
         querysql = ''
         if mode == 'dev':
-            querysql = f"SELECT msg_calc_dvc_no, last(msg_calc_parse_time, msg_calc_parse_time) as time, max(ref_leak_u11) as ref_leak_u11, max(ref_leak_u12) as ref_leak_u12, max(ref_leak_u21) as ref_leak_u21, max(ref_leak_u22) as ref_leak_u22, max(f_cp_u1) as f_cp_u1, max(f_cp_u2) as f_cp_u2, max(f_fas) as f_fas, max(f_ras) as f_ras, max(cabin_overtemp) as cabin_overtemp, max(f_presdiff_u1) as f_presdiff_u1, max(f_presdiff_u2) as f_presdiff_u2, max(f_ef_u11) as f_ef_u11, max(f_ef_u12) as f_ef_u12, max(f_ef_u21) as f_ef_u21, max(f_ef_u22) as f_ef_u22, max(f_cf_u11) as f_cf_u11, max(f_cf_u12) as f_cf_u12, max(f_cf_u21) as f_cf_u21, max(f_cf_u22) as f_cf_u22, max(f_exufan) as f_exufan, max(f_fas_u11) as f_fas_u11, max(f_fas_u12) as f_fas_u12, max(f_fas_u21) as f_fas_u21, max(f_fas_u22) as f_fas_u22, max(f_aq_u1) as f_aq_u1, max(f_aq_u2) as f_aq_u2 FROM dev_predict WHERE msg_calc_parse_time > now() - INTERVAL '5 minutes' group by msg_calc_dvc_no"
+            querysql = f"SELECT msg_calc_dvc_no, last(msg_calc_parse_time, msg_calc_parse_time) as time, max(ref_leak_u11) as ref_leak_u11, max(ref_leak_u12) as ref_leak_u12, max(ref_leak_u21) as ref_leak_u21, max(ref_leak_u22) as ref_leak_u22, max(f_cp_u1) as f_cp_u1, max(f_cp_u2) as f_cp_u2, max(f_fas) as f_fas, max(f_ras) as f_ras, max(cabin_overtemp) as cabin_overtemp, max(f_presdiff_u1) as f_presdiff_u1, max(f_presdiff_u2) as f_presdiff_u2, max(f_ef_u11) as f_ef_u11, max(f_ef_u12) as f_ef_u12, max(f_ef_u21) as f_ef_u21, max(f_ef_u22) as f_ef_u22, max(f_cf_u11) as f_cf_u11, max(f_cf_u12) as f_cf_u12, max(f_cf_u21) as f_cf_u21, max(f_cf_u22) as f_cf_u22, max(f_fas_u11) as f_fas_u11, max(f_fas_u12) as f_fas_u12, max(f_fas_u21) as f_fas_u21, max(f_fas_u22) as f_fas_u22, max(f_aq_u1) as f_aq_u1, max(f_aq_u2) as f_aq_u2 FROM dev_predict WHERE msg_calc_parse_time > now() - INTERVAL '5 minutes' group by msg_calc_dvc_no"
         else:
-            querysql = f"SELECT msg_calc_dvc_no, last(msg_calc_dvc_time, msg_calc_dvc_time) as time, max(ref_leak_u11) as ref_leak_u11, max(ref_leak_u12) as ref_leak_u12, max(ref_leak_u21) as ref_leak_u21, max(ref_leak_u22) as ref_leak_u22, max(f_cp_u1) as f_cp_u1, max(f_cp_u2) as f_cp_u2, max(f_fas) as f_fas, max(f_ras) as f_ras, max(cabin_overtemp) as cabin_overtemp, max(f_presdiff_u1) as f_presdiff_u1, max(f_presdiff_u2) as f_presdiff_u2, max(f_ef_u11) as f_ef_u11, max(f_ef_u12) as f_ef_u12, max(f_ef_u21) as f_ef_u21, max(f_ef_u22) as f_ef_u22, max(f_cf_u11) as f_cf_u11, max(f_cf_u12) as f_cf_u12, max(f_cf_u21) as f_cf_u21, max(f_cf_u22) as f_cf_u22, max(f_exufan) as f_exufan, max(f_fas_u11) as f_fas_u11, max(f_fas_u12) as f_fas_u12, max(f_fas_u21) as f_fas_u21, max(f_fas_u22) as f_fas_u22, max(f_aq_u1) as f_aq_u1, max(f_aq_u2) as f_aq_u2 FROM pro_predict WHERE msg_calc_dvc_time > now() - INTERVAL '5 minutes' group by msg_calc_dvc_no"
+            querysql = f"SELECT msg_calc_dvc_no, last(msg_calc_dvc_time, msg_calc_dvc_time) as time, max(ref_leak_u11) as ref_leak_u11, max(ref_leak_u12) as ref_leak_u12, max(ref_leak_u21) as ref_leak_u21, max(ref_leak_u22) as ref_leak_u22, max(f_cp_u1) as f_cp_u1, max(f_cp_u2) as f_cp_u2, max(f_fas) as f_fas, max(f_ras) as f_ras, max(cabin_overtemp) as cabin_overtemp, max(f_presdiff_u1) as f_presdiff_u1, max(f_presdiff_u2) as f_presdiff_u2, max(f_ef_u11) as f_ef_u11, max(f_ef_u12) as f_ef_u12, max(f_ef_u21) as f_ef_u21, max(f_ef_u22) as f_ef_u22, max(f_cf_u11) as f_cf_u11, max(f_cf_u12) as f_cf_u12, max(f_cf_u21) as f_cf_u21, max(f_cf_u22) as f_cf_u22, max(f_fas_u11) as f_fas_u11, max(f_fas_u12) as f_fas_u12, max(f_fas_u21) as f_fas_u21, max(f_fas_u22) as f_fas_u22, max(f_aq_u1) as f_aq_u1, max(f_aq_u2) as f_aq_u2 FROM pro_predict WHERE msg_calc_dvc_time > now() - INTERVAL '5 minutes' group by msg_calc_dvc_no"
         try:
             returndata = {}
             conn = self.conn_pool.getconn()
@@ -898,6 +894,7 @@ class TSutil(metaclass=Cached):
             traceback.print_exc()
 
     def prepare_predictdata(self, mode, dvc_no):
+        querysql_1m = ''
         querysql_3m = ''
         querysql_5m = ''
         querysql_10m = ''
@@ -905,33 +902,39 @@ class TSutil(metaclass=Cached):
         querysql_20m = ''
         querysql_30m = ''
         if mode == 'dev':
-            querysql_3m = f"select msg_calc_dvc_no, round(approx_percentile(0.95, percentile_agg(wmode_u1))) as dvc_w_op_mode_u1, round(approx_percentile(0.95, percentile_agg(wmode_u2))) as dvc_w_op_mode_u2, " \
+            querysql_1m = f"select msg_calc_dvc_no, " \
+                       f"approx_percentile(0.95, percentile_agg(bflt_tempover)) as bflt_tempover " \
+                       f"FROM public.dev_macda where msg_calc_parse_time > now() - INTERVAL '1 minutes' and msg_calc_dvc_no = '{dvc_no}' group by msg_calc_dvc_no"
+
+            querysql_3m = f"select msg_calc_dvc_no, " \
                        f"approx_percentile(0.95, percentile_agg(f_cp_u11)) as f_cp_u11, approx_percentile(0.95, percentile_agg(f_cp_u12)) as f_cp_u12, approx_percentile(0.95, percentile_agg(f_cp_u21)) as f_cp_u21, approx_percentile(0.95, percentile_agg(f_cp_u22)) as f_cp_u22, " \
                        f"avg(ABS(i_cp_u11 - i_cp_u12)) as w_crntu1_sub, avg(ABS(i_cp_u21 - i_cp_u22)) as w_crntu2_sub " \
                        f"FROM public.dev_macda where msg_calc_parse_time > now() - INTERVAL '3 minutes' and msg_calc_dvc_no = '{dvc_no}' group by msg_calc_dvc_no"
 
-            querysql_5m = f"select msg_calc_dvc_no, round(approx_percentile(0.95, percentile_agg(wmode_u1))) as dvc_w_op_mode_u1, round(approx_percentile(0.95, percentile_agg(wmode_u2))) as dvc_w_op_mode_u2, " \
+            querysql_5m = f"select msg_calc_dvc_no, " \
                           f"approx_percentile(0.95, percentile_agg(f_cp_u11)) as f_cp_u11, approx_percentile(0.95, percentile_agg(f_cp_u12)) as f_cp_u12, approx_percentile(0.95, percentile_agg(f_cp_u21)) as f_cp_u21, approx_percentile(0.95, percentile_agg(f_cp_u22)) as f_cp_u22, " \
                           f"approx_percentile(0.95, percentile_agg(suckp_u11)) as suckp_u11, approx_percentile(0.95, percentile_agg(suckp_u12)) as suckp_u12, approx_percentile(0.95, percentile_agg(suckp_u21)) as suckp_u21, approx_percentile(0.95, percentile_agg(suckp_u22)) as suckp_u22, " \
                           f"avg(ABS(fas_u1 - fas_u2)) as fas_sub, avg(ABS(ras_u1 - ras_u2)) as ras_sub " \
                           f"FROM public.dev_macda where msg_calc_parse_time > now() - INTERVAL '5 minutes' and msg_calc_dvc_no = '{dvc_no}' group by msg_calc_dvc_no"
 
-            querysql_10m = f"select msg_calc_dvc_no, round(approx_percentile(0.95, percentile_agg(wmode_u1))) as dvc_w_op_mode_u1, round(approx_percentile(0.95, percentile_agg(wmode_u2))) as dvc_w_op_mode_u2, " \
+            querysql_10m = f"select msg_calc_dvc_no, " \
+                           f"approx_percentile(0.95, percentile_agg(cfbk_comp_u11)) as cfbk_comp_u11, approx_percentile(0.95, percentile_agg(cfbk_comp_u12)) as cfbk_comp_u12, approx_percentile(0.95, percentile_agg(cfbk_comp_u21)) as cfbk_comp_u21, approx_percentile(0.95, percentile_agg(cfbk_comp_u22)) as cfbk_comp_u22, " \
                            f"approx_percentile(0.95, percentile_agg(sp_u11)) as sp_u11, approx_percentile(0.95, percentile_agg(sp_u12)) as sp_u12, approx_percentile(0.95, percentile_agg(sp_u21)) as sp_u21, approx_percentile(0.95, percentile_agg(sp_u22)) as sp_u22, " \
-                           f"approx_percentile(0.95, percentile_agg(cfbk_ef_u11)) as cfbk_ef_u11, approx_percentile(0.95, percentile_agg(cfbk_ef_u21)) as cfbk_ef_u21, approx_percentile(0.95, percentile_agg(cfbk_cf_u11)) as cfbk_cf_u11, approx_percentile(0.95, percentile_agg(cfbk_cf_u21)) as cfbk_cf_u21, " \
+                           f"approx_percentile(0.95, percentile_agg(cfbk_ef_u11)) as cfbk_ef_u11, approx_percentile(0.95, percentile_agg(cfbk_ef_u21)) as cfbk_ef_u21, approx_percentile(0.95, percentile_agg(cfbk_cf_u11)) as cfbk_cf_u11, approx_percentile(0.95, percentile_agg(cfbk_cf_u12)) as cfbk_cf_u12, approx_percentile(0.95, percentile_agg(cfbk_cf_u21)) as cfbk_cf_u21, approx_percentile(0.95, percentile_agg(cfbk_cf_u22)) as cfbk_cf_u22, " \
                            f"approx_percentile(0.95, percentile_agg(i_ef_u11)) as i_ef_u11, approx_percentile(0.95, percentile_agg(i_ef_u12)) as i_ef_u12, approx_percentile(0.95, percentile_agg(i_ef_u21)) as i_ef_u21, approx_percentile(0.95, percentile_agg(i_ef_u22)) as i_ef_u22, " \
                            f"approx_percentile(0.95, percentile_agg(i_cf_u11)) as i_cf_u11, approx_percentile(0.95, percentile_agg(i_cf_u12)) as i_cf_u12, approx_percentile(0.95, percentile_agg(i_cf_u21)) as i_cf_u21, approx_percentile(0.95, percentile_agg(i_cf_u22)) as i_cf_u22, " \
-                           f"approx_percentile(0.95, percentile_agg(fas_u1)) as fas_u1, approx_percentile(0.95, percentile_agg(fas_u2)) as fas_u2, " \
-                           f"approx_percentile(0.95, percentile_agg(cfbk_exufan)) as cfbk_exufan, approx_percentile(0.95, percentile_agg(i_exufan)) as i_exufan, " \
+                           f"approx_percentile(0.95, percentile_agg(fas_sys)) as fas_sys, " \
                            f"approx_percentile(0.95, percentile_agg(i_cp_u11)) as i_cp_u11, approx_percentile(0.95, percentile_agg(i_cp_u12)) as i_cp_u12, approx_percentile(0.95, percentile_agg(i_cp_u21)) as i_cp_u21, approx_percentile(0.95, percentile_agg(i_cp_u22)) as i_cp_u22 " \
                            f"FROM public.dev_macda where msg_calc_parse_time > now() - INTERVAL '10 minutes' and msg_calc_dvc_no = '{dvc_no}' group by msg_calc_dvc_no"
 
-            querysql_15m = f"select msg_calc_dvc_no, round(approx_percentile(0.95, percentile_agg(wmode_u1))) as dvc_w_op_mode_u1, round(approx_percentile(0.95, percentile_agg(wmode_u2))) as dvc_w_op_mode_u2, " \
-                          f"approx_percentile(0.95, percentile_agg(highpress_u11)) as highpress_u11, approx_percentile(0.95, percentile_agg(highpress_u12)) as highpress_u12, approx_percentile(0.95, percentile_agg(highpress_u21)) as highpress_u21, approx_percentile(0.95, percentile_agg(highpress_u22)) as highpress_u22 " \
-                          f"FROM public.dev_macda where msg_calc_parse_time > now() - INTERVAL '15 minutes' and msg_calc_dvc_no = '{dvc_no}' group by msg_calc_dvc_no"
+            querysql_15m = f"select msg_calc_dvc_no, " \
+                           f"approx_percentile(0.95, percentile_agg(f_cp_u11)) as f_cp_u11, approx_percentile(0.95, percentile_agg(f_cp_u12)) as f_cp_u12, approx_percentile(0.95, percentile_agg(f_cp_u21)) as f_cp_u21, approx_percentile(0.95, percentile_agg(f_cp_u22)) as f_cp_u22, " \
+                           f"approx_percentile(0.95, percentile_agg(highpress_u11)) as highpress_u11, approx_percentile(0.95, percentile_agg(highpress_u12)) as highpress_u12, approx_percentile(0.95, percentile_agg(highpress_u21)) as highpress_u21, approx_percentile(0.95, percentile_agg(highpress_u22)) as highpress_u22, " \
+                           f"approx_percentile(0.95, percentile_agg(cfbk_ef_u11)) as cfbk_ef_u11, approx_percentile(0.95, percentile_agg(cfbk_ef_u21)) as cfbk_ef_u21, " \
+                           f"approx_percentile(0.95, percentile_agg(aq_co2_u1)) as aq_co2_u1, approx_percentile(0.95, percentile_agg(aq_co2_u2)) as aq_co2_u2 " \
+                           f"FROM public.dev_macda where msg_calc_parse_time > now() - INTERVAL '15 minutes' and msg_calc_dvc_no = '{dvc_no}' group by msg_calc_dvc_no"
 
-            querysql_20m = f"select msg_calc_dvc_no, round(approx_percentile(0.95, percentile_agg(wmode_u1))) as dvc_w_op_mode_u1, round(approx_percentile(0.95, percentile_agg(wmode_u2))) as dvc_w_op_mode_u2, " \
-                           f"approx_percentile(0.95, percentile_agg(bflt_tempover)) as bflt_tempover, " \
+            querysql_20m = f"select msg_calc_dvc_no, " \
                            f"approx_percentile(0.95, percentile_agg(cfbk_ef_u11)) as cfbk_ef_u11, approx_percentile(0.95, percentile_agg(cfbk_ef_u21)) as cfbk_ef_u21, " \
                            f"approx_percentile(0.95, percentile_agg(aq_co2_u1)) as aq_co2_u1, approx_percentile(0.95, percentile_agg(aq_co2_u2)) as aq_co2_u2, " \
                            f"approx_percentile(0.95, percentile_agg(aq_tvoc_u1)) as aq_tvoc_u1, approx_percentile(0.95, percentile_agg(aq_tvoc_u2)) as aq_tvoc_u2, " \
@@ -939,39 +942,44 @@ class TSutil(metaclass=Cached):
                            f"approx_percentile(0.95, percentile_agg(aq_pm10_u1)) as aq_pm10_u1, approx_percentile(0.95, percentile_agg(aq_pm10_u2)) as aq_pm10_u2 " \
                            f"FROM public.dev_macda where msg_calc_parse_time > now() - INTERVAL '20 minutes' and msg_calc_dvc_no = '{dvc_no}' group by msg_calc_dvc_no"
 
-            querysql_30m = f"select msg_calc_dvc_no, round(approx_percentile(0.95, percentile_agg(wmode_u1))) as dvc_w_op_mode_u1, round(approx_percentile(0.95, percentile_agg(wmode_u2))) as dvc_w_op_mode_u2, " \
+            querysql_30m = f"select msg_calc_dvc_no, " \
                            f"approx_percentile(0.95, percentile_agg(cfbk_ef_u11)) as cfbk_ef_u11, approx_percentile(0.95, percentile_agg(cfbk_ef_u21)) as cfbk_ef_u21, " \
-                           f"approx_percentile(0.95, percentile_agg(cfbk_cf_u11)) as cfbk_cf_u11, approx_percentile(0.95, percentile_agg(cfbk_cf_u21)) as cfbk_cf_u21, " \
                            f"approx_percentile(0.95, percentile_agg(presdiff_u1)) as presdiff_u1, approx_percentile(0.95, percentile_agg(presdiff_u2)) as presdiff_u2 " \
                            f"FROM public.dev_macda where msg_calc_parse_time > now() - INTERVAL '30 minutes' and msg_calc_dvc_no = '{dvc_no}' group by msg_calc_dvc_no"
         else:
-            querysql_3m = f"select msg_calc_dvc_no, round(approx_percentile(0.95, percentile_agg(wmode_u1))) as dvc_w_op_mode_u1, round(approx_percentile(0.95, percentile_agg(wmode_u2))) as dvc_w_op_mode_u2, " \
+            querysql_1m = f"select msg_calc_dvc_no, " \
+                          f"approx_percentile(0.95, percentile_agg(bflt_tempover)) as bflt_tempover " \
+                          f"FROM public.pro_macda where msg_calc_dvc_time > now() - INTERVAL '1 minutes' and msg_calc_dvc_no = '{dvc_no}' group by msg_calc_dvc_no"
+
+            querysql_3m = f"select msg_calc_dvc_no, " \
                           f"approx_percentile(0.95, percentile_agg(f_cp_u11)) as f_cp_u11, approx_percentile(0.95, percentile_agg(f_cp_u12)) as f_cp_u12, approx_percentile(0.95, percentile_agg(f_cp_u21)) as f_cp_u21, approx_percentile(0.95, percentile_agg(f_cp_u22)) as f_cp_u22, " \
                           f"avg(ABS(i_cp_u11 - i_cp_u12)) as w_crntu1_sub, avg(ABS(i_cp_u21 - i_cp_u22)) as w_crntu2_sub " \
                           f"FROM public.pro_macda where msg_calc_dvc_time > now() - INTERVAL '3 minutes' and msg_calc_dvc_no = '{dvc_no}' group by msg_calc_dvc_no"
 
-            querysql_5m = f"select msg_calc_dvc_no, round(approx_percentile(0.95, percentile_agg(wmode_u1))) as dvc_w_op_mode_u1, round(approx_percentile(0.95, percentile_agg(wmode_u2))) as dvc_w_op_mode_u2, " \
+            querysql_5m = f"select msg_calc_dvc_no, " \
                           f"approx_percentile(0.95, percentile_agg(f_cp_u11)) as f_cp_u11, approx_percentile(0.95, percentile_agg(f_cp_u12)) as f_cp_u12, approx_percentile(0.95, percentile_agg(f_cp_u21)) as f_cp_u21, approx_percentile(0.95, percentile_agg(f_cp_u22)) as f_cp_u22, " \
                           f"approx_percentile(0.95, percentile_agg(suckp_u11)) as suckp_u11, approx_percentile(0.95, percentile_agg(suckp_u12)) as suckp_u12, approx_percentile(0.95, percentile_agg(suckp_u21)) as suckp_u21, approx_percentile(0.95, percentile_agg(suckp_u22)) as suckp_u22, " \
                           f"avg(ABS(fas_u1 - fas_u2)) as fas_sub, avg(ABS(ras_u1 - ras_u2)) as ras_sub " \
                           f"FROM public.pro_macda where msg_calc_dvc_time > now() - INTERVAL '5 minutes' and msg_calc_dvc_no = '{dvc_no}' group by msg_calc_dvc_no"
 
-            querysql_10m = f"select msg_calc_dvc_no, round(approx_percentile(0.95, percentile_agg(wmode_u1))) as dvc_w_op_mode_u1, round(approx_percentile(0.95, percentile_agg(wmode_u2))) as dvc_w_op_mode_u2, " \
+            querysql_10m = f"select msg_calc_dvc_no, " \
+                           f"approx_percentile(0.95, percentile_agg(cfbk_comp_u11)) as cfbk_comp_u11, approx_percentile(0.95, percentile_agg(cfbk_comp_u12)) as cfbk_comp_u12, approx_percentile(0.95, percentile_agg(cfbk_comp_u21)) as cfbk_comp_u21, approx_percentile(0.95, percentile_agg(cfbk_comp_u22)) as cfbk_comp_u22, " \
                            f"approx_percentile(0.95, percentile_agg(sp_u11)) as sp_u11, approx_percentile(0.95, percentile_agg(sp_u12)) as sp_u12, approx_percentile(0.95, percentile_agg(sp_u21)) as sp_u21, approx_percentile(0.95, percentile_agg(sp_u22)) as sp_u22, " \
-                           f"approx_percentile(0.95, percentile_agg(cfbk_ef_u11)) as cfbk_ef_u11, approx_percentile(0.95, percentile_agg(cfbk_ef_u21)) as cfbk_ef_u21, approx_percentile(0.95, percentile_agg(cfbk_cf_u11)) as cfbk_cf_u11, approx_percentile(0.95, percentile_agg(cfbk_cf_u21)) as cfbk_cf_u21, " \
+                           f"approx_percentile(0.95, percentile_agg(cfbk_ef_u11)) as cfbk_ef_u11, approx_percentile(0.95, percentile_agg(cfbk_ef_u21)) as cfbk_ef_u21, approx_percentile(0.95, percentile_agg(cfbk_cf_u11)) as cfbk_cf_u11, approx_percentile(0.95, percentile_agg(cfbk_cf_u12)) as cfbk_cf_u12, approx_percentile(0.95, percentile_agg(cfbk_cf_u21)) as cfbk_cf_u21, approx_percentile(0.95, percentile_agg(cfbk_cf_u22)) as cfbk_cf_u22, " \
                            f"approx_percentile(0.95, percentile_agg(i_ef_u11)) as i_ef_u11, approx_percentile(0.95, percentile_agg(i_ef_u12)) as i_ef_u12, approx_percentile(0.95, percentile_agg(i_ef_u21)) as i_ef_u21, approx_percentile(0.95, percentile_agg(i_ef_u22)) as i_ef_u22, " \
                            f"approx_percentile(0.95, percentile_agg(i_cf_u11)) as i_cf_u11, approx_percentile(0.95, percentile_agg(i_cf_u12)) as i_cf_u12, approx_percentile(0.95, percentile_agg(i_cf_u21)) as i_cf_u21, approx_percentile(0.95, percentile_agg(i_cf_u22)) as i_cf_u22, " \
-                           f"approx_percentile(0.95, percentile_agg(fas_u1)) as fas_u1, approx_percentile(0.95, percentile_agg(fas_u2)) as fas_u2, " \
-                           f"approx_percentile(0.95, percentile_agg(cfbk_exufan)) as cfbk_exufan, approx_percentile(0.95, percentile_agg(i_exufan)) as i_exufan, " \
+                           f"approx_percentile(0.95, percentile_agg(fas_sys)) as fas_sys, " \
                            f"approx_percentile(0.95, percentile_agg(i_cp_u11)) as i_cp_u11, approx_percentile(0.95, percentile_agg(i_cp_u12)) as i_cp_u12, approx_percentile(0.95, percentile_agg(i_cp_u21)) as i_cp_u21, approx_percentile(0.95, percentile_agg(i_cp_u22)) as i_cp_u22 " \
                            f"FROM public.pro_macda where msg_calc_dvc_time > now() - INTERVAL '10 minutes' and msg_calc_dvc_no = '{dvc_no}' group by msg_calc_dvc_no"
 
-            querysql_15m = f"select msg_calc_dvc_no, round(approx_percentile(0.95, percentile_agg(wmode_u1))) as dvc_w_op_mode_u1, round(approx_percentile(0.95, percentile_agg(wmode_u2))) as dvc_w_op_mode_u2, " \
-                           f"approx_percentile(0.95, percentile_agg(highpress_u11)) as highpress_u11, approx_percentile(0.95, percentile_agg(highpress_u12)) as highpress_u12, approx_percentile(0.95, percentile_agg(highpress_u21)) as highpress_u21, approx_percentile(0.95, percentile_agg(highpress_u22)) as highpress_u22 " \
+            querysql_15m = f"select msg_calc_dvc_no, " \
+                           f"approx_percentile(0.95, percentile_agg(f_cp_u11)) as f_cp_u11, approx_percentile(0.95, percentile_agg(f_cp_u12)) as f_cp_u12, approx_percentile(0.95, percentile_agg(f_cp_u21)) as f_cp_u21, approx_percentile(0.95, percentile_agg(f_cp_u22)) as f_cp_u22, " \
+                           f"approx_percentile(0.95, percentile_agg(highpress_u11)) as highpress_u11, approx_percentile(0.95, percentile_agg(highpress_u12)) as highpress_u12, approx_percentile(0.95, percentile_agg(highpress_u21)) as highpress_u21, approx_percentile(0.95, percentile_agg(highpress_u22)) as highpress_u22, " \
+                           f"approx_percentile(0.95, percentile_agg(cfbk_ef_u11)) as cfbk_ef_u11, approx_percentile(0.95, percentile_agg(cfbk_ef_u21)) as cfbk_ef_u21, " \
+                           f"approx_percentile(0.95, percentile_agg(aq_co2_u1)) as aq_co2_u1, approx_percentile(0.95, percentile_agg(aq_co2_u2)) as aq_co2_u2 " \
                            f"FROM public.pro_macda where msg_calc_dvc_time > now() - INTERVAL '15 minutes' and msg_calc_dvc_no = '{dvc_no}' group by msg_calc_dvc_no"
 
-            querysql_20m = f"select msg_calc_dvc_no, round(approx_percentile(0.95, percentile_agg(wmode_u1))) as dvc_w_op_mode_u1, round(approx_percentile(0.95, percentile_agg(wmode_u2))) as dvc_w_op_mode_u2, " \
-                           f"approx_percentile(0.95, percentile_agg(bflt_tempover)) as bflt_tempover, " \
+            querysql_20m = f"select msg_calc_dvc_no, " \
                            f"approx_percentile(0.95, percentile_agg(cfbk_ef_u11)) as cfbk_ef_u11, approx_percentile(0.95, percentile_agg(cfbk_ef_u21)) as cfbk_ef_u21, " \
                            f"approx_percentile(0.95, percentile_agg(aq_co2_u1)) as aq_co2_u1, approx_percentile(0.95, percentile_agg(aq_co2_u2)) as aq_co2_u2, " \
                            f"approx_percentile(0.95, percentile_agg(aq_tvoc_u1)) as aq_tvoc_u1, approx_percentile(0.95, percentile_agg(aq_tvoc_u2)) as aq_tvoc_u2, " \
@@ -979,12 +987,12 @@ class TSutil(metaclass=Cached):
                            f"approx_percentile(0.95, percentile_agg(aq_pm10_u1)) as aq_pm10_u1, approx_percentile(0.95, percentile_agg(aq_pm10_u2)) as aq_pm10_u2 " \
                            f"FROM public.pro_macda where msg_calc_dvc_time > now() - INTERVAL '20 minutes' and msg_calc_dvc_no = '{dvc_no}' group by msg_calc_dvc_no"
 
-            querysql_30m = f"select msg_calc_dvc_no, round(approx_percentile(0.95, percentile_agg(wmode_u1))) as dvc_w_op_mode_u1, round(approx_percentile(0.95, percentile_agg(wmode_u2))) as dvc_w_op_mode_u2, " \
+            querysql_30m = f"select msg_calc_dvc_no, " \
                            f"approx_percentile(0.95, percentile_agg(cfbk_ef_u11)) as cfbk_ef_u11, approx_percentile(0.95, percentile_agg(cfbk_ef_u21)) as cfbk_ef_u21, " \
-                           f"approx_percentile(0.95, percentile_agg(cfbk_cf_u11)) as cfbk_cf_u11, approx_percentile(0.95, percentile_agg(cfbk_cf_u21)) as cfbk_cf_u21, " \
                            f"approx_percentile(0.95, percentile_agg(presdiff_u1)) as presdiff_u1, approx_percentile(0.95, percentile_agg(presdiff_u2)) as presdiff_u2 " \
                            f"FROM public.pro_macda where msg_calc_dvc_time > now() - INTERVAL '30 minutes' and msg_calc_dvc_no = '{dvc_no}' group by msg_calc_dvc_no"
         try:
+            #log.debug(querysql_1m)
             #log.debug(querysql_3m)
             #log.debug(querysql_5m)
             #log.debug(querysql_10m)
@@ -995,6 +1003,18 @@ class TSutil(metaclass=Cached):
             returndata['len'] = 0
             conn = self.conn_pool.getconn()
             cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            #query 1m
+            cur.execute(querysql_1m)
+            result = cur.fetchall()
+            rlen = len(result)
+            rdata = {}
+            rdata['len'] = rlen
+            if rlen >= 1:
+                rdata['data'] = result[0]
+                returndata['len'] += 1
+            else:
+                rdata['data'] = None
+            returndata['data1m'] = rdata
             #query 3m
             cur.execute(querysql_3m)
             result = cur.fetchall()
@@ -1077,138 +1097,145 @@ class TSutil(metaclass=Cached):
 
     def predict(self, mode, dvc_no):
         predictdata = self.prepare_predictdata(mode, dvc_no)
-        #log.debug(predictdata)
+        log.debug(predictdata)
         predictjson = {}
-        if predictdata['len'] == 6:
-            predictsave = 0
-            log.debug('Get Predict Data ... Success !')
-            log.debug('Predict Start ... ...')
-            # ref leak predict 冷媒泄露预警
-            ref_leak_u11 = 0
-            if (round(predictdata['data5m']['data']['dvc_w_op_mode_u1']) == 2 or round(predictdata['data5m']['data']['dvc_w_op_mode_u1']) ==3) and (round(predictdata['data5m']['data']['f_cp_u11'])>30 and round(predictdata['data5m']['data']['suckp_u11'])<2) :
-                ref_leak_u11 = 1
-            if (round(predictdata['data5m']['data']['dvc_w_op_mode_u1']) == 1) and (round(predictdata['data15m']['data']['highpress_u11'])<5) :
-                ref_leak_u11 = 1
-            ref_leak_u12 = 0
-            if (round(predictdata['data5m']['data']['dvc_w_op_mode_u1']) == 2 or round(predictdata['data5m']['data']['dvc_w_op_mode_u1']) ==3) and (round(predictdata['data5m']['data']['f_cp_u12'])>30 and round(predictdata['data5m']['data']['suckp_u12'])<2) :
-                ref_leak_u12 = 1
-            if (round(predictdata['data5m']['data']['dvc_w_op_mode_u1']) == 1) and (round(predictdata['data15m']['data']['highpress_u12'])<5) :
-                ref_leak_u12 = 1
-            ref_leak_u21 = 0
-            if (round(predictdata['data5m']['data']['dvc_w_op_mode_u2']) == 2 or round(predictdata['data5m']['data']['dvc_w_op_mode_u2']) ==3) and (round(predictdata['data5m']['data']['f_cp_u21'])>30 and round(predictdata['data5m']['data']['suckp_u21'])<2) :
-                ref_leak_u21 = 1
-            if (round(predictdata['data5m']['data']['dvc_w_op_mode_u2']) == 1) and (round(predictdata['data15m']['data']['highpress_u21'])<5) :
-                ref_leak_u21 = 1
-            ref_leak_u22 = 0
-            if (round(predictdata['data5m']['data']['dvc_w_op_mode_u2']) == 2 or round(predictdata['data5m']['data']['dvc_w_op_mode_u2']) ==3) and (round(predictdata['data5m']['data']['f_cp_u22'])>30 and round(predictdata['data5m']['data']['suckp_u22'])<2) :
-                ref_leak_u22 = 1
-            if (round(predictdata['data5m']['data']['dvc_w_op_mode_u2']) == 1) and (round(predictdata['data15m']['data']['highpress_u22'])<5) :
-                ref_leak_u22 = 1
+        if predictdata is not None:
+            if predictdata['len'] == 7:
+                predictsave = 0
+                log.debug('Get Predict Data ... Success !')
+                log.debug('Predict Start ... ...')
+                # ref leak predict 冷媒泄露预警
+                log.debug('ref leak predict 冷媒泄露预警')
+                ref_leak_u11 = 0
+                if (round(predictdata['data5m']['data']['f_cp_u11'])>30 and round(predictdata['data5m']['data']['suckp_u11'])<2) :
+                    ref_leak_u11 = 1
+                if (round(predictdata['data5m']['data']['f_cp_u11']) == 0) and (round(predictdata['data15m']['data']['highpress_u11'])<5) :
+                    ref_leak_u11 = 1
+                ref_leak_u12 = 0
+                if (round(predictdata['data5m']['data']['f_cp_u12'])>30 and round(predictdata['data5m']['data']['suckp_u12'])<2) :
+                    ref_leak_u12 = 1
+                if (round(predictdata['data5m']['data']['f_cp_u12']) == 1) and (round(predictdata['data15m']['data']['highpress_u12'])<5) :
+                    ref_leak_u12 = 1
+                ref_leak_u21 = 0
+                if (round(predictdata['data5m']['data']['f_cp_u21'])>30 and round(predictdata['data5m']['data']['suckp_u21'])<2) :
+                    ref_leak_u21 = 1
+                if (round(predictdata['data5m']['data']['f_cp_u21']) == 1) and (round(predictdata['data15m']['data']['highpress_u21'])<5) :
+                    ref_leak_u21 = 1
+                ref_leak_u22 = 0
+                if (round(predictdata['data5m']['data']['f_cp_u22'])>30 and round(predictdata['data5m']['data']['suckp_u22'])<2) :
+                    ref_leak_u22 = 1
+                if (round(predictdata['data5m']['data']['f_cp_u22']) == 1) and (round(predictdata['data15m']['data']['highpress_u22'])<5) :
+                    ref_leak_u22 = 1
 
-            # f_cp predict 制冷系统预警
-            f_cp_u1 = 0
-            if (round(predictdata['data3m']['data']['f_cp_u11']) == round(predictdata['data3m']['data']['f_cp_u12'])) and (round(predictdata['data3m']['data']['w_crntu1_sub'],1) > 2):
-                f_cp_u1 = 1
-            if (round(predictdata['data10m']['data']['sp_u11'],1) > 20 or round(predictdata['data10m']['data']['sp_u11'],1) < -8 or round(predictdata['data10m']['data']['sp_u12'],1) > 20 or round(predictdata['data10m']['data']['sp_u12'],1) < -8):
-                f_cp_u1 = 1
-            f_cp_u2 = 0
-            if (round(predictdata['data3m']['data']['f_cp_u21']) == round(predictdata['data3m']['data']['f_cp_u22'])) and (round(predictdata['data3m']['data']['w_crntu2_sub'],1) > 2):
-                f_cp_u2 = 1
-            if (round(predictdata['data10m']['data']['sp_u21'],1) > 20 or round(predictdata['data10m']['data']['sp_u21'],1) < -8 or round(predictdata['data10m']['data']['sp_u22'],1) > 20 or round(predictdata['data10m']['data']['sp_u22'],1) < -8):
-                f_cp_u2 = 1
+                # f_cp predict 制冷系统预警
+                log.debug('f_cp predict 制冷系统预警')
+                f_cp_u1 = 0
+                if (round(predictdata['data3m']['data']['f_cp_u11']) == round(predictdata['data3m']['data']['f_cp_u12'])) and (round(predictdata['data3m']['data']['w_crntu1_sub'],1) > 2):
+                    f_cp_u1 = 1
+                if (round(predictdata['data10m']['data']['sp_u11'],1) > 20 or round(predictdata['data10m']['data']['sp_u11'],1) < -8 or round(predictdata['data10m']['data']['sp_u12'],1) > 20 or round(predictdata['data10m']['data']['sp_u12'],1) < -8):
+                    f_cp_u1 = 1
+                f_cp_u2 = 0
+                if (round(predictdata['data3m']['data']['f_cp_u21']) == round(predictdata['data3m']['data']['f_cp_u22'])) and (round(predictdata['data3m']['data']['w_crntu2_sub'],1) > 2):
+                    f_cp_u2 = 1
+                if (round(predictdata['data10m']['data']['sp_u21'],1) > 20 or round(predictdata['data10m']['data']['sp_u21'],1) < -8 or round(predictdata['data10m']['data']['sp_u22'],1) > 20 or round(predictdata['data10m']['data']['sp_u22'],1) < -8):
+                    f_cp_u2 = 1
 
-            # fas & ras predict 新风温度传感器 & 回风温度传感器 预警
-            f_fas = 0
-            if round(predictdata['data5m']['data']['fas_sub'],1) > 8 :
-                f_fas = 1
-            f_ras = 0
-            if round(predictdata['data5m']['data']['ras_sub'], 1) > 8:
-                f_ras = 1
+                # fas & ras predict 新风温度传感器 & 回风温度传感器 预警
+                log.debug('fas & ras predict 温度传感器预警 预警')
+                f_fas = 0
+                if round(predictdata['data5m']['data']['fas_sub'],1) > 8 :
+                    f_fas = 1
+                f_ras = 0
+                if round(predictdata['data5m']['data']['ras_sub'], 1) > 8:
+                    f_ras = 1
 
-            #cabin_overtemp predict 车厢温度超温预警
-            cabin_overtemp = 0
-            if round(predictdata['data20m']['data']['bflt_tempover'],1) > 0:
-                cabin_overtemp = 1
+                #cabin_overtemp predict 车厢温度超温预警
+                log.debug('cabin_overtemp predict 车厢温度超温预警')
+                cabin_overtemp = 0
+                if round(predictdata['data1m']['data']['bflt_tempover'],1) > 0:
+                    cabin_overtemp = 1
 
-            #f_presdiff  predict 滤网脏堵预警
-            f_presdiff_u1 = 0
-            if round(predictdata['data30m']['data']['cfbk_ef_u11']) ==1 and round(predictdata['data30m']['data']['presdiff_u1']) > 300:
-                f_presdiff_u1 = 1
-            f_presdiff_u2 = 0
-            if round(predictdata['data30m']['data']['cfbk_ef_u21']) ==1 and round(predictdata['data30m']['data']['presdiff_u2']) > 300:
-                f_presdiff_u2 = 1
+                #f_presdiff  predict 滤网脏堵预警
+                log.debug('f_presdiff  predict 滤网脏堵预警')
+                f_presdiff_u1 = 0
+                if round(predictdata['data30m']['data']['cfbk_ef_u11']) ==1 and round(predictdata['data30m']['data']['presdiff_u1']) > 300:
+                    f_presdiff_u1 = 1
+                f_presdiff_u2 = 0
+                if round(predictdata['data30m']['data']['cfbk_ef_u21']) ==1 and round(predictdata['data30m']['data']['presdiff_u2']) > 300:
+                    f_presdiff_u2 = 1
 
-            #f_ef predict 通风机电流预警
-            f_ef_u11 = 0
-            if round(predictdata['data10m']['data']['cfbk_ef_u11']) == 1 and round(predictdata['data10m']['data']['i_ef_u11'],1) > 2:
-                f_ef_u11 = 1
-            f_ef_u12 = 0
-            if round(predictdata['data10m']['data']['cfbk_ef_u11']) == 1 and round(predictdata['data10m']['data']['i_ef_u12'],1) > 2:
-                f_ef_u12 = 1
-            f_ef_u21 = 0
-            if round(predictdata['data10m']['data']['cfbk_ef_u21']) == 1 and round(predictdata['data10m']['data']['i_ef_u21'],1) > 2:
-                f_ef_u21 = 1
-            f_ef_u22 = 0
-            if round(predictdata['data10m']['data']['cfbk_ef_u21']) == 1 and round(predictdata['data10m']['data']['i_ef_u22'],1) > 2:
-                f_ef_u22 = 1
+                #f_ef predict 通风机电流预警
+                log.debug('f_ef predict 通风机电流预警')
+                f_ef_u11 = 0
+                if round(predictdata['data10m']['data']['cfbk_ef_u11']) == 1 and round(predictdata['data10m']['data']['i_ef_u11'],1) > 2.2:
+                    f_ef_u11 = 1
+                f_ef_u12 = 0
+                if round(predictdata['data10m']['data']['cfbk_ef_u11']) == 1 and round(predictdata['data10m']['data']['i_ef_u12'],1) > 2.2:
+                    f_ef_u12 = 1
+                f_ef_u21 = 0
+                if round(predictdata['data10m']['data']['cfbk_ef_u21']) == 1 and round(predictdata['data10m']['data']['i_ef_u21'],1) > 2.2:
+                    f_ef_u21 = 1
+                f_ef_u22 = 0
+                if round(predictdata['data10m']['data']['cfbk_ef_u21']) == 1 and round(predictdata['data10m']['data']['i_ef_u22'],1) > 2.2:
+                    f_ef_u22 = 1
 
-            #f_cf predict 冷凝风机电流预警
-            f_cf_u11 = 0
-            if round(predictdata['data10m']['data']['cfbk_cf_u11']) == 1 and round(
-                    predictdata['data10m']['data']['i_cf_u11'], 1) > 2.9:
-                f_cf_u11 = 1
-            f_cf_u12 = 0
-            if round(predictdata['data10m']['data']['cfbk_cf_u11']) == 1 and round(
-                    predictdata['data10m']['data']['i_cf_u12'], 1) > 2.9:
-                f_cf_u12 = 1
-            f_cf_u21 = 0
-            if round(predictdata['data10m']['data']['cfbk_cf_u21']) == 1 and round(
-                    predictdata['data10m']['data']['i_cf_u21'], 1) > 2.9:
-                f_cf_u21 = 1
-            f_cf_u22 = 0
-            if round(predictdata['data10m']['data']['cfbk_cf_u21']) == 1 and round(
-                    predictdata['data10m']['data']['i_cf_u22'], 1) > 2.9:
-                f_cf_u22 = 1
+                #f_cf predict 冷凝风机电流预警
+                log.debug('f_cf predict 冷凝风机电流预警')
+                f_cf_u11 = 0
+                if round(predictdata['data10m']['data']['cfbk_cf_u11']) == 1 and round(
+                        predictdata['data10m']['data']['i_cf_u11'], 1) > 2.5:
+                    f_cf_u11 = 1
+                f_cf_u12 = 0
+                if round(predictdata['data10m']['data']['cfbk_cf_u11']) == 1 and round(
+                        predictdata['data10m']['data']['i_cf_u12'], 1) > 2.5:
+                    f_cf_u12 = 1
+                f_cf_u21 = 0
+                if round(predictdata['data10m']['data']['cfbk_cf_u21']) == 1 and round(
+                        predictdata['data10m']['data']['i_cf_u21'], 1) > 2.5:
+                    f_cf_u21 = 1
+                f_cf_u22 = 0
+                if round(predictdata['data10m']['data']['cfbk_cf_u21']) == 1 and round(
+                        predictdata['data10m']['data']['i_cf_u22'], 1) > 2.5:
+                    f_cf_u22 = 1
 
-            # f_exufan predict 废排风机电流预警
-            f_exufan = 0
-            if round(predictdata['data10m']['data']['cfbk_exufan'] ==1) and round(predictdata['data10m']['data']['i_exufan'],1) > 4:
-                f_exufan = 1
+                # f_fas predict 压缩机电流预警
+                log.debug('f_fas predict 压缩机电流预警')
+                f_fas_u11 = 0
+                if round(predictdata['data10m']['data']['cfbk_comp_u11']) == 1 and round(predictdata['data10m']['data']['fas_sys'],1) < 35 and round(predictdata['data10m']['data']['i_cp_u11'],1) > 18:
+                    f_fas_u11 = 1
+                f_fas_u21 = 0
+                if round(predictdata['data10m']['data']['cfbk_comp_u12']) == 1 and round(predictdata['data10m']['data']['fas_sys'],1) < 35 and round(predictdata['data10m']['data']['i_cp_u12'],1) > 18:
+                    f_fas_u21 = 1
+                f_fas_u12 = 0
+                if round(predictdata['data10m']['data']['cfbk_comp_u21']) == 1 and round(predictdata['data10m']['data']['fas_sys'],1) < 35 and round(predictdata['data10m']['data']['i_cp_u21'],1) > 18:
+                    f_fas_u12 = 1
+                f_fas_u22 = 0
+                if round(predictdata['data10m']['data']['cfbk_comp_u22']) == 1 and round(predictdata['data10m']['data']['fas_sys'],1) < 35 and round(predictdata['data10m']['data']['i_cp_u22'],1) > 18:
+                    f_fas_u22 = 1
 
-            # f_fas predict 压缩机电流预警
-            f_fas_u11 = 0
-            if round(predictdata['data10m']['data']['fas_u1'],1) < 35 and round(predictdata['data10m']['data']['i_cp_u11'],1) > 18:
-                f_fas_u11 = 1
-            f_fas_u21 = 0
-            if round(predictdata['data10m']['data']['fas_u1'],1) < 35 and round(predictdata['data10m']['data']['i_cp_u12'],1) > 18:
-                f_fas_u21 = 1
-            f_fas_u12 = 0
-            if round(predictdata['data10m']['data']['fas_u2'],1) < 35 and round(predictdata['data10m']['data']['i_cp_u21'],1) > 18:
-                f_fas_u12 = 1
-            f_fas_u22 = 0
-            if round(predictdata['data10m']['data']['fas_u2'],1) < 35 and round(predictdata['data10m']['data']['i_cp_u22'],1) > 18:
-                f_fas_u22 = 1
+                # f_aq predict 空气质量监测终端预警
+                log.debug('f_aq predict 空气质量预警')
+                f_aq_u1 = 0
+                if (round(predictdata['data20m']['data']['cfbk_ef_u11']) == 1) and ( round(predictdata['data15m']['data']['aq_co2_u1'])>1200 or round(predictdata['data20m']['data']['aq_pm2_5_u1'])>75 or round(predictdata['data20m']['data']['aq_pm10_u1'])>150 or round(predictdata['data20m']['data']['aq_tvoc_u1'])>600):
+                    f_aq_u1 = 1
+                f_aq_u2 = 0
+                if (round(predictdata['data20m']['data']['cfbk_ef_u21']) == 1) and ( round(predictdata['data15m']['data']['aq_co2_u2'])>1200 or round(predictdata['data20m']['data']['aq_pm2_5_u2'])>75 or round(predictdata['data20m']['data']['aq_pm10_u2'])>150 or round(predictdata['data20m']['data']['aq_tvoc_u2'])>600):
+                    f_aq_u2 = 1
 
-            # f_aq predict 空气质量监测终端预警
-            f_aq_u1 = 0
-            if (round(predictdata['data20m']['data']['cfbk_ef_u11']) == 1) and ( round(predictdata['data20m']['data']['aq_co2_u1'])>1200 or round(predictdata['data20m']['data']['aq_pm2_5_u1'])>75 or round(predictdata['data20m']['data']['aq_pm10_u1'])>150 or round(predictdata['data20m']['data']['aq_tvoc_u1'])>600):
-                f_aq_u1 = 1
-            f_aq_u2 = 0
-            if (round(predictdata['data20m']['data']['cfbk_ef_u21']) == 1) and ( round(predictdata['data20m']['data']['aq_co2_u2'])>1200 or round(predictdata['data20m']['data']['aq_pm2_5_u2'])>75 or round(predictdata['data20m']['data']['aq_pm10_u2'])>150 or round(predictdata['data20m']['data']['aq_tvoc_u2'])>600):
-                f_aq_u2 = 1
-
-            predictsave = (f"{ref_leak_u11},{ref_leak_u12},{ref_leak_u21},{ref_leak_u22},{f_cp_u1},{f_cp_u2},{f_fas},{f_ras},{cabin_overtemp},{f_presdiff_u1},{f_presdiff_u2},"
-                           f"{f_ef_u11},{f_ef_u12},{f_ef_u21},{f_ef_u22},{f_cf_u11},{f_cf_u12},{f_cf_u21},{f_cf_u22},{f_exufan},{f_fas_u11},{f_fas_u12},{f_fas_u21},{f_fas_u22},{f_aq_u1},{f_aq_u2}")
-            predictskey = ['ref_leak_u11','ref_leak_u12','ref_leak_u21','ref_leak_u22','f_cp_u1','f_cp_u2','f_fas','f_ras','cabin_overtemp','f_presdiff_u1','f_presdiff_u2','f_ef_u11','f_ef_u12','f_ef_u21','f_ef_u22','f_cf_u11','f_cf_u12','f_cf_u21','f_cf_u22','f_exufan','f_fas_u11','f_fas_u12','f_fas_u21','f_fas_u22','f_aq_u1','f_aq_u2']
-            for k in range(len(predictskey)):
-                predictjson[predictskey[k]] = list(map(int,predictsave.split(',')))[k]
-            #log.debug(predictskey)
-            #log.debug(predictsave)
-            #log.debug(list(map(int,predictsave.split(','))))
-            #log.debug(sum(list(map(int,predictsave.split(',')))))
-            log.debug(predictjson)
-            log.debug('Predict ... Success !')
-            return predictjson
+                predictsave = (f"{ref_leak_u11},{ref_leak_u12},{ref_leak_u21},{ref_leak_u22},{f_cp_u1},{f_cp_u2},{f_fas},{f_ras},{cabin_overtemp},{f_presdiff_u1},{f_presdiff_u2},"
+                               f"{f_ef_u11},{f_ef_u12},{f_ef_u21},{f_ef_u22},{f_cf_u11},{f_cf_u12},{f_cf_u21},{f_cf_u22},{f_fas_u11},{f_fas_u12},{f_fas_u21},{f_fas_u22},{f_aq_u1},{f_aq_u2}")
+                predictskey = ['ref_leak_u11','ref_leak_u12','ref_leak_u21','ref_leak_u22','f_cp_u1','f_cp_u2','f_fas','f_ras','cabin_overtemp','f_presdiff_u1','f_presdiff_u2','f_ef_u11','f_ef_u12','f_ef_u21','f_ef_u22','f_cf_u11','f_cf_u12','f_cf_u21','f_cf_u22','f_fas_u11','f_fas_u12','f_fas_u21','f_fas_u22','f_aq_u1','f_aq_u2']
+                for k in range(len(predictskey)):
+                    predictjson[predictskey[k]] = list(map(int,predictsave.split(',')))[k]
+                #log.debug(predictskey)
+                #log.debug(predictsave)
+                #log.debug(list(map(int,predictsave.split(','))))
+                #log.debug(sum(list(map(int,predictsave.split(',')))))
+                log.debug(predictjson)
+                log.debug('Predict ... Success !')
+                return predictjson
+            else:
+                return predictjson
         else:
             return predictjson
 
@@ -1248,7 +1275,7 @@ class TSutil(metaclass=Cached):
 
 if __name__ == '__main__':
     tu = TSutil()
-    tu.predict('dev', '700203')
+    tu.predict('dev', '1210106')
     '''
     tu = TSutil()
     jobj = {"schema":"s1","playload":"p1"}

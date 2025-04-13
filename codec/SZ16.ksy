@@ -274,7 +274,7 @@ seq:
     type: b1le
   - id: bflt_vfd_cnt_u12
     type: b1le
-  - id: bflt__ev_cnt_u1
+  - id: bflt_ev_cnt_u1
     type: b1le
   - id: ig_rsv16
     type: b1le
@@ -290,7 +290,7 @@ seq:
     type: b1le
   - id: bflt_vfd_cnt_u22
     type: b1le
-  - id: bflt__ev_cnt_u2
+  - id: bflt_ev_cnt_u2
     type: b1le
   - id: ig_rsv18
     type: b1le

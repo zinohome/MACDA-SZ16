@@ -157,7 +157,7 @@ class Sz16(KaitaiStruct):
         self.bflt_cf_cnt_u12 = self._io.read_bits_int_le(1) != 0
         self.bflt_vfd_cnt_u11 = self._io.read_bits_int_le(1) != 0
         self.bflt_vfd_cnt_u12 = self._io.read_bits_int_le(1) != 0
-        self.bflt__ev_cnt_u1 = self._io.read_bits_int_le(1) != 0
+        self.bflt_ev_cnt_u1 = self._io.read_bits_int_le(1) != 0
         self.ig_rsv16 = self._io.read_bits_int_le(1) != 0
         self.ig_rsv17 = self._io.read_bits_int_le(1) != 0
         self.bflt_ef_cnt_u2 = self._io.read_bits_int_le(1) != 0
@@ -165,7 +165,7 @@ class Sz16(KaitaiStruct):
         self.bflt_cf_cnt_u22 = self._io.read_bits_int_le(1) != 0
         self.bflt_vfd_cnt_u21 = self._io.read_bits_int_le(1) != 0
         self.bflt_vfd_cnt_u22 = self._io.read_bits_int_le(1) != 0
-        self.bflt__ev_cnt_u2 = self._io.read_bits_int_le(1) != 0
+        self.bflt_ev_cnt_u2 = self._io.read_bits_int_le(1) != 0
         self.ig_rsv18 = self._io.read_bits_int_le(1) != 0
         self.ig_rsv19 = self._io.read_bits_int_le(1) != 0
         self.bflt_tempover = self._io.read_bits_int_le(1) != 0
