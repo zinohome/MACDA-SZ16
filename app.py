@@ -23,7 +23,8 @@ app = faust.App(
 )
 app.web.blueprints.add('/stats/', 'faust.web.apps.stats:blueprint')
 run_mode = settings.RUN_MODE
-#app.discover('pipeline.batchparse')
+#app.discover('pipeline.parse')
+app.discover('pipeline.batchparse')
 #app.discover('pipeline.batchstore')
 #app.discover('pipeline.status')
 #app.discover('pipeline.lifereport')
@@ -31,6 +32,7 @@ run_mode = settings.RUN_MODE
 #app.discover('pipeline.faultreport')
 #app.discover('pipeline.predict')
 
+'''
 if run_mode.strip().lower() == 'parse':
     # run parse
     app.discover('pipeline.batchparse')
@@ -42,6 +44,7 @@ else:
     app.discover('pipeline.status','pipeline.lifereport','pipeline.predict', 'pipeline.faultreport')
     #app.discover('pipeline.status','pipeline.lifereport')
     #app.discover('pipeline.predict', 'pipeline.faultreport')
+'''
 
     #app.discover('pipeline.predict', 'pipeline.faultreport','pipeline.statisreport')
 #app.discover('pipeline.batchparse','pipeline.batchstore','pipeline.predict','pipeline.faultreport','pipeline.statisreport')

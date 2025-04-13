@@ -11,6 +11,7 @@ import binascii
 import simplejson as json
 from app import app
 from codec.sz16 import Sz16
+from codec.sz16flag import Sz16flag
 from core.settings import settings
 from pipeline.fetcher.models import output_schema
 from pipeline.batchparse.models import input_topic, output_topic, json_schema
@@ -30,47 +31,67 @@ async def parse_signal(stream):
             if dev_mode:
                 # Parse data and send to parsed topic
                 parsed_dict = {}
+                flag_dict = {}
                 if src_mode.strip().lower() == 'bin':
-                    parsed_dict = Sz16.from_bytes_to_dict(data)
+                    flag_dict = Sz16flag.from_bytes_to_dict(data)
                 else:
                     datadict = json.loads(str(data, encoding='utf-8'))
                     if 'message_data' in datadict.keys():
-                        parsed_dict = Sz16.from_bytes_to_dict(binascii.a2b_hex(datadict['message_data']))
+                        flag_dict = Sz16flag.from_bytes_to_dict(binascii.a2b_hex(datadict['message_data']))
                     else:
-                        log.debug("-------------------- No message data --------------------")
-                out_record = {"schema": jschema, "payload": parsed_dict}
-                if dev_mode:
-                    key = f"{parsed_dict['msg_calc_dvc_no']}-{parsed_dict['msg_calc_parse_time']}"
-                else:
-                    key = f"{parsed_dict['msg_calc_dvc_no']}-{parsed_dict['msg_calc_dvc_time']}"
-                log.debug(
-                    "---------- Parsed data with key : %s" % f"{parsed_dict['msg_calc_dvc_no']}-{parsed_dict['msg_calc_dvc_time']}")
-                await output_topic.send(key=key, value=out_record, schema=output_schema)
-                # Send json to Archive topics
-                archivetopicname = f"MACDA-archive-{settings.PARSED_TOPIC_NAME}-{parsed_dict['msg_calc_dvc_no']}"
-                archivetopic = app.topic(archivetopicname, partitions=settings.TOPIC_PARTITIONS, value_serializer='json')
-                await archivetopic.send(key=key, value=out_record)
+                        log.debug("-------------------- No message flag data --------------------")
+                if flag_dict['dvc_flag'] == 1:
+                    if src_mode.strip().lower() == 'bin':
+                        parsed_dict = Sz16.from_bytes_to_dict(data)
+                    else:
+                        datadict = json.loads(str(data, encoding='utf-8'))
+                        if 'message_data' in datadict.keys():
+                            parsed_dict = Sz16.from_bytes_to_dict(binascii.a2b_hex(datadict['message_data']))
+                        else:
+                            log.debug("-------------------- No message data --------------------")
+                    out_record = {"schema": jschema, "payload": parsed_dict}
+                    if dev_mode:
+                        key = f"{parsed_dict['msg_calc_dvc_no']}-{parsed_dict['msg_calc_parse_time']}"
+                    else:
+                        key = f"{parsed_dict['msg_calc_dvc_no']}-{parsed_dict['msg_calc_dvc_time']}"
+                    log.debug(
+                        "---------- Parsed data with key : %s" % f"{parsed_dict['msg_calc_dvc_no']}-{parsed_dict['msg_calc_dvc_time']}")
+                    await output_topic.send(key=key, value=out_record, schema=output_schema)
+                    # Send json to Archive topics
+                    archivetopicname = f"MACDA-archive-{settings.PARSED_TOPIC_NAME}-{parsed_dict['msg_calc_dvc_no']}"
+                    archivetopic = app.topic(archivetopicname, partitions=settings.TOPIC_PARTITIONS, value_serializer='json')
+                    await archivetopic.send(key=key, value=out_record)
             else:
                 # Parse data and send to parsed topic
                 parsed_dict = {}
+                flag_dict = {}
                 if src_mode.strip().lower() == 'bin':
-                    parsed_dict = Sz16.from_bytes_to_dict(data)
+                    flag_dict = Sz16flag.from_bytes_to_dict(data)
                 else:
                     datadict = json.loads(str(data, encoding='utf-8'))
                     if 'message_data' in datadict.keys():
-                        parsed_dict = Sz16.from_bytes_to_dict(binascii.a2b_hex(datadict['message_data']))
+                        flag_dict = Sz16flag.from_bytes_to_dict(binascii.a2b_hex(datadict['message_data']))
                     else:
-                        log.debug("-------------------- No message data --------------------")
-                out_record = {"schema": jschema, "payload": parsed_dict}
-                if dev_mode:
-                    key = f"{parsed_dict['msg_calc_dvc_no']}-{parsed_dict['msg_calc_parse_time']}"
-                else:
-                    key = f"{parsed_dict['msg_calc_dvc_no']}-{parsed_dict['msg_calc_dvc_time']}"
-                log.debug(
-                    "---------- Parsed data with key : %s" % f"{parsed_dict['msg_calc_dvc_no']}-{parsed_dict['msg_calc_dvc_time']}")
-                await output_topic.send(key=key, value=out_record, schema=output_schema)
-                # Send json to Archive topics
-                archivetopicname = f"MACDA-archive-{settings.PARSED_TOPIC_NAME}-{parsed_dict['msg_calc_dvc_no']}"
-                archivetopic = app.topic(archivetopicname, partitions=settings.TOPIC_PARTITIONS,
-                                         value_serializer='json')
-                await archivetopic.send(key=key, value=out_record)
+                        log.debug("-------------------- No message flag data --------------------")
+                if flag_dict['dvc_flag'] == 1:
+                    if src_mode.strip().lower() == 'bin':
+                        parsed_dict = Sz16.from_bytes_to_dict(data)
+                    else:
+                        datadict = json.loads(str(data, encoding='utf-8'))
+                        if 'message_data' in datadict.keys():
+                            parsed_dict = Sz16.from_bytes_to_dict(binascii.a2b_hex(datadict['message_data']))
+                        else:
+                            log.debug("-------------------- No message data --------------------")
+                    out_record = {"schema": jschema, "payload": parsed_dict}
+                    if dev_mode:
+                        key = f"{parsed_dict['msg_calc_dvc_no']}-{parsed_dict['msg_calc_parse_time']}"
+                    else:
+                        key = f"{parsed_dict['msg_calc_dvc_no']}-{parsed_dict['msg_calc_dvc_time']}"
+                    log.debug(
+                        "---------- Parsed data with key : %s" % f"{parsed_dict['msg_calc_dvc_no']}-{parsed_dict['msg_calc_dvc_time']}")
+                    await output_topic.send(key=key, value=out_record, schema=output_schema)
+                    # Send json to Archive topics
+                    archivetopicname = f"MACDA-archive-{settings.PARSED_TOPIC_NAME}-{parsed_dict['msg_calc_dvc_no']}"
+                    archivetopic = app.topic(archivetopicname, partitions=settings.TOPIC_PARTITIONS,
+                                             value_serializer='json')
+                    await archivetopic.send(key=key, value=out_record)

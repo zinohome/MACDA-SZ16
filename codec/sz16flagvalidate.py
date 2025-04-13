@@ -14,7 +14,7 @@ from utils.log import log as log
 import simplejson as json
 
 if __name__ == '__main__':
-    rdict = Sz16flag.from_file_to_dict('sz16')
+    rdict = Sz16flag.from_file_to_dict('sz16-Flag_1')
     for k,v in rdict.items():
         log.debug('%s = [%s]' % (k,v))
     log.debug(len(rdict.items()))
