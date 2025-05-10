@@ -6,7 +6,7 @@ apt -y dist-upgrade && \
 apt-get install -y --no-install-recommends build-essential libssl-dev libffi-dev python3-dev net-tools libsasl2-dev cmake libsnappy-dev zlib1g-dev libbz2-dev libgflags-dev liblz4-dev curl wget procps netcat git libnss3-tools python3-pip && \
 pip3 install virtualenv && \
 cd /opt && \
-git clone https://github.com/zinohome/MACDA-NB67.git && \
+git clone https://github.com/zinohome/MACDA-SZ16.git && \
 mv MACDA-NB67 MACDA && \
 cd /opt/MACDA && \
 git pull && \
