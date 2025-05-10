@@ -7,7 +7,7 @@ apt-get install -y --no-install-recommends build-essential libssl-dev libffi-dev
 pip3 install virtualenv && \
 cd /opt && \
 git clone https://github.com/zinohome/MACDA-SZ16.git && \
-mv MACDA-NB67 MACDA && \
+mv MACDA-SZ16 MACDA && \
 cd /opt/MACDA && \
 git pull && \
 mkdir -p /opt/MACDA/log && \
