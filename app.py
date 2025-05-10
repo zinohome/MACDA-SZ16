@@ -33,7 +33,7 @@ run_mode = settings.RUN_MODE
 #app.discover('pipeline.faultreport')
 #app.discover('pipeline.predict')
 
-'''
+
 if run_mode.strip().lower() == 'parse':
     # run parse
     app.discover('pipeline.batchparse')
@@ -47,7 +47,7 @@ else:
     app.discover('pipeline.predict')
     #app.discover('pipeline.faultreport')
     #app.discover('pipeline.status','pipeline.lifereport','pipeline.predict', 'pipeline.faultreport')
-'''
+
 
     #app.discover('pipeline.predict', 'pipeline.faultreport','pipeline.statisreport')
 #app.discover('pipeline.batchparse','pipeline.batchstore','pipeline.predict','pipeline.faultreport','pipeline.statisreport')
