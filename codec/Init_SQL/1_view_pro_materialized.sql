@@ -1,17 +1,17 @@
--- 创建视图：dev_mview_train_carriage
-CREATE MATERIALIZED  VIEW dev_mview_train_carriage AS
+-- 创建视图：pro_mview_train_carriage
+CREATE MATERIALIZED  VIEW pro_mview_train_carriage AS
 SELECT DISTINCT
     dvc_train_no,
     dvc_carriage_no
 FROM
-    dev_macda
+    pro_macda
 WHERE
-    msg_calc_parse_time >= CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Shanghai' - INTERVAL '24 hours'
+    msg_calc_dvc_time >= CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Shanghai' - INTERVAL '24 hours'
 WITH NO DATA; -- 初始不加载数据，需要手动REFRESH
-REFRESH MATERIALIZED VIEW dev_mview_train_carriage;
+REFRESH MATERIALIZED VIEW pro_mview_train_carriage;
 
--- 创建视图：dev_mview_param
-CREATE MATERIALIZED  VIEW dev_mview_param AS
+-- 创建视图：pro_mview_param
+CREATE MATERIALIZED  VIEW pro_mview_param AS
 SELECT
     msg_calc_dvc_time,
     msg_calc_parse_time,
@@ -19,7 +19,7 @@ SELECT
     msg_calc_train_no,
     dvc_train_no,
     dvc_carriage_no,
-    -- 动态筛选所有Param类型且存在于dev_macda的字段
+    -- 动态筛选所有Param类型且存在于pro_macda的字段
     fas_sys,
     ras_sys,
     tic,
@@ -104,13 +104,13 @@ SELECT
     i_hvac_u2,
     dwpower
 FROM
-    dev_macda
+    pro_macda
 WITH NO DATA; -- 初始不加载数据，需要手动REFRESH
-CREATE INDEX idx_param_parse_time ON dev_mview_param(msg_calc_parse_time);
-REFRESH MATERIALIZED VIEW dev_mview_param;
+CREATE INDEX idx_pro_param_dvc_time ON pro_mview_param(msg_calc_dvc_time);
+REFRESH MATERIALIZED VIEW pro_mview_param;
 
--- 创建视图：dev_mview_error
-CREATE MATERIALIZED  VIEW dev_mview_error AS
+-- 创建视图：pro_mview_error
+CREATE MATERIALIZED  VIEW pro_mview_error AS
 SELECT
     msg_calc_dvc_time,
     msg_calc_parse_time,
@@ -118,7 +118,7 @@ SELECT
     msg_calc_train_no,
     dvc_train_no,
     dvc_carriage_no,
-    -- 动态筛选所有Error类型且存在于dev_macda的字段
+    -- 动态筛选所有Error类型且存在于pro_macda的字段
     bocflt_ef_u11,
     bocflt_ef_u12,
     bocflt_cf_u11,
@@ -222,13 +222,13 @@ SELECT
     bflt_ev_cnt_u2,
     bflt_tempover
 FROM
-    dev_macda
+    pro_macda
 WITH NO DATA; -- 初始不加载数据，需要手动REFRESH
-CREATE INDEX idx_error_parse_time ON dev_mview_error(msg_calc_parse_time);
-REFRESH MATERIALIZED VIEW dev_mview_error;
+CREATE INDEX idx_pro_error_dvc_time ON pro_mview_error(msg_calc_dvc_time);
+REFRESH MATERIALIZED VIEW pro_mview_error;
 
--- 创建视图：dev_mview_statistic
-CREATE MATERIALIZED  VIEW dev_mview_statistic AS
+-- 创建视图：pro_mview_statistic
+CREATE MATERIALIZED  VIEW pro_mview_statistic AS
 SELECT
     msg_calc_dvc_time,
     msg_calc_parse_time,
@@ -236,7 +236,7 @@ SELECT
     msg_calc_train_no,
     dvc_train_no,
     dvc_carriage_no,
-    -- 动态筛选所有Statistics类型且存在于dev_macda的字段
+    -- 动态筛选所有Statistics类型且存在于pro_macda的字段
     dwemerg_op_tm,
     dwemerg_op_cnt,
     dwef_op_tm_u11,
@@ -273,13 +273,13 @@ SELECT
     dwap_op_cnt_u21,
     dwap_op_cnt_u22
 FROM
-    dev_macda
+    pro_macda
 WITH NO DATA; -- 初始不加载数据，需要手动REFRESH
-CREATE INDEX idx_statistic_parse_time ON dev_mview_statistic(msg_calc_parse_time);
-REFRESH MATERIALIZED VIEW dev_mview_statistic;
+CREATE INDEX idx_pro_statistic_dvc_time ON pro_mview_statistic(msg_calc_dvc_time);
+REFRESH MATERIALIZED VIEW pro_mview_statistic;
 
--- 创建视图：dev_mview_param_transposed（参数类型字段转置）
-CREATE MATERIALIZED  VIEW dev_mview_param_transposed AS
+-- 创建视图：pro_mview_param_transposed（参数类型字段转置）
+CREATE MATERIALIZED  VIEW pro_mview_param_transposed AS
 SELECT
     p.msg_calc_dvc_time,
     p.msg_calc_parse_time,
@@ -375,7 +375,7 @@ SELECT
         ELSE NULL
     END AS param_value
 FROM
-    dev_mview_param p
+    pro_mview_param p
 CROSS JOIN
     sys_fields f
 WHERE
@@ -397,16 +397,16 @@ WHERE
     )
 ORDER BY
     f.field_name,
-    p.msg_calc_parse_time
+    p.msg_calc_dvc_time
 WITH NO DATA; -- 初始不加载数据，需要手动REFRESH
-CREATE INDEX idx_param_transposed_param_name ON dev_mview_param_transposed(param_name);
-CREATE INDEX idx_param_transposed_parse_time ON dev_mview_param_transposed(msg_calc_parse_time);
-CREATE INDEX idx_param_transposed_param_value ON dev_mview_param_transposed(param_value);
-REFRESH MATERIALIZED VIEW dev_mview_param_transposed;
+CREATE INDEX idx_pro_param_transposed_param_name ON pro_mview_param_transposed(param_name);
+CREATE INDEX idx_pro_param_transposed_dvc_time ON pro_mview_param_transposed(msg_calc_dvc_time);
+CREATE INDEX idx_pro_param_transposed_param_value ON pro_mview_param_transposed(param_value);
+REFRESH MATERIALIZED VIEW pro_mview_param_transposed;
 
 
--- 创建视图：dev_mview_error_transposed（错误类型字段转置）
-CREATE MATERIALIZED  VIEW dev_mview_error_transposed AS
+-- 创建视图：pro_mview_error_transposed（错误类型字段转置）
+CREATE MATERIALIZED  VIEW pro_mview_error_transposed AS
 SELECT
     e.msg_calc_dvc_time,
     e.msg_calc_parse_time,
@@ -521,7 +521,7 @@ SELECT
         ELSE NULL
     END AS param_value
 FROM
-    dev_mview_error e
+    pro_mview_error e
 CROSS JOIN
     sys_fields f
 WHERE
@@ -555,15 +555,15 @@ WHERE
     )
 ORDER BY
     f.field_name,
-    e.msg_calc_parse_time
+    e.msg_calc_dvc_time
 WITH NO DATA; -- 初始不加载数据，需要手动REFRESH
-CREATE INDEX idx_error_transposed_param_name ON dev_mview_error_transposed(param_name);
-CREATE INDEX idx_error_transposed_parse_time ON dev_mview_error_transposed(msg_calc_parse_time);
-CREATE INDEX idx_error_transposed_param_value ON dev_mview_error_transposed(param_value);
-REFRESH MATERIALIZED VIEW dev_mview_error_transposed;
+CREATE INDEX idx_pro_error_transposed_param_name ON pro_mview_error_transposed(param_name);
+CREATE INDEX idx_pro_error_transposed_dvc_time ON pro_mview_error_transposed(msg_calc_dvc_time);
+CREATE INDEX idx_pro_error_transposed_param_value ON pro_mview_error_transposed(param_value);
+REFRESH MATERIALIZED VIEW pro_mview_error_transposed;
 
--- 创建视图：dev_mview_statistic_transposed（统计类型字段转置）
-CREATE MATERIALIZED  VIEW dev_mview_statistic_transposed AS
+-- 创建视图：pro_mview_statistic_transposed（统计类型字段转置）
+CREATE MATERIALIZED  VIEW pro_mview_statistic_transposed AS
 SELECT
     s.msg_calc_dvc_time,
     s.msg_calc_parse_time,
@@ -611,7 +611,7 @@ SELECT
         ELSE NULL
     END AS param_value
 FROM
-    dev_mview_statistic s
+    pro_mview_statistic s
 CROSS JOIN
     sys_fields f
 WHERE
@@ -628,9 +628,9 @@ WHERE
     )
 ORDER BY
     f.field_name,
-    s.msg_calc_parse_time
+    s.msg_calc_dvc_time
 WITH NO DATA; -- 初始不加载数据，需要手动REFRESH
-CREATE INDEX idx_statistic_transposed_param_name ON dev_mview_statistic_transposed(param_name);
-CREATE INDEX idx_statistic_transposed_parse_time ON dev_mview_statistic_transposed(msg_calc_parse_time);
-CREATE INDEX idx_statistic_transposed_param_value ON dev_mview_statistic_transposed(param_value);
-REFRESH MATERIALIZED VIEW dev_mview_statistic_transposed;
+CREATE INDEX idx_pro_statistic_transposed_param_name ON pro_mview_statistic_transposed(param_name);
+CREATE INDEX idx_pro_statistic_transposed_dvc_time ON pro_mview_statistic_transposed(msg_calc_dvc_time);
+CREATE INDEX idx_pro_statistic_transposed_param_value ON pro_mview_statistic_transposed(param_value);
+REFRESH MATERIALIZED VIEW pro_mview_statistic_transposed;

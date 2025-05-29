@@ -106,7 +106,7 @@ SELECT
 FROM
     dev_macda
 WITH NO DATA; -- 初始不加载数据，需要手动REFRESH
-CREATE INDEX idx_param_parse_time ON dev_mview_param(msg_calc_parse_time);
+CREATE INDEX idx_dev_param_parse_time ON dev_mview_param(msg_calc_parse_time);
 REFRESH MATERIALIZED VIEW dev_mview_param;
 
 -- 创建视图：dev_mview_error
@@ -224,7 +224,7 @@ SELECT
 FROM
     dev_macda
 WITH NO DATA; -- 初始不加载数据，需要手动REFRESH
-CREATE INDEX idx_error_parse_time ON dev_mview_error(msg_calc_parse_time);
+CREATE INDEX idx_dev_error_parse_time ON dev_mview_error(msg_calc_parse_time);
 REFRESH MATERIALIZED VIEW dev_mview_error;
 
 -- 创建视图：dev_mview_statistic
@@ -275,7 +275,7 @@ SELECT
 FROM
     dev_macda
 WITH NO DATA; -- 初始不加载数据，需要手动REFRESH
-CREATE INDEX idx_statistic_parse_time ON dev_mview_statistic(msg_calc_parse_time);
+CREATE INDEX idx_dev_statistic_parse_time ON dev_mview_statistic(msg_calc_parse_time);
 REFRESH MATERIALIZED VIEW dev_mview_statistic;
 
 -- 创建视图：dev_mview_param_transposed（参数类型字段转置）
@@ -399,9 +399,9 @@ ORDER BY
     f.field_name,
     p.msg_calc_parse_time
 WITH NO DATA; -- 初始不加载数据，需要手动REFRESH
-CREATE INDEX idx_param_transposed_param_name ON dev_mview_param_transposed(param_name);
-CREATE INDEX idx_param_transposed_parse_time ON dev_mview_param_transposed(msg_calc_parse_time);
-CREATE INDEX idx_param_transposed_param_value ON dev_mview_param_transposed(param_value);
+CREATE INDEX idx_dev_param_transposed_param_name ON dev_mview_param_transposed(param_name);
+CREATE INDEX idx_dev_param_transposed_parse_time ON dev_mview_param_transposed(msg_calc_parse_time);
+CREATE INDEX idx_dev_param_transposed_param_value ON dev_mview_param_transposed(param_value);
 REFRESH MATERIALIZED VIEW dev_mview_param_transposed;
 
 
@@ -557,9 +557,9 @@ ORDER BY
     f.field_name,
     e.msg_calc_parse_time
 WITH NO DATA; -- 初始不加载数据，需要手动REFRESH
-CREATE INDEX idx_error_transposed_param_name ON dev_mview_error_transposed(param_name);
-CREATE INDEX idx_error_transposed_parse_time ON dev_mview_error_transposed(msg_calc_parse_time);
-CREATE INDEX idx_error_transposed_param_value ON dev_mview_error_transposed(param_value);
+CREATE INDEX idx_dev_error_transposed_param_name ON dev_mview_error_transposed(param_name);
+CREATE INDEX idx_dev_error_transposed_parse_time ON dev_mview_error_transposed(msg_calc_parse_time);
+CREATE INDEX idx_dev_error_transposed_param_value ON dev_mview_error_transposed(param_value);
 REFRESH MATERIALIZED VIEW dev_mview_error_transposed;
 
 -- 创建视图：dev_mview_statistic_transposed（统计类型字段转置）
@@ -630,7 +630,7 @@ ORDER BY
     f.field_name,
     s.msg_calc_parse_time
 WITH NO DATA; -- 初始不加载数据，需要手动REFRESH
-CREATE INDEX idx_statistic_transposed_param_name ON dev_mview_statistic_transposed(param_name);
-CREATE INDEX idx_statistic_transposed_parse_time ON dev_mview_statistic_transposed(msg_calc_parse_time);
-CREATE INDEX idx_statistic_transposed_param_value ON dev_mview_statistic_transposed(param_value);
+CREATE INDEX idx_dev_statistic_transposed_param_name ON dev_mview_statistic_transposed(param_name);
+CREATE INDEX idx_dev_statistic_transposed_parse_time ON dev_mview_statistic_transposed(msg_calc_parse_time);
+CREATE INDEX idx_dev_statistic_transposed_param_value ON dev_mview_statistic_transposed(param_value);
 REFRESH MATERIALIZED VIEW dev_mview_statistic_transposed;
