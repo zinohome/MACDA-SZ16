@@ -559,6 +559,12 @@ ORDER BY
 WITH NO DATA; -- 初始不加载数据，需要手动REFRESH
 CREATE INDEX idx_pro_error_transposed_param_name ON pro_mview_error_transposed(param_name);
 CREATE INDEX idx_pro_error_transposed_dvc_time ON pro_mview_error_transposed(msg_calc_dvc_time);
+CREATE INDEX idx_pro_mview_error_transposed_covering ON pro_mview_error_transposed (
+    msg_calc_dvc_no,
+    msg_calc_train_no,
+    dvc_train_no,
+    dvc_carriage_no
+) INCLUDE (param_name, msg_calc_dvc_time, param_value);
 CREATE INDEX idx_pro_error_transposed_param_value ON pro_mview_error_transposed(param_value);
 REFRESH MATERIALIZED VIEW pro_mview_error_transposed;
 

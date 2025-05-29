@@ -560,6 +560,13 @@ WITH NO DATA; -- 初始不加载数据，需要手动REFRESH
 CREATE INDEX idx_dev_error_transposed_param_name ON dev_mview_error_transposed(param_name);
 CREATE INDEX idx_dev_error_transposed_parse_time ON dev_mview_error_transposed(msg_calc_parse_time);
 CREATE INDEX idx_dev_error_transposed_param_value ON dev_mview_error_transposed(param_value);
+CREATE INDEX idx_dev_mview_error_transposed_covering ON dev_mview_error_transposed (
+    msg_calc_dvc_no,
+    msg_calc_train_no,
+    dvc_train_no,
+    dvc_carriage_no
+) INCLUDE (param_name, msg_calc_parse_time, param_value);
+CREATE UNIQUE INDEX idx_mview_error_transposed_unique ON dev_mview_error_transposed (msg_calc_parse_time,dvc_train_no,dvc_carriage_no,param_name);
 REFRESH MATERIALIZED VIEW dev_mview_error_transposed;
 
 -- 创建视图：dev_mview_statistic_transposed（统计类型字段转置）
@@ -634,3 +641,25 @@ CREATE INDEX idx_dev_statistic_transposed_param_name ON dev_mview_statistic_tran
 CREATE INDEX idx_dev_statistic_transposed_parse_time ON dev_mview_statistic_transposed(msg_calc_parse_time);
 CREATE INDEX idx_dev_statistic_transposed_param_value ON dev_mview_statistic_transposed(param_value);
 REFRESH MATERIALIZED VIEW dev_mview_statistic_transposed;
+
+
+-- 在物化视图中添加`last_refresh_time`字段
+ALTER TABLE dev_mview_error_transposed ADD COLUMN last_refresh_time TIMESTAMP DEFAULT NOW();
+
+-- 增量刷新函数
+CREATE OR REPLACE FUNCTION refresh_incrementally()
+RETURNS void AS $$
+BEGIN
+    UPDATE dev_mview_error_transposed
+    SET last_refresh_time = NOW()
+    WHERE msg_calc_parse_time = (SELECT MAX(msg_calc_parse_time) FROM dev_view_error);
+
+    REFRESH MATERIALIZED VIEW CONCURRENTLY dev_mview_error_transposed
+    WHERE msg_calc_parse_time > (SELECT last_refresh_time FROM dev_mview_error_transposed);
+END;
+$$ LANGUAGE plpgsql;
+
+REFRESH MATERIALIZED VIEW CONCURRENTLY dev_mview_error_transposed;
+
+
+
