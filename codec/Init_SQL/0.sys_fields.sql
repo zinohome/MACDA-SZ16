@@ -254,7 +254,37 @@ INSERT INTO sys_fields (field_name, field_code, field_category) VALUES
 ('空气净化器累计开关次数-U2-1', 'dwAP_op_cnt_u21', 'Statistics'),
 ('空气净化器累计开关次数-U2-2', 'dwAP_op_cnt_u22', 'Statistics');
 
+-- 插入数据
+INSERT INTO sys_fields (field_name, field_code, field_category) VALUES
+('冷媒泄露预警 U-11', 'ref_leak_u11', 'predict'),
+('冷媒泄露预警 U-12', 'ref_leak_u12', 'predict'),
+('冷媒泄露预警 U-21', 'ref_leak_u21', 'predict'),
+('冷媒泄露预警 U-22', 'ref_leak_u22', 'predict'),
+('制冷系统预警 U-1', 'f_cp_u1', 'predict'),
+('制冷系统预警 U-2', 'f_cp_u2', 'predict'),
+('新风温度传感器预警', 'f_fas', 'predict'),
+('回风温度传感器预警', 'f_ras', 'predict'),
+('车厢温度超温预警', 'cabin_overtemp', 'predict'),
+('滤网脏堵预警 U-1', 'f_presdiff_u1', 'predict'),
+('滤网脏堵预警 U-2', 'f_presdiff_u2', 'predict'),
+('通风机电流预警 U-11', 'f_ef_u11', 'predict'),
+('通风机电流预警 U-12', 'f_ef_u12', 'predict'),
+('通风机电流预警 U-21', 'f_ef_u21', 'predict'),
+('通风机电流预警 U-22', 'f_ef_u22', 'predict'),
+('冷凝风机电流预警 U-11', 'f_cf_u11', 'predict'),
+('冷凝风机电流预警 U-12', 'f_cf_u12', 'predict'),
+('冷凝风机电流预警 U-21', 'f_cf_u21', 'predict'),
+('冷凝风机电流预警 U-22', 'f_cf_u22', 'predict'),
+('压缩机电流预警 U-11', 'f_fas_u11', 'predict'),
+('压缩机电流预警 U-12', 'f_fas_u12', 'predict'),
+('压缩机电流预警 U-21', 'f_fas_u21', 'predict'),
+('压缩机电流预警 U-22', 'f_fas_u22', 'predict'),
+('空气质量监测终端预警 U-1', 'f_aq_u1', 'predict'),
+('空气质量监测终端预警 U-2', 'f_aq_u2', 'predict');
 
 -- 将field_code字段全部转换为小写
 UPDATE sys_fields
 SET field_code = LOWER(field_code);
+
+-- 创建索引
+CREATE INDEX IF NOT EXISTS idx_sys_fields_field_code ON sys_fields(field_code);
