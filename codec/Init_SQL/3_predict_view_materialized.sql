@@ -208,9 +208,9 @@ SELECT cron.schedule(
 );
 
 
--- 创建视图 dev_view_predict_timed
--- 创建视图 dev_view_predict_timed（修正持续中状态的结束时间）
-CREATE OR REPLACE VIEW dev_view_predict_timed AS
+-- 创建视图 dev_mview_predict_changes
+-- 创建预计算预测状态变化物化视图（每日刷新）
+CREATE MATERIALIZED VIEW IF NOT EXISTS dev_mview_predict_changes AS
 WITH filtered_data AS (
     SELECT
         msg_calc_dvc_no,
@@ -219,122 +219,11 @@ WITH filtered_data AS (
         dvc_carriage_no,
         field_name AS param_name,
         msg_calc_parse_time AT TIME ZONE 'Asia/Shanghai' AS event_time,
-        field_value AS param_value
+        field_value AS is_predicted
     FROM
         dev_mview_predict_transposed
     WHERE
-        msg_calc_parse_time >= (CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Shanghai') - INTERVAL '7 days'
-),
-lagged_data AS (
-    SELECT
-        msg_calc_dvc_no,
-        msg_calc_train_no,
-        dvc_train_no,
-        dvc_carriage_no,
-        param_name,
-        event_time,
-        param_value AS is_predicted,
-        LAG(param_value) OVER w AS prev_status,
-        LEAD(param_value) OVER w AS next_status,
-        LEAD(event_time) OVER w AS next_time
-    FROM
-        filtered_data
-    WINDOW w AS (PARTITION BY param_name ORDER BY event_time)
-),
-potential_ends AS (
-    SELECT
-        *,
-        EXISTS (
-            SELECT 1
-            FROM filtered_data f2
-            WHERE
-                f2.param_name = lagged_data.param_name
-                AND f2.event_time > lagged_data.event_time
-                AND f2.event_time <= lagged_data.event_time + INTERVAL '30 minutes'
-                AND f2.param_value = 1
-        ) AS has_retrigger_within_30min
-    FROM
-        lagged_data
-    WHERE
-        is_predicted = 0 AND prev_status = 1
-),
-confirmed_ends AS (
-    SELECT
-        param_name,
-        event_time AS confirmed_end_time
-    FROM
-        potential_ends
-    WHERE
-        has_retrigger_within_30min = FALSE
-),
-status_groups AS (
-    SELECT
-        l.msg_calc_dvc_no,
-        l.msg_calc_train_no,
-        l.dvc_train_no,
-        l.dvc_carriage_no,
-        l.param_name,
-        l.event_time,
-        l.is_predicted,
-        e.confirmed_end_time,
-        SUM(
-            CASE
-                WHEN l.prev_status = 0 AND l.is_predicted = 1 THEN 1
-                WHEN e.confirmed_end_time IS NOT NULL THEN 1
-                ELSE 0
-            END
-        ) OVER (PARTITION BY l.param_name ORDER BY l.event_time) AS status_group
-    FROM
-        lagged_data l
-    LEFT JOIN
-        confirmed_ends e
-        ON l.param_name = e.param_name AND l.event_time = e.confirmed_end_time
-),
-prediction_periods AS (
-    SELECT
-        msg_calc_dvc_no,
-        msg_calc_train_no,
-        dvc_train_no,
-        dvc_carriage_no,
-        param_name,
-        MIN(CASE WHEN is_predicted = 1 THEN event_time END) AS prediction_start_time,
-        MAX(CASE WHEN is_predicted = 1 THEN event_time END) AS prediction_end_time_candidate,
-        MAX(confirmed_end_time) AS confirmed_end_time,
-        COUNT(*) FILTER (WHERE is_predicted = 1) > 0 AS has_active_prediction
-    FROM
-        status_groups
-    GROUP BY
-        msg_calc_dvc_no,
-        msg_calc_train_no,
-        dvc_train_no,
-        dvc_carriage_no,
-        param_name,
-        status_group
-),
-final_periods AS (
-    SELECT
-        msg_calc_dvc_no,
-        msg_calc_train_no,
-        dvc_train_no,
-        dvc_carriage_no,
-        param_name,
-        prediction_start_time,
-        -- 关键修正：当状态为"持续中"时，强制将end_time设为NULL
-        CASE
-            WHEN confirmed_end_time IS NULL AND prediction_end_time_candidate IS NOT NULL THEN NULL
-            ELSE COALESCE(confirmed_end_time, prediction_end_time_candidate)
-        END AS prediction_end_time,
-        CASE
-            WHEN confirmed_end_time IS NULL AND prediction_end_time_candidate IS NOT NULL THEN '持续中'
-            ELSE '已结束'
-        END AS prediction_status,
-        EXTRACT(EPOCH FROM (
-            COALESCE(confirmed_end_time, prediction_end_time_candidate) - prediction_start_time
-        )) / 60 AS total_minutes
-    FROM
-        prediction_periods
-    WHERE
-        has_active_prediction
+        msg_calc_parse_time >= CURRENT_TIMESTAMP - INTERVAL '14 days'
 )
 SELECT
     msg_calc_dvc_no,
@@ -342,20 +231,125 @@ SELECT
     dvc_train_no,
     dvc_carriage_no,
     param_name,
+    event_time,
+    is_predicted,
+    LAG(is_predicted) OVER w AS prev_status,
+    LAG(event_time) OVER w AS prev_time,
+    -- 标记状态变化点
+    CASE
+        WHEN LAG(is_predicted) OVER w != is_predicted THEN 1
+        ELSE 0
+    END AS is_change_point
+FROM
+    filtered_data
+WINDOW w AS (PARTITION BY param_name ORDER BY event_time);
+
+-- 添加必要的索引
+CREATE INDEX idx_dev_predict_changes ON dev_mview_predict_changes (
+    param_name, event_time, is_predicted, is_change_point
+);
+
+
+-- 创建视图 dev_view_predict_timed
+-- 创建快速查询视图（毫秒级响应）
+CREATE OR REPLACE VIEW dev_view_predict_timed AS
+WITH
+-- 1. 从预计算视图获取数据（仅最近7天）
+recent_changes AS (
+    SELECT *
+    FROM dev_mview_predict_changes
+    WHERE event_time >= CURRENT_TIMESTAMP - INTERVAL '7 days'
+),
+
+-- 2. 生成预测组ID（仅在状态变化时递增）
+prediction_groups AS (
+    SELECT
+        msg_calc_dvc_no,
+        msg_calc_train_no,
+        dvc_train_no,
+        dvc_carriage_no,
+        param_name,
+        event_time,
+        is_predicted,
+        SUM(is_change_point) OVER (PARTITION BY param_name ORDER BY event_time) AS group_id
+    FROM
+        recent_changes
+),
+
+-- 3. 计算每组的起止时间
+group_periods AS (
+    SELECT
+        msg_calc_dvc_no,
+        msg_calc_train_no,
+        dvc_train_no,
+        dvc_carriage_no,
+        param_name,
+        group_id,
+        MIN(event_time) AS prediction_start_time,
+        MAX(event_time) AS prediction_end_candidate,
+        BOOL_OR(is_predicted = 1) AS has_prediction
+    FROM
+        prediction_groups
+    GROUP BY
+        msg_calc_dvc_no,
+        msg_calc_train_no,
+        dvc_train_no,
+        dvc_carriage_no,
+        param_name,
+        group_id
+    HAVING
+        BOOL_OR(is_predicted = 1)
+),
+
+-- 4. 计算结束时间（使用窗口函数避免子查询）
+final_periods AS (
+    SELECT
+        gp.*,
+        -- 如果下一组的开始时间超过当前组结束时间+30分钟，则当前组结束
+        CASE
+            WHEN LEAD(gp.prediction_start_time) OVER w
+                 > gp.prediction_end_candidate + INTERVAL '30 minutes'
+            THEN gp.prediction_end_candidate
+            -- 否则，检查当前组结束时间是否超过当前时间-30分钟
+            WHEN gp.prediction_end_candidate < CURRENT_TIMESTAMP - INTERVAL '30 minutes'
+            THEN gp.prediction_end_candidate
+            ELSE NULL
+        END AS confirmed_end_time
+    FROM
+        group_periods gp
+    WINDOW w AS (PARTITION BY gp.param_name ORDER BY gp.prediction_start_time)
+)
+
+-- 5. 最终结果
+SELECT
+    msg_calc_dvc_no,
+    msg_calc_train_no,
+    dvc_train_no,
+    dvc_carriage_no,
+    param_name,
     prediction_start_time,
-    prediction_end_time,
-    prediction_status,
-    total_minutes
+    confirmed_end_time AS prediction_end_time,
+    CASE
+        WHEN confirmed_end_time IS NULL THEN '持续中'
+        ELSE '已结束'
+    END AS prediction_status,
+    EXTRACT(EPOCH FROM (
+        COALESCE(confirmed_end_time, CURRENT_TIMESTAMP) - prediction_start_time
+    )) / 60 AS total_minutes
 FROM
     final_periods
+WHERE
+    has_prediction
 ORDER BY
     param_name,
     prediction_start_time;
 
 
 
--- 创建视图 pro_view_predict_timed
-CREATE OR REPLACE VIEW pro_view_predict_timed AS
+
+-- 创建视图 pro_mview_predict_changes
+-- 创建预计算预测状态变化物化视图（每日刷新）
+CREATE MATERIALIZED VIEW IF NOT EXISTS pro_mview_predict_changes AS
 WITH filtered_data AS (
     SELECT
         msg_calc_dvc_no,
@@ -364,122 +358,11 @@ WITH filtered_data AS (
         dvc_carriage_no,
         field_name AS param_name,
         msg_calc_dvc_time AT TIME ZONE 'Asia/Shanghai' AS event_time,
-        field_value AS param_value
+        field_value AS is_predicted
     FROM
         pro_mview_predict_transposed
     WHERE
-        msg_calc_dvc_time >= (CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Shanghai') - INTERVAL '7 days'
-),
-lagged_data AS (
-    SELECT
-        msg_calc_dvc_no,
-        msg_calc_train_no,
-        dvc_train_no,
-        dvc_carriage_no,
-        param_name,
-        event_time,
-        param_value AS is_predicted,
-        LAG(param_value) OVER w AS prev_status,
-        LEAD(param_value) OVER w AS next_status,
-        LEAD(event_time) OVER w AS next_time
-    FROM
-        filtered_data
-    WINDOW w AS (PARTITION BY param_name ORDER BY event_time)
-),
-potential_ends AS (
-    SELECT
-        *,
-        EXISTS (
-            SELECT 1
-            FROM filtered_data f2
-            WHERE
-                f2.param_name = lagged_data.param_name
-                AND f2.event_time > lagged_data.event_time
-                AND f2.event_time <= lagged_data.event_time + INTERVAL '30 minutes'
-                AND f2.param_value = 1
-        ) AS has_retrigger_within_30min
-    FROM
-        lagged_data
-    WHERE
-        is_predicted = 0 AND prev_status = 1
-),
-confirmed_ends AS (
-    SELECT
-        param_name,
-        event_time AS confirmed_end_time
-    FROM
-        potential_ends
-    WHERE
-        has_retrigger_within_30min = FALSE
-),
-status_groups AS (
-    SELECT
-        l.msg_calc_dvc_no,
-        l.msg_calc_train_no,
-        l.dvc_train_no,
-        l.dvc_carriage_no,
-        l.param_name,
-        l.event_time,
-        l.is_predicted,
-        e.confirmed_end_time,
-        SUM(
-            CASE
-                WHEN l.prev_status = 0 AND l.is_predicted = 1 THEN 1
-                WHEN e.confirmed_end_time IS NOT NULL THEN 1
-                ELSE 0
-            END
-        ) OVER (PARTITION BY l.param_name ORDER BY l.event_time) AS status_group
-    FROM
-        lagged_data l
-    LEFT JOIN
-        confirmed_ends e
-        ON l.param_name = e.param_name AND l.event_time = e.confirmed_end_time
-),
-prediction_periods AS (
-    SELECT
-        msg_calc_dvc_no,
-        msg_calc_train_no,
-        dvc_train_no,
-        dvc_carriage_no,
-        param_name,
-        MIN(CASE WHEN is_predicted = 1 THEN event_time END) AS prediction_start_time,
-        MAX(CASE WHEN is_predicted = 1 THEN event_time END) AS prediction_end_time_candidate,
-        MAX(confirmed_end_time) AS confirmed_end_time,
-        COUNT(*) FILTER (WHERE is_predicted = 1) > 0 AS has_active_prediction
-    FROM
-        status_groups
-    GROUP BY
-        msg_calc_dvc_no,
-        msg_calc_train_no,
-        dvc_train_no,
-        dvc_carriage_no,
-        param_name,
-        status_group
-),
-final_periods AS (
-    SELECT
-        msg_calc_dvc_no,
-        msg_calc_train_no,
-        dvc_train_no,
-        dvc_carriage_no,
-        param_name,
-        prediction_start_time,
-        -- 关键修正：当状态为"持续中"时，强制将end_time设为NULL
-        CASE
-            WHEN confirmed_end_time IS NULL AND prediction_end_time_candidate IS NOT NULL THEN NULL
-            ELSE COALESCE(confirmed_end_time, prediction_end_time_candidate)
-        END AS prediction_end_time,
-        CASE
-            WHEN confirmed_end_time IS NULL AND prediction_end_time_candidate IS NOT NULL THEN '持续中'
-            ELSE '已结束'
-        END AS prediction_status,
-        EXTRACT(EPOCH FROM (
-            COALESCE(confirmed_end_time, prediction_end_time_candidate) - prediction_start_time
-        )) / 60 AS total_minutes
-    FROM
-        prediction_periods
-    WHERE
-        has_active_prediction
+        msg_calc_dvc_time >= CURRENT_TIMESTAMP - INTERVAL '14 days'
 )
 SELECT
     msg_calc_dvc_no,
@@ -487,12 +370,116 @@ SELECT
     dvc_train_no,
     dvc_carriage_no,
     param_name,
+    event_time,
+    is_predicted,
+    LAG(is_predicted) OVER w AS prev_status,
+    LAG(event_time) OVER w AS prev_time,
+    -- 标记状态变化点
+    CASE
+        WHEN LAG(is_predicted) OVER w != is_predicted THEN 1
+        ELSE 0
+    END AS is_change_point
+FROM
+    filtered_data
+WINDOW w AS (PARTITION BY param_name ORDER BY event_time);
+
+-- 添加必要的索引
+CREATE INDEX idx_pro_predict_changes ON pro_mview_predict_changes (
+    param_name, event_time, is_predicted, is_change_point
+);
+
+
+-- 创建视图 pro_view_predict_timed
+-- 创建快速查询视图（毫秒级响应）
+CREATE OR REPLACE VIEW pro_view_predict_timed AS
+WITH
+-- 1. 从预计算视图获取数据（仅最近7天）
+recent_changes AS (
+    SELECT *
+    FROM pro_mview_predict_changes
+    WHERE event_time >= CURRENT_TIMESTAMP - INTERVAL '7 days'
+),
+
+-- 2. 生成预测组ID（仅在状态变化时递增）
+prediction_groups AS (
+    SELECT
+        msg_calc_dvc_no,
+        msg_calc_train_no,
+        dvc_train_no,
+        dvc_carriage_no,
+        param_name,
+        event_time,
+        is_predicted,
+        SUM(is_change_point) OVER (PARTITION BY param_name ORDER BY event_time) AS group_id
+    FROM
+        recent_changes
+),
+
+-- 3. 计算每组的起止时间
+group_periods AS (
+    SELECT
+        msg_calc_dvc_no,
+        msg_calc_train_no,
+        dvc_train_no,
+        dvc_carriage_no,
+        param_name,
+        group_id,
+        MIN(event_time) AS prediction_start_time,
+        MAX(event_time) AS prediction_end_candidate,
+        BOOL_OR(is_predicted = 1) AS has_prediction
+    FROM
+        prediction_groups
+    GROUP BY
+        msg_calc_dvc_no,
+        msg_calc_train_no,
+        dvc_train_no,
+        dvc_carriage_no,
+        param_name,
+        group_id
+    HAVING
+        BOOL_OR(is_predicted = 1)
+),
+
+-- 4. 计算结束时间（使用窗口函数避免子查询）
+final_periods AS (
+    SELECT
+        gp.*,
+        -- 如果下一组的开始时间超过当前组结束时间+30分钟，则当前组结束
+        CASE
+            WHEN LEAD(gp.prediction_start_time) OVER w
+                 > gp.prediction_end_candidate + INTERVAL '30 minutes'
+            THEN gp.prediction_end_candidate
+            -- 否则，检查当前组结束时间是否超过当前时间-30分钟
+            WHEN gp.prediction_end_candidate < CURRENT_TIMESTAMP - INTERVAL '30 minutes'
+            THEN gp.prediction_end_candidate
+            ELSE NULL
+        END AS confirmed_end_time
+    FROM
+        group_periods gp
+    WINDOW w AS (PARTITION BY gp.param_name ORDER BY gp.prediction_start_time)
+)
+
+-- 5. 最终结果
+SELECT
+    msg_calc_dvc_no,
+    msg_calc_train_no,
+    dvc_train_no,
+    dvc_carriage_no,
+    param_name,
     prediction_start_time,
-    prediction_end_time,
-    prediction_status,
-    total_minutes
+    confirmed_end_time AS prediction_end_time,
+    CASE
+        WHEN confirmed_end_time IS NULL THEN '持续中'
+        ELSE '已结束'
+    END AS prediction_status,
+    EXTRACT(EPOCH FROM (
+        COALESCE(confirmed_end_time, CURRENT_TIMESTAMP) - prediction_start_time
+    )) / 60 AS total_minutes
 FROM
     final_periods
+WHERE
+    has_prediction
 ORDER BY
     param_name,
     prediction_start_time;
+
