@@ -223,7 +223,7 @@ WITH filtered_data AS (
     FROM
         dev_mview_predict_transposed
     WHERE
-        msg_calc_parse_time >= CURRENT_TIMESTAMP - INTERVAL '14 days'
+        msg_calc_parse_time >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
 )
 SELECT
     msg_calc_dvc_no,
@@ -258,7 +258,7 @@ WITH
 recent_changes AS (
     SELECT *
     FROM dev_mview_predict_changes
-    WHERE event_time >= CURRENT_TIMESTAMP - INTERVAL '7 days'
+    WHERE event_time >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
 ),
 
 -- 2. 生成预测组ID（仅在状态变化时递增）
@@ -362,7 +362,7 @@ WITH filtered_data AS (
     FROM
         pro_mview_predict_transposed
     WHERE
-        msg_calc_dvc_time >= CURRENT_TIMESTAMP - INTERVAL '14 days'
+        msg_calc_dvc_time >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
 )
 SELECT
     msg_calc_dvc_no,
@@ -397,7 +397,7 @@ WITH
 recent_changes AS (
     SELECT *
     FROM pro_mview_predict_changes
-    WHERE event_time >= CURRENT_TIMESTAMP - INTERVAL '7 days'
+    WHERE event_time >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
 ),
 
 -- 2. 生成预测组ID（仅在状态变化时递增）

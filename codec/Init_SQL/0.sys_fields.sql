@@ -288,3 +288,32 @@ SET field_code = LOWER(field_code);
 
 -- 创建索引
 CREATE INDEX IF NOT EXISTS idx_sys_fields_field_code ON sys_fields(field_code);
+
+
+-- 创建列车表 dev_macda_ac
+CREATE TABLE dev_macda_ac (
+    dvc_train_no INTEGER NOT NULL,
+    dvc_carriage_no INTEGER NOT NULL,
+    PRIMARY KEY (dvc_train_no, dvc_carriage_no)
+);
+
+-- 填充列车数据（12101-12120）和车厢数据（1-6）
+INSERT INTO dev_macda_ac (dvc_train_no, dvc_carriage_no)
+SELECT train_num, carriage_num
+FROM
+    (SELECT generate_series(12101, 12120) as train_num) AS trains,
+    (SELECT generate_series(1, 6) as carriage_num) AS carriages;
+
+-- 创建列车表 pro_macda_ac
+CREATE TABLE pro_macda_ac (
+    dvc_train_no INTEGER NOT NULL,
+    dvc_carriage_no INTEGER NOT NULL,
+    PRIMARY KEY (dvc_train_no, dvc_carriage_no)
+);
+
+-- 填充列车数据（12101-12120）和车厢数据（1-6）
+INSERT INTO pro_macda_ac (dvc_train_no, dvc_carriage_no)
+SELECT train_num, carriage_num
+FROM
+    (SELECT generate_series(12101, 12120) as train_num) AS trains,
+    (SELECT generate_series(1, 6) as carriage_num) AS carriages;
