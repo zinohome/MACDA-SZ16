@@ -565,12 +565,12 @@ class TSutil(metaclass=Cached):
             cur.execute(create_dev_json_table)
             cur.execute(create_pro_predict_table)
             cur.execute(create_dev_predict_table)
-            cur.execute("SELECT create_hypertable('pro_macda', 'msg_calc_dvc_time', chunk_time_interval => 86400000000, if_not_exists => TRUE);")
-            cur.execute("SELECT create_hypertable('dev_macda', 'msg_calc_parse_time', chunk_time_interval => 86400000000, if_not_exists => TRUE);")
-            cur.execute("SELECT create_hypertable('pro_macda_json', 'msg_calc_dvc_time', chunk_time_interval => 86400000000, if_not_exists => TRUE);")
-            cur.execute("SELECT create_hypertable('dev_macda_json', 'msg_calc_parse_time', chunk_time_interval => 86400000000, if_not_exists => TRUE);")
-            cur.execute("SELECT create_hypertable('pro_predict', 'msg_calc_dvc_time', chunk_time_interval => 86400000000, if_not_exists => TRUE);")
-            cur.execute("SELECT create_hypertable('dev_predict', 'msg_calc_parse_time', chunk_time_interval => 86400000000, if_not_exists => TRUE);")
+            cur.execute("SELECT create_hypertable('pro_macda', 'msg_calc_dvc_time', chunk_time_interval => INTERVAL '1 day', if_not_exists => TRUE);")
+            cur.execute("SELECT create_hypertable('dev_macda', 'msg_calc_parse_time', chunk_time_interval => INTERVAL '1 day', if_not_exists => TRUE);")
+            cur.execute("SELECT create_hypertable('pro_macda_json', 'msg_calc_dvc_time', chunk_time_interval => INTERVAL '1 day', if_not_exists => TRUE);")
+            cur.execute("SELECT create_hypertable('dev_macda_json', 'msg_calc_parse_time', chunk_time_interval => INTERVAL '1 day', if_not_exists => TRUE);")
+            cur.execute("SELECT create_hypertable('pro_predict', 'msg_calc_dvc_time', chunk_time_interval => INTERVAL '1 day', if_not_exists => TRUE);")
+            cur.execute("SELECT create_hypertable('dev_predict', 'msg_calc_parse_time', chunk_time_interval => INTERVAL '1 day', if_not_exists => TRUE);")
             #cur.execute("SELECT remove_retention_policy('pro_macda', True);")
             cur.execute("SELECT add_retention_policy('pro_macda', INTERVAL '1 year', if_not_exists => true);")
             #cur.execute("SELECT remove_retention_policy('dev_macda', True);")
@@ -938,7 +938,7 @@ class TSutil(metaclass=Cached):
                 param_value INTEGER NULL);
             """
             create_hyper_dev_status_transposed = """
-                SELECT create_hypertable('dev_status_transposed', 'msg_calc_parse_time', chunk_time_interval => 86400000000, if_not_exists => TRUE);
+                SELECT create_hypertable('dev_status_transposed', 'msg_calc_parse_time', chunk_time_interval => INTERVAL '1 day', if_not_exists => TRUE);
             """
             create_rp_dev_status_transposed = """
                 SELECT add_retention_policy('dev_status_transposed', INTERVAL '1 year', if_not_exists => true);
@@ -955,7 +955,7 @@ class TSutil(metaclass=Cached):
                 param_value DOUBLE PRECISION NULL);
             """
             create_hyper_dev_param_transposed = """
-                SELECT create_hypertable('dev_param_transposed', 'msg_calc_parse_time', chunk_time_interval => 86400000000, if_not_exists => TRUE);
+                SELECT create_hypertable('dev_param_transposed', 'msg_calc_parse_time', chunk_time_interval => INTERVAL '1 day', if_not_exists => TRUE);
             """
             create_rp_dev_param_transposed = """
                 SELECT add_retention_policy('dev_param_transposed', INTERVAL '1 year', if_not_exists => true);
@@ -972,10 +972,21 @@ class TSutil(metaclass=Cached):
                 param_value INTEGER NULL);
             """
             create_hyper_dev_error_transposed = """
-                SELECT create_hypertable('dev_error_transposed', 'msg_calc_parse_time', chunk_time_interval => 86400000000, if_not_exists => TRUE);
+                SELECT create_hypertable('dev_error_transposed', 'msg_calc_parse_time', chunk_time_interval => INTERVAL '1 day', if_not_exists => TRUE);
             """
             create_rp_dev_error_transposed = """
                 SELECT add_retention_policy('dev_error_transposed', INTERVAL '1 year', if_not_exists => true);
+            """
+            create_idx_dev_error_transposed_group_time = """
+                CREATE INDEX idx_dev_error_transposed_group_time 
+                    ON dev_error_transposed (
+                        msg_calc_dvc_no, 
+                        msg_calc_train_no, 
+                        dvc_train_no, 
+                        dvc_carriage_no, 
+                        param_name, 
+                        msg_calc_parse_time
+                    );
             """
             create_dev_statistics_transposed = """
                 CREATE TABLE IF NOT EXISTS dev_statistics_transposed (
@@ -989,7 +1000,7 @@ class TSutil(metaclass=Cached):
                 param_value DOUBLE PRECISION NULL);
             """
             create_hyper_dev_statistics_transposed = """
-                SELECT create_hypertable('dev_statistics_transposed', 'msg_calc_parse_time', chunk_time_interval => 86400000000, if_not_exists => TRUE);
+                SELECT create_hypertable('dev_statistics_transposed', 'msg_calc_parse_time', chunk_time_interval => INTERVAL '1 day', if_not_exists => TRUE);
             """
             create_rp_dev_statistics_transposed = """
                 SELECT add_retention_policy('dev_statistics_transposed', INTERVAL '1 year', if_not_exists => true);
@@ -1006,7 +1017,7 @@ class TSutil(metaclass=Cached):
                 param_value INTEGER NULL);
             """
             create_hyper_dev_predict_transposed = """
-                SELECT create_hypertable('dev_predict_transposed', 'msg_calc_parse_time', chunk_time_interval => 86400000000, if_not_exists => TRUE);
+                SELECT create_hypertable('dev_predict_transposed', 'msg_calc_parse_time', chunk_time_interval => INTERVAL '1 day', if_not_exists => TRUE);
             """
             create_rp_dev_predict_transposed = """
                 SELECT add_retention_policy('dev_predict_transposed', INTERVAL '1 year', if_not_exists => true);
@@ -1023,7 +1034,7 @@ class TSutil(metaclass=Cached):
                             param_value DOUBLE PRECISION NULL);
                         """
             create_hyper_pro_param_transposed = """
-                            SELECT create_hypertable('pro_param_transposed', 'msg_calc_dvc_time', chunk_time_interval => 86400000000, if_not_exists => TRUE);
+                            SELECT create_hypertable('pro_param_transposed', 'msg_calc_dvc_time', chunk_time_interval => INTERVAL '1 day', if_not_exists => TRUE);
                         """
             create_rp_pro_param_transposed = """
                             SELECT add_retention_policy('pro_param_transposed', INTERVAL '1 year', if_not_exists => true);
@@ -1040,7 +1051,7 @@ class TSutil(metaclass=Cached):
                                         param_value INTEGER NULL);
                                     """
             create_hyper_pro_status_transposed = """
-                                        SELECT create_hypertable('pro_status_transposed', 'msg_calc_dvc_time', chunk_time_interval => 86400000000, if_not_exists => TRUE);
+                                        SELECT create_hypertable('pro_status_transposed', 'msg_calc_dvc_time', chunk_time_interval => INTERVAL '1 day', if_not_exists => TRUE);
                                     """
             create_rp_pro_status_transposed = """
                                         SELECT add_retention_policy('pro_status_transposed', INTERVAL '1 year', if_not_exists => true);
@@ -1057,11 +1068,23 @@ class TSutil(metaclass=Cached):
                             param_value INTEGER NULL);
                         """
             create_hyper_pro_error_transposed = """
-                            SELECT create_hypertable('pro_error_transposed', 'msg_calc_dvc_time', chunk_time_interval => 86400000000, if_not_exists => TRUE);
+                            SELECT create_hypertable('pro_error_transposed', 'msg_calc_dvc_time', chunk_time_interval => INTERVAL '1 day', if_not_exists => TRUE);
                         """
             create_rp_pro_error_transposed = """
                             SELECT add_retention_policy('pro_error_transposed', INTERVAL '1 year', if_not_exists => true);
                         """
+
+            create_idx_pro_error_transposed_group_time = """
+                CREATE INDEX idx_pro_error_transposed_group_time 
+                    ON pro_error_transposed (
+                        msg_calc_dvc_no, 
+                        msg_calc_train_no, 
+                        dvc_train_no, 
+                        dvc_carriage_no, 
+                        param_name, 
+                        msg_calc_dvc_time
+                    );
+            """
             create_pro_statistics_transposed = """
                             CREATE TABLE IF NOT EXISTS pro_statistics_transposed (
                             msg_calc_dvc_time TIMESTAMPTZ NOT NULL,
@@ -1074,7 +1097,7 @@ class TSutil(metaclass=Cached):
                             param_value DOUBLE PRECISION NULL);
                         """
             create_hyper_pro_statistics_transposed = """
-                            SELECT create_hypertable('pro_statistics_transposed', 'msg_calc_dvc_time', chunk_time_interval => 86400000000, if_not_exists => TRUE);
+                            SELECT create_hypertable('pro_statistics_transposed', 'msg_calc_dvc_time', chunk_time_interval => INTERVAL '1 day', if_not_exists => TRUE);
                         """
             create_rp_pro_statistics_transposed = """
                             SELECT add_retention_policy('pro_statistics_transposed', INTERVAL '1 year', if_not_exists => true);
@@ -1091,7 +1114,7 @@ class TSutil(metaclass=Cached):
                             param_value INTEGER NULL);
                         """
             create_hyper_pro_predict_transposed = """
-                            SELECT create_hypertable('pro_predict_transposed', 'msg_calc_dvc_time', chunk_time_interval => 86400000000, if_not_exists => TRUE);
+                            SELECT create_hypertable('pro_predict_transposed', 'msg_calc_dvc_time', chunk_time_interval => INTERVAL '1 day', if_not_exists => TRUE);
                         """
             create_rp_pro_predict_transposed = """
                             SELECT add_retention_policy('pro_predict_transposed', INTERVAL '1 year', if_not_exists => true);
@@ -1105,6 +1128,7 @@ class TSutil(metaclass=Cached):
             cur.execute(create_dev_error_transposed)
             cur.execute(create_hyper_dev_error_transposed)
             cur.execute(create_rp_dev_error_transposed)
+            cur.execute(create_idx_dev_error_transposed_group_time)
             cur.execute(create_dev_statistics_transposed)
             cur.execute(create_hyper_dev_statistics_transposed)
             cur.execute(create_rp_dev_statistics_transposed)
@@ -1119,6 +1143,7 @@ class TSutil(metaclass=Cached):
             cur.execute(create_rp_pro_param_transposed)
             cur.execute(create_pro_error_transposed)
             cur.execute(create_hyper_pro_error_transposed)
+            cur.execute(create_idx_pro_error_transposed_group_time)
             cur.execute(create_rp_pro_error_transposed)
             cur.execute(create_pro_statistics_transposed)
             cur.execute(create_hyper_pro_statistics_transposed)
