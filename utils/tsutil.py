@@ -598,11 +598,11 @@ class TSutil(metaclass=Cached):
             insert_sys_fields = """
             WITH all_fields (field_name, field_code, field_category) AS (
                 VALUES
-                    ('Flag', 'dvc_flag', 'basic'),
-                    ('车辆编码', 'dvc_train_no', 'basic'),
-                    ('车厢号', 'dvc_carriage_no', 'basic'),
-                    ('年', 'dvc_year', 'basic'),
-                    ('月', 'dvc_month', 'basic'),
+                    ('Flag', 'dvc_flag', 'Basic'),
+                    ('车辆编码', 'dvc_train_no', 'Basic'),
+                    ('车厢号', 'dvc_carriage_no', 'Basic'),
+                    ('年', 'dvc_year', 'Basic'),
+                    ('月', 'dvc_month', 'Basic'),
                     ('日', 'dvc_day', 'Basic'),
                     ('时', 'dvc_hour', 'Basic'),
                     ('分', 'dvc_minute', 'Basic'),
@@ -926,6 +926,23 @@ class TSutil(metaclass=Cached):
             cur.execute(insert_pro_macda_ac)
             conn.commit()
             # 创建 转置表
+            create_dev_status_transposed = """
+                CREATE TABLE IF NOT EXISTS dev_status_transposed (
+                msg_calc_dvc_time TEXT NOT NULL,
+                msg_calc_parse_time TIMESTAMPTZ NOT NULL,
+                msg_calc_dvc_no TEXT NOT NULL,
+                msg_calc_train_no TEXT NOT NULL,
+                dvc_train_no INTEGER NULL,
+                dvc_carriage_no INTEGER NULL,
+                param_name TEXT NULL,
+                param_value INTEGER NULL);
+            """
+            create_hyper_dev_status_transposed = """
+                SELECT create_hypertable('dev_status_transposed', 'msg_calc_parse_time', chunk_time_interval => 86400000000, if_not_exists => TRUE);
+            """
+            create_rp_dev_status_transposed = """
+                SELECT add_retention_policy('dev_status_transposed', INTERVAL '1 year', if_not_exists => true);
+            """
             create_dev_param_transposed = """
                 CREATE TABLE IF NOT EXISTS dev_param_transposed (
                 msg_calc_dvc_time TEXT NOT NULL,
@@ -935,7 +952,7 @@ class TSutil(metaclass=Cached):
                 dvc_train_no INTEGER NULL,
                 dvc_carriage_no INTEGER NULL,
                 param_name TEXT NULL,
-                param_value TEXT NULL);
+                param_value DOUBLE PRECISION NULL);
             """
             create_hyper_dev_param_transposed = """
                 SELECT create_hypertable('dev_param_transposed', 'msg_calc_parse_time', chunk_time_interval => 86400000000, if_not_exists => TRUE);
@@ -952,7 +969,7 @@ class TSutil(metaclass=Cached):
                 dvc_train_no INTEGER NULL,
                 dvc_carriage_no INTEGER NULL,
                 param_name TEXT NULL,
-                param_value TEXT NULL);
+                param_value INTEGER NULL);
             """
             create_hyper_dev_error_transposed = """
                 SELECT create_hypertable('dev_error_transposed', 'msg_calc_parse_time', chunk_time_interval => 86400000000, if_not_exists => TRUE);
@@ -960,8 +977,8 @@ class TSutil(metaclass=Cached):
             create_rp_dev_error_transposed = """
                 SELECT add_retention_policy('dev_error_transposed', INTERVAL '1 year', if_not_exists => true);
             """
-            create_dev_statistic_transposed = """
-                CREATE TABLE IF NOT EXISTS dev_statistic_transposed (
+            create_dev_statistics_transposed = """
+                CREATE TABLE IF NOT EXISTS dev_statistics_transposed (
                 msg_calc_dvc_time TEXT NOT NULL,
                 msg_calc_parse_time TIMESTAMPTZ NOT NULL,
                 msg_calc_dvc_no TEXT NOT NULL,
@@ -969,13 +986,13 @@ class TSutil(metaclass=Cached):
                 dvc_train_no INTEGER NULL,
                 dvc_carriage_no INTEGER NULL,
                 param_name TEXT NULL,
-                param_value TEXT NULL);
+                param_value DOUBLE PRECISION NULL);
             """
-            create_hyper_dev_statistic_transposed = """
-                SELECT create_hypertable('dev_statistic_transposed', 'msg_calc_parse_time', chunk_time_interval => 86400000000, if_not_exists => TRUE);
+            create_hyper_dev_statistics_transposed = """
+                SELECT create_hypertable('dev_statistics_transposed', 'msg_calc_parse_time', chunk_time_interval => 86400000000, if_not_exists => TRUE);
             """
-            create_rp_dev_statistic_transposed = """
-                SELECT add_retention_policy('dev_statistic_transposed', INTERVAL '1 year', if_not_exists => true);
+            create_rp_dev_statistics_transposed = """
+                SELECT add_retention_policy('dev_statistics_transposed', INTERVAL '1 year', if_not_exists => true);
             """
             create_dev_predict_transposed = """
                 CREATE TABLE IF NOT EXISTS dev_predict_transposed (
@@ -986,7 +1003,7 @@ class TSutil(metaclass=Cached):
                 dvc_train_no INTEGER NULL,
                 dvc_carriage_no INTEGER NULL,
                 param_name TEXT NULL,
-                param_value TEXT NULL);
+                param_value INTEGER NULL);
             """
             create_hyper_dev_predict_transposed = """
                 SELECT create_hypertable('dev_predict_transposed', 'msg_calc_parse_time', chunk_time_interval => 86400000000, if_not_exists => TRUE);
@@ -1003,7 +1020,7 @@ class TSutil(metaclass=Cached):
                             dvc_train_no INTEGER NULL,
                             dvc_carriage_no INTEGER NULL,
                             param_name TEXT NULL,
-                            param_value TEXT NULL);
+                            param_value DOUBLE PRECISION NULL);
                         """
             create_hyper_pro_param_transposed = """
                             SELECT create_hypertable('pro_param_transposed', 'msg_calc_dvc_time', chunk_time_interval => 86400000000, if_not_exists => TRUE);
@@ -1011,6 +1028,23 @@ class TSutil(metaclass=Cached):
             create_rp_pro_param_transposed = """
                             SELECT add_retention_policy('pro_param_transposed', INTERVAL '1 year', if_not_exists => true);
                         """
+            create_pro_status_transposed = """
+                                        CREATE TABLE IF NOT EXISTS pro_status_transposed (
+                                        msg_calc_dvc_time TIMESTAMPTZ NOT NULL,
+                                        msg_calc_parse_time TEXT NOT NULL,
+                                        msg_calc_dvc_no TEXT NOT NULL,
+                                        msg_calc_train_no TEXT NOT NULL,
+                                        dvc_train_no INTEGER NULL,
+                                        dvc_carriage_no INTEGER NULL,
+                                        param_name TEXT NULL,
+                                        param_value INTEGER NULL);
+                                    """
+            create_hyper_pro_status_transposed = """
+                                        SELECT create_hypertable('pro_status_transposed', 'msg_calc_dvc_time', chunk_time_interval => 86400000000, if_not_exists => TRUE);
+                                    """
+            create_rp_pro_status_transposed = """
+                                        SELECT add_retention_policy('pro_status_transposed', INTERVAL '1 year', if_not_exists => true);
+                                    """
             create_pro_error_transposed = """
                             CREATE TABLE IF NOT EXISTS pro_error_transposed (
                             msg_calc_dvc_time TIMESTAMPTZ NOT NULL,
@@ -1020,7 +1054,7 @@ class TSutil(metaclass=Cached):
                             dvc_train_no INTEGER NULL,
                             dvc_carriage_no INTEGER NULL,
                             param_name TEXT NULL,
-                            param_value TEXT NULL);
+                            param_value INTEGER NULL);
                         """
             create_hyper_pro_error_transposed = """
                             SELECT create_hypertable('pro_error_transposed', 'msg_calc_dvc_time', chunk_time_interval => 86400000000, if_not_exists => TRUE);
@@ -1028,8 +1062,8 @@ class TSutil(metaclass=Cached):
             create_rp_pro_error_transposed = """
                             SELECT add_retention_policy('pro_error_transposed', INTERVAL '1 year', if_not_exists => true);
                         """
-            create_pro_statistic_transposed = """
-                            CREATE TABLE IF NOT EXISTS pro_statistic_transposed (
+            create_pro_statistics_transposed = """
+                            CREATE TABLE IF NOT EXISTS pro_statistics_transposed (
                             msg_calc_dvc_time TIMESTAMPTZ NOT NULL,
                             msg_calc_parse_time TEXT NOT NULL,
                             msg_calc_dvc_no TEXT NOT NULL,
@@ -1037,13 +1071,13 @@ class TSutil(metaclass=Cached):
                             dvc_train_no INTEGER NULL,
                             dvc_carriage_no INTEGER NULL,
                             param_name TEXT NULL,
-                            param_value TEXT NULL);
+                            param_value DOUBLE PRECISION NULL);
                         """
-            create_hyper_pro_statistic_transposed = """
-                            SELECT create_hypertable('pro_statistic_transposed', 'msg_calc_dvc_time', chunk_time_interval => 86400000000, if_not_exists => TRUE);
+            create_hyper_pro_statistics_transposed = """
+                            SELECT create_hypertable('pro_statistics_transposed', 'msg_calc_dvc_time', chunk_time_interval => 86400000000, if_not_exists => TRUE);
                         """
-            create_rp_pro_statistic_transposed = """
-                            SELECT add_retention_policy('pro_statistic_transposed', INTERVAL '1 year', if_not_exists => true);
+            create_rp_pro_statistics_transposed = """
+                            SELECT add_retention_policy('pro_statistics_transposed', INTERVAL '1 year', if_not_exists => true);
                         """
             create_pro_predict_transposed = """
                             CREATE TABLE IF NOT EXISTS pro_predict_transposed (
@@ -1054,7 +1088,7 @@ class TSutil(metaclass=Cached):
                             dvc_train_no INTEGER NULL,
                             dvc_carriage_no INTEGER NULL,
                             param_name TEXT NULL,
-                            param_value TEXT NULL);
+                            param_value INTEGER NULL);
                         """
             create_hyper_pro_predict_transposed = """
                             SELECT create_hypertable('pro_predict_transposed', 'msg_calc_dvc_time', chunk_time_interval => 86400000000, if_not_exists => TRUE);
@@ -1062,30 +1096,36 @@ class TSutil(metaclass=Cached):
             create_rp_pro_predict_transposed = """
                             SELECT add_retention_policy('pro_predict_transposed', INTERVAL '1 year', if_not_exists => true);
                         """
+            cur.execute(create_dev_status_transposed)
+            cur.execute(create_hyper_dev_status_transposed)
+            cur.execute(create_rp_dev_status_transposed)
             cur.execute(create_dev_param_transposed)
             cur.execute(create_hyper_dev_param_transposed)
             cur.execute(create_rp_dev_param_transposed)
             cur.execute(create_dev_error_transposed)
             cur.execute(create_hyper_dev_error_transposed)
             cur.execute(create_rp_dev_error_transposed)
-            cur.execute(create_dev_statistic_transposed)
-            cur.execute(create_hyper_dev_statistic_transposed)
-            cur.execute(create_rp_dev_statistic_transposed)
+            cur.execute(create_dev_statistics_transposed)
+            cur.execute(create_hyper_dev_statistics_transposed)
+            cur.execute(create_rp_dev_statistics_transposed)
             cur.execute(create_dev_predict_transposed)
             cur.execute(create_hyper_dev_predict_transposed)
             cur.execute(create_rp_dev_predict_transposed)
+            cur.execute(create_pro_status_transposed)
+            cur.execute(create_hyper_pro_status_transposed)
+            cur.execute(create_rp_pro_status_transposed)
             cur.execute(create_pro_param_transposed)
             cur.execute(create_hyper_pro_param_transposed)
             cur.execute(create_rp_pro_param_transposed)
             cur.execute(create_pro_error_transposed)
             cur.execute(create_hyper_pro_error_transposed)
             cur.execute(create_rp_pro_error_transposed)
-            cur.execute(create_pro_statistic_transposed)
-            cur.execute(create_hyper_pro_statistic_transposed)
-            cur.execute(create_rp_pro_statistic_transposed)
+            cur.execute(create_pro_statistics_transposed)
+            cur.execute(create_hyper_pro_statistics_transposed)
+            cur.execute(create_rp_pro_statistics_transposed)
             cur.execute(create_pro_predict_transposed)
             cur.execute(create_hyper_pro_predict_transposed)
-            cur.execute(create_rp_dev_predict_transposed)
+            cur.execute(create_rp_pro_predict_transposed)
             conn.commit()
             cur.close()
             self.conn_pool.putconn(conn)
