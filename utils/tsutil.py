@@ -1086,6 +1086,7 @@ class TSutil(metaclass=Cached):
             cur.execute(create_pro_predict_transposed)
             cur.execute(create_hyper_pro_predict_transposed)
             cur.execute(create_rp_dev_predict_transposed)
+            conn.commit()
             cur.close()
             self.conn_pool.putconn(conn)
             log.debug("Check tsdb table ... Success !")
