@@ -46,6 +46,9 @@ async def store_signal(stream):
                 predictdata['msg_calc_parse_time'] = data['payload']['msg_calc_parse_time']
                 predictdata['msg_calc_dvc_no'] = data['payload']['msg_calc_dvc_no']
                 predictdata['msg_calc_train_no'] = data['payload']['msg_calc_train_no']
+                predictdata['dvc_train_no'] = data['payload']['dvc_train_no']
+                predictdata['dvc_carriage_no'] = data['payload']['dvc_carriage_no']
+                #log.debug(predictdata)
                 if dev_mode:
                     tu.insert_predictdata('dev_predict', predictdata)
                 else:

@@ -12,7 +12,7 @@ import weakref
 import psycopg2
 from datetime import datetime
 from pgcopy import CopyManager
-from psycopg2 import pool
+from psycopg2 import pool, sql
 from core.settings import settings
 from utils.log import log as log
 from collections import Counter
@@ -556,8 +556,8 @@ class TSutil(metaclass=Cached):
             """
             create_pro_json_table = "CREATE TABLE IF NOT EXISTS pro_macda_json (msg_calc_dvc_time TIMESTAMPTZ NOT NULL, msg_calc_parse_time TEXT NOT NULL, msg_calc_dvc_no TEXT NOT NULL, msg_calc_train_no TEXT NOT NULL, Indicators JSON);"
             create_dev_json_table = "CREATE TABLE IF NOT EXISTS dev_macda_json (msg_calc_dvc_time TEXT NOT NULL, msg_calc_parse_time TIMESTAMPTZ NOT NULL, msg_calc_dvc_no TEXT NOT NULL, msg_calc_train_no TEXT NOT NULL, Indicators JSON);"
-            create_pro_predict_table = "CREATE TABLE IF NOT EXISTS pro_predict (msg_calc_dvc_time TIMESTAMPTZ NOT NULL, msg_calc_parse_time TEXT NOT NULL, msg_calc_dvc_no TEXT NOT NULL, msg_calc_train_no TEXT NOT NULL, ref_leak_u11 integer NOT NULL DEFAULT 0, ref_leak_u12 integer NOT NULL DEFAULT 0, ref_leak_u21 integer NOT NULL DEFAULT 0, ref_leak_u22 integer NOT NULL DEFAULT 0, f_cp_u1 integer NOT NULL DEFAULT 0, f_cp_u2 integer NOT NULL DEFAULT 0, f_fas integer NOT NULL DEFAULT 0, f_ras integer NOT NULL DEFAULT 0, cabin_overtemp integer NOT NULL DEFAULT 0, f_presdiff_u1 integer NOT NULL DEFAULT 0, f_presdiff_u2 integer NOT NULL DEFAULT 0, f_ef_u11 integer NOT NULL DEFAULT 0, f_ef_u12 integer NOT NULL DEFAULT 0, f_ef_u21 integer NOT NULL DEFAULT 0, f_ef_u22 integer NOT NULL DEFAULT 0, f_cf_u11 integer NOT NULL DEFAULT 0, f_cf_u12 integer NOT NULL DEFAULT 0, f_cf_u21 integer NOT NULL DEFAULT 0, f_cf_u22 integer NOT NULL DEFAULT 0, f_fas_u11 integer NOT NULL DEFAULT 0, f_fas_u12 integer NOT NULL DEFAULT 0, f_fas_u21 integer NOT NULL DEFAULT 0, f_fas_u22 integer NOT NULL DEFAULT 0, f_aq_u1 integer NOT NULL DEFAULT 0, f_aq_u2 integer NOT NULL DEFAULT 0);"
-            create_dev_predict_table = "CREATE TABLE IF NOT EXISTS dev_predict (msg_calc_dvc_time TEXT NOT NULL, msg_calc_parse_time TIMESTAMPTZ NOT NULL, msg_calc_dvc_no TEXT NOT NULL, msg_calc_train_no TEXT NOT NULL, ref_leak_u11 integer NOT NULL DEFAULT 0, ref_leak_u12 integer NOT NULL DEFAULT 0, ref_leak_u21 integer NOT NULL DEFAULT 0, ref_leak_u22 integer NOT NULL DEFAULT 0, f_cp_u1 integer NOT NULL DEFAULT 0, f_cp_u2 integer NOT NULL DEFAULT 0, f_fas integer NOT NULL DEFAULT 0, f_ras integer NOT NULL DEFAULT 0, cabin_overtemp integer NOT NULL DEFAULT 0, f_presdiff_u1 integer NOT NULL DEFAULT 0, f_presdiff_u2 integer NOT NULL DEFAULT 0, f_ef_u11 integer NOT NULL DEFAULT 0, f_ef_u12 integer NOT NULL DEFAULT 0, f_ef_u21 integer NOT NULL DEFAULT 0, f_ef_u22 integer NOT NULL DEFAULT 0, f_cf_u11 integer NOT NULL DEFAULT 0, f_cf_u12 integer NOT NULL DEFAULT 0, f_cf_u21 integer NOT NULL DEFAULT 0, f_cf_u22 integer NOT NULL DEFAULT 0, f_fas_u11 integer NOT NULL DEFAULT 0, f_fas_u12 integer NOT NULL DEFAULT 0, f_fas_u21 integer NOT NULL DEFAULT 0, f_fas_u22 integer NOT NULL DEFAULT 0, f_aq_u1 integer NOT NULL DEFAULT 0, f_aq_u2 integer NOT NULL DEFAULT 0);"
+            create_pro_predict_table = "CREATE TABLE IF NOT EXISTS pro_predict (msg_calc_dvc_time TIMESTAMPTZ NOT NULL, msg_calc_parse_time TEXT NOT NULL, msg_calc_dvc_no TEXT NOT NULL, msg_calc_train_no TEXT NOT NULL, dvc_train_no INTEGER NULL, dvc_carriage_no INTEGER NULL, ref_leak_u11 integer NOT NULL DEFAULT 0, ref_leak_u12 integer NOT NULL DEFAULT 0, ref_leak_u21 integer NOT NULL DEFAULT 0, ref_leak_u22 integer NOT NULL DEFAULT 0, f_cp_u1 integer NOT NULL DEFAULT 0, f_cp_u2 integer NOT NULL DEFAULT 0, f_fas integer NOT NULL DEFAULT 0, f_ras integer NOT NULL DEFAULT 0, cabin_overtemp integer NOT NULL DEFAULT 0, f_presdiff_u1 integer NOT NULL DEFAULT 0, f_presdiff_u2 integer NOT NULL DEFAULT 0, f_ef_u11 integer NOT NULL DEFAULT 0, f_ef_u12 integer NOT NULL DEFAULT 0, f_ef_u21 integer NOT NULL DEFAULT 0, f_ef_u22 integer NOT NULL DEFAULT 0, f_cf_u11 integer NOT NULL DEFAULT 0, f_cf_u12 integer NOT NULL DEFAULT 0, f_cf_u21 integer NOT NULL DEFAULT 0, f_cf_u22 integer NOT NULL DEFAULT 0, f_fas_u11 integer NOT NULL DEFAULT 0, f_fas_u12 integer NOT NULL DEFAULT 0, f_fas_u21 integer NOT NULL DEFAULT 0, f_fas_u22 integer NOT NULL DEFAULT 0, f_aq_u1 integer NOT NULL DEFAULT 0, f_aq_u2 integer NOT NULL DEFAULT 0);"
+            create_dev_predict_table = "CREATE TABLE IF NOT EXISTS dev_predict (msg_calc_dvc_time TEXT NOT NULL, msg_calc_parse_time TIMESTAMPTZ NOT NULL, msg_calc_dvc_no TEXT NOT NULL, msg_calc_train_no TEXT NOT NULL, dvc_train_no INTEGER NULL, dvc_carriage_no INTEGER NULL, ref_leak_u11 integer NOT NULL DEFAULT 0, ref_leak_u12 integer NOT NULL DEFAULT 0, ref_leak_u21 integer NOT NULL DEFAULT 0, ref_leak_u22 integer NOT NULL DEFAULT 0, f_cp_u1 integer NOT NULL DEFAULT 0, f_cp_u2 integer NOT NULL DEFAULT 0, f_fas integer NOT NULL DEFAULT 0, f_ras integer NOT NULL DEFAULT 0, cabin_overtemp integer NOT NULL DEFAULT 0, f_presdiff_u1 integer NOT NULL DEFAULT 0, f_presdiff_u2 integer NOT NULL DEFAULT 0, f_ef_u11 integer NOT NULL DEFAULT 0, f_ef_u12 integer NOT NULL DEFAULT 0, f_ef_u21 integer NOT NULL DEFAULT 0, f_ef_u22 integer NOT NULL DEFAULT 0, f_cf_u11 integer NOT NULL DEFAULT 0, f_cf_u12 integer NOT NULL DEFAULT 0, f_cf_u21 integer NOT NULL DEFAULT 0, f_cf_u22 integer NOT NULL DEFAULT 0, f_fas_u11 integer NOT NULL DEFAULT 0, f_fas_u12 integer NOT NULL DEFAULT 0, f_fas_u21 integer NOT NULL DEFAULT 0, f_fas_u22 integer NOT NULL DEFAULT 0, f_aq_u1 integer NOT NULL DEFAULT 0, f_aq_u2 integer NOT NULL DEFAULT 0);"
             cur = conn.cursor()
             cur.execute(create_pro_table)
             cur.execute(create_dev_table)
@@ -1776,7 +1776,7 @@ class TSutil(metaclass=Cached):
                 #log.debug(predictsave)
                 #log.debug(list(map(int,predictsave.split(','))))
                 #log.debug(sum(list(map(int,predictsave.split(',')))))
-                log.debug(predictjson)
+                #log.debug(predictjson)
                 log.debug('Predict ... Success !')
                 return predictjson
             else:
@@ -1785,20 +1785,63 @@ class TSutil(metaclass=Cached):
             return predictjson
 
     def insert_predictdata(self, tablename, jsonobj):
-        keylst = []
-        valuelst = []
-        masklst = []
-        for (key, value) in jsonobj.items():
-            keylst.append(key)
-            valuelst.append(str(value))
-            masklst.append('%s')
-        keystr = ','.join(keylst)
-        maskstr = ','.join(masklst)
-        insertsql = f"INSERT INTO {tablename} ({keystr}) VALUES ({maskstr})"
-        # log.debug(insertsql)
         try:
             conn = self.conn_pool.getconn()
             cur = conn.cursor()
+            # 参数映射表
+            sys_fields_list = [
+                ('冷媒泄露预警 U-11', 'ref_leak_u11', 'predict'),
+                ('冷媒泄露预警 U-12', 'ref_leak_u12', 'predict'),
+                ('冷媒泄露预警 U-21', 'ref_leak_u21', 'predict'),
+                ('冷媒泄露预警 U-22', 'ref_leak_u22', 'predict'),
+                ('制冷系统预警 U-1', 'f_cp_u1', 'predict'),
+                ('制冷系统预警 U-2', 'f_cp_u2', 'predict'),
+                ('新风温度传感器预警', 'f_fas', 'predict'),
+                ('回风温度传感器预警', 'f_ras', 'predict'),
+                ('车厢温度超温预警', 'cabin_overtemp', 'predict'),
+                ('滤网脏堵预警 U-1', 'f_presdiff_u1', 'predict'),
+                ('滤网脏堵预警 U-2', 'f_presdiff_u2', 'predict'),
+                ('通风机电流预警 U-11', 'f_ef_u11', 'predict'),
+                ('通风机电流预警 U-12', 'f_ef_u12', 'predict'),
+                ('通风机电流预警 U-21', 'f_ef_u21', 'predict'),
+                ('通风机电流预警 U-22', 'f_ef_u22', 'predict'),
+                ('冷凝风机电流预警 U-11', 'f_cf_u11', 'predict'),
+                ('冷凝风机电流预警 U-12', 'f_cf_u12', 'predict'),
+                ('冷凝风机电流预警 U-21', 'f_cf_u21', 'predict'),
+                ('冷凝风机电流预警 U-22', 'f_cf_u22', 'predict'),
+                ('压缩机电流预警 U-11', 'f_fas_u11', 'predict'),
+                ('压缩机电流预警 U-12', 'f_fas_u12', 'predict'),
+                ('压缩机电流预警 U-21', 'f_fas_u21', 'predict'),
+                ('压缩机电流预警 U-22', 'f_fas_u22', 'predict'),
+                ('空气质量监测终端预警 U-1', 'f_aq_u1', 'predict'),
+                ('空气质量监测终端预警 U-2', 'f_aq_u2', 'predict')
+            ]
+
+            # 为每个参数创建插入语句
+            for param_name, param_code, param_category in sys_fields_list:
+                if param_code in jsonobj:
+                    param_value = jsonobj[param_code]
+
+                    # 构建SQL插入语句
+                    insert_query = sql.SQL("INSERT INTO "+tablename+"_transposed (msg_calc_dvc_time, msg_calc_parse_time, msg_calc_dvc_no, msg_calc_train_no, dvc_train_no, dvc_carriage_no,param_name, param_value)VALUES (%s, %s, %s, %s, %s, %s, %s, %s)")
+                    # 执行插入
+                    cur.execute(insert_query, (
+                        jsonobj['msg_calc_dvc_time'], jsonobj['msg_calc_parse_time'], jsonobj['msg_calc_dvc_no'],
+                        jsonobj['msg_calc_train_no'], jsonobj['dvc_train_no'], jsonobj['dvc_carriage_no'],
+                        param_name, param_value
+                    ))
+            conn.commit()
+            keylst = []
+            valuelst = []
+            masklst = []
+            for (key, value) in jsonobj.items():
+                keylst.append(key)
+                valuelst.append(str(value))
+                masklst.append('%s')
+            keystr = ','.join(keylst)
+            maskstr = ','.join(masklst)
+            insertsql = f"INSERT INTO {tablename} ({keystr}) VALUES ({maskstr})"
+            # log.debug(insertsql)
             cur.execute(insertsql, valuelst)
             conn.commit()
             cur.close()
