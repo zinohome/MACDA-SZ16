@@ -22,7 +22,7 @@ seq:
     type: u1
   - id: ig_rsv0
     type: u1
-  - id: ig_rsv1
+  - id: dvc_op_condition
     type: u1
   - id: cfbk_ef_u11
     type: b1le

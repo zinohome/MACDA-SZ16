@@ -16,6 +16,7 @@ INSERT INTO sys_fields (field_name, field_code, field_category) VALUES
 ('时', 'dvc_hour', 'Basic'),
 ('分', 'dvc_minute', 'Basic'),
 ('秒', 'dvc_second', 'Basic'),
+('列车工况', 'dvc_op_condition', 'Basic'),
 ('通风机运行U1-1', 'cFBK_EF_U11', 'Status'),
 ('冷凝风机运行U1-1', 'cFBK_CF_U11', 'Status'),
 ('冷凝风机运行U1-2', 'cFBK_CF_U12', 'Status'),
@@ -281,6 +282,7 @@ INSERT INTO sys_fields (field_name, field_code, field_category) VALUES
 ('压缩机电流预警 U-22', 'f_fas_u22', 'predict'),
 ('空气质量监测终端预警 U-1', 'f_aq_u1', 'predict'),
 ('空气质量监测终端预警 U-2', 'f_aq_u2', 'predict');
+
 
 -- 将field_code字段全部转换为小写
 UPDATE sys_fields

@@ -31,7 +31,7 @@ class Sz16(KaitaiStruct):
         self.dvc_minute = self._io.read_u1()
         self.dvc_second = self._io.read_u1()
         self.ig_rsv0 = self._io.read_u1()
-        self.ig_rsv1 = self._io.read_u1()
+        self.dvc_op_condition = self._io.read_u1()
         self.cfbk_ef_u11 = self._io.read_bits_int_le(1) != 0
         self.ig_rsv2 = self._io.read_bits_int_le(1) != 0
         self.cfbk_cf_u11 = self._io.read_bits_int_le(1) != 0
