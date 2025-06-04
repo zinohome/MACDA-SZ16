@@ -978,7 +978,7 @@ class TSutil(metaclass=Cached):
                 SELECT add_retention_policy('dev_error_transposed', INTERVAL '1 year', if_not_exists => true);
             """
             create_idx_dev_error_transposed_group_time = """
-                CREATE INDEX idx_dev_error_transposed_group_time 
+                CREATE INDEX IF NOT EXISTS idx_dev_error_transposed_group_time 
                     ON dev_error_transposed (
                         msg_calc_dvc_no, 
                         msg_calc_train_no, 
@@ -1021,6 +1021,17 @@ class TSutil(metaclass=Cached):
             """
             create_rp_dev_predict_transposed = """
                 SELECT add_retention_policy('dev_predict_transposed', INTERVAL '1 year', if_not_exists => true);
+            """
+            create_idx_dev_predict_group_time = """
+            CREATE INDEX IF NOT EXISTS idx_dev_predict_group_time 
+                ON dev_predict_transposed (
+                    msg_calc_dvc_no, 
+                    msg_calc_train_no, 
+                    dvc_train_no, 
+                    dvc_carriage_no, 
+                    param_name, 
+                    msg_calc_parse_time
+                );
             """
             create_pro_param_transposed = """
                             CREATE TABLE IF NOT EXISTS pro_param_transposed (
@@ -1075,7 +1086,7 @@ class TSutil(metaclass=Cached):
                         """
 
             create_idx_pro_error_transposed_group_time = """
-                CREATE INDEX idx_pro_error_transposed_group_time 
+                CREATE INDEX IF NOT EXISTS idx_pro_error_transposed_group_time 
                     ON pro_error_transposed (
                         msg_calc_dvc_no, 
                         msg_calc_train_no, 
@@ -1119,6 +1130,17 @@ class TSutil(metaclass=Cached):
             create_rp_pro_predict_transposed = """
                             SELECT add_retention_policy('pro_predict_transposed', INTERVAL '1 year', if_not_exists => true);
                         """
+            create_idx_pro_predict_group_time = """
+            CREATE INDEX IF NOT EXISTS idx_pro_predict_group_time 
+                ON pro_predict_transposed (
+                    msg_calc_dvc_no, 
+                    msg_calc_train_no, 
+                    dvc_train_no, 
+                    dvc_carriage_no, 
+                    param_name, 
+                    msg_calc_dvc_time
+                );
+            """
             cur.execute(create_dev_status_transposed)
             cur.execute(create_hyper_dev_status_transposed)
             cur.execute(create_rp_dev_status_transposed)
@@ -1135,6 +1157,7 @@ class TSutil(metaclass=Cached):
             cur.execute(create_dev_predict_transposed)
             cur.execute(create_hyper_dev_predict_transposed)
             cur.execute(create_rp_dev_predict_transposed)
+            cur.execute(create_idx_dev_predict_group_time)
             cur.execute(create_pro_status_transposed)
             cur.execute(create_hyper_pro_status_transposed)
             cur.execute(create_rp_pro_status_transposed)
@@ -1150,6 +1173,7 @@ class TSutil(metaclass=Cached):
             cur.execute(create_rp_pro_statistics_transposed)
             cur.execute(create_pro_predict_transposed)
             cur.execute(create_hyper_pro_predict_transposed)
+            cur.execute(create_idx_pro_predict_group_time)
             cur.execute(create_rp_pro_predict_transposed)
             conn.commit()
             cur.close()
