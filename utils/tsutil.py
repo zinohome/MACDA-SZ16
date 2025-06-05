@@ -1141,6 +1141,64 @@ class TSutil(metaclass=Cached):
                     msg_calc_dvc_time
                 );
             """
+            create_equipment_management = """
+            CREATE TABLE IF NOT EXISTS equipment_management (
+                id SERIAL PRIMARY KEY,
+                device_name VARCHAR(100) NOT NULL,
+                baseline_data VARCHAR(50) NOT NULL,
+                associated_data VARCHAR(100) NOT NULL,
+                processing_measures VARCHAR(100) NOT NULL,
+                health_threshold NUMERIC(3,2) NOT NULL,
+                sub_health_threshold NUMERIC(3,2) NOT NULL
+            );    
+            """
+            insert_equipment_management = """
+            INSERT INTO equipment_management (
+                device_name, baseline_data, associated_data, processing_measures,
+                health_threshold, sub_health_threshold
+            )
+            SELECT '机组1通风机', '90000000', '通风机累计运行时间-U1-1', '更换风机轴承', 0.7, 0.85
+            WHERE NOT EXISTS (SELECT 1 FROM equipment_management WHERE device_name = '机组1通风机')
+            UNION ALL
+            SELECT '机组2通风机', '90000000', '通风机累计运行时间-U2-1', '更换风机轴承', 0.7, 0.85
+            WHERE NOT EXISTS (SELECT 1 FROM equipment_management WHERE device_name = '机组2通风机')
+            UNION ALL
+            SELECT '机组1冷凝风机1', '90000000', '冷凝风机累计运行时间-U1-1', '更换风机轴承', 0.7, 0.85
+            WHERE NOT EXISTS (SELECT 1 FROM equipment_management WHERE device_name = '机组1冷凝风机1')
+            UNION ALL
+            SELECT '机组1冷凝风机2', '90000000', '冷凝风机累计运行时间-U1-2', '更换风机轴承', 0.7, 0.85
+            WHERE NOT EXISTS (SELECT 1 FROM equipment_management WHERE device_name = '机组1冷凝风机2')
+            UNION ALL
+            SELECT '机组2冷凝风机1', '90000000', '冷凝风机累计运行时间-U2-1', '更换风机轴承', 0.7, 0.85
+            WHERE NOT EXISTS (SELECT 1 FROM equipment_management WHERE device_name = '机组2冷凝风机1')
+            UNION ALL
+            SELECT '机组2冷凝风机2', '90000000', '冷凝风机累计运行时间-U2-2', '更换风机轴承', 0.7, 0.85
+            WHERE NOT EXISTS (SELECT 1 FROM equipment_management WHERE device_name = '机组2冷凝风机2')
+            UNION ALL
+            SELECT '机组1压缩机1', '180000000', '压缩机累计运行时间-U11', '更换压缩机', 0.7, 0.85
+            WHERE NOT EXISTS (SELECT 1 FROM equipment_management WHERE device_name = '机组1压缩机1')
+            UNION ALL
+            SELECT '机组1压缩机2', '180000000', '压缩机累计运行时间-U12', '更换压缩机', 0.7, 0.85
+            WHERE NOT EXISTS (SELECT 1 FROM equipment_management WHERE device_name = '机组1压缩机2')
+            UNION ALL
+            SELECT '机组2压缩机1', '180000000', '压缩机累计运行时间-U21', '更换压缩机', 0.7, 0.85
+            WHERE NOT EXISTS (SELECT 1 FROM equipment_management WHERE device_name = '机组2压缩机1')
+            UNION ALL
+            SELECT '机组2压缩机2', '180000000', '压缩机累计运行时间-U22', '更换压缩机', 0.7, 0.85
+            WHERE NOT EXISTS (SELECT 1 FROM equipment_management WHERE device_name = '机组2压缩机2')
+            UNION ALL
+            SELECT '机组1新风阀', '10000000', '新风阀开关次数-U1', '更换风阀执行器', 0.7, 0.85
+            WHERE NOT EXISTS (SELECT 1 FROM equipment_management WHERE device_name = '机组1新风阀')
+            UNION ALL
+            SELECT '机组1回风阀', '10000000', '回风阀开关次数-U1', '更换风阀执行器', 0.7, 0.85
+            WHERE NOT EXISTS (SELECT 1 FROM equipment_management WHERE device_name = '机组1回风阀')
+            UNION ALL
+            SELECT '机组2新风阀', '10000000', '新风阀开关次数-U2', '更换风阀执行器', 0.7, 0.85
+            WHERE NOT EXISTS (SELECT 1 FROM equipment_management WHERE device_name = '机组2新风阀')
+            UNION ALL
+            SELECT '机组2回风阀', '10000000', '回风阀开关次数-U2', '更换风阀执行器', 0.7, 0.85
+            WHERE NOT EXISTS (SELECT 1 FROM equipment_management WHERE device_name = '机组2回风阀');   
+            """
             cur.execute(create_dev_status_transposed)
             cur.execute(create_hyper_dev_status_transposed)
             cur.execute(create_rp_dev_status_transposed)
@@ -1175,6 +1233,8 @@ class TSutil(metaclass=Cached):
             cur.execute(create_hyper_pro_predict_transposed)
             cur.execute(create_idx_pro_predict_group_time)
             cur.execute(create_rp_pro_predict_transposed)
+            cur.execute(create_equipment_management)
+            cur.execute(insert_equipment_management)
             conn.commit()
             cur.close()
             self.conn_pool.putconn(conn)
