@@ -1,0 +1,7 @@
+-- 为error类型视图创建唯一索引（包含param_name）
+CREATE UNIQUE INDEX idx_dev_error_unique ON dev_view_error_timed_mat (msg_calc_dvc_no, error_start_time, error_status, param_name);
+CREATE UNIQUE INDEX idx_pro_error_unique ON pro_view_error_timed_mat (msg_calc_dvc_no, error_start_time, error_status, param_name);
+
+-- 为predict类型视图创建唯一索引（包含param_name）
+CREATE UNIQUE INDEX idx_dev_predict_unique ON dev_view_predict_timed_mat (msg_calc_dvc_no, predict_start_time, predict_status, param_name);
+CREATE UNIQUE INDEX idx_pro_predict_unique ON pro_view_predict_timed_mat (msg_calc_dvc_no, predict_start_time, predict_status, param_name);
