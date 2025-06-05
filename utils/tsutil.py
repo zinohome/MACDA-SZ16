@@ -2009,6 +2009,8 @@ class TSutil(metaclass=Cached):
             "public.pro_view_error_timed_mat",
             "public.dev_view_predict_timed_mat",
             "public.pro_view_predict_timed_mat"
+            "public.dev_view_health_equipment_mat"
+            "public.pro_view_health_equipment_mat"
         ]
 
         for view in views_to_refresh:
