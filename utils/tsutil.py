@@ -813,38 +813,38 @@ class TSutil(metaclass=Cached):
                     ('空调机组能耗', 'dwpower', 'Param'),
                     ('紧急逆变器累计运行时间', 'dwemerg_op_tm', 'Statistics'),
                     ('紧急逆变器累计运行次数', 'dwemerg_op_cnt', 'Statistics'),
-                    ('通风机累计运行时间-U1-1', 'dwef_op_tm_u11', 'Statistics'),
-                    ('冷凝风机累计运行时间-U1-1', 'dwcf_op_tm_u11', 'Statistics'),
-                    ('冷凝风机累计运行时间-U1-2', 'dwcf_op_tm_u12', 'Statistics'),
+                    ('通风机累计运行时间-U11', 'dwef_op_tm_u11', 'Statistics'),
+                    ('冷凝风机累计运行时间-U11', 'dwcf_op_tm_u11', 'Statistics'),
+                    ('冷凝风机累计运行时间-U12', 'dwcf_op_tm_u12', 'Statistics'),
                     ('压缩机累计运行时间-U11', 'dwcp_op_tm_u11', 'Statistics'),
                     ('压缩机累计运行时间-U12', 'dwcp_op_tm_u12', 'Statistics'),
-                    ('空气净化器累计运行时间-U1-1', 'dwap_op_tm_u11', 'Statistics'),
-                    ('空气净化器累计运行时间-U1-2', 'dwap_op_tm_u12', 'Statistics'),
+                    ('空气净化器累计运行时间-U11', 'dwap_op_tm_u11', 'Statistics'),
+                    ('空气净化器累计运行时间-U12', 'dwap_op_tm_u12', 'Statistics'),
                     ('新风阀开关次数-U1', 'dwfad_op_cnt_u1', 'Statistics'),
                     ('回风阀开关次数-U1', 'dwrrad_op_cnt_u1', 'Statistics'),
-                    ('通风机累计开关次数-U1-1', 'dwef_op_cnt_u11', 'Statistics'),
-                    ('冷凝风机累计开关次数-U1-1', 'dwcf_op_cnt_u11', 'Statistics'),
-                    ('冷凝风机累计开关次数-U1-2', 'dwcf_op_cnt_u12', 'Statistics'),
+                    ('通风机累计开关次数-U11', 'dwef_op_cnt_u11', 'Statistics'),
+                    ('冷凝风机累计开关次数-U11', 'dwcf_op_cnt_u11', 'Statistics'),
+                    ('冷凝风机累计开关次数-U12', 'dwcf_op_cnt_u12', 'Statistics'),
                     ('压缩机累计开关次数-U11', 'dwcp_op_cnt_u11', 'Statistics'),
                     ('压缩机累计开关次数-U12', 'dwcp_op_cnt_u12', 'Statistics'),
-                    ('空气净化器累计开关次数-U1-1', 'dwap_op_cnt_u11', 'Statistics'),
-                    ('空气净化器累计开关次数-U1-2', 'dwap_op_cnt_u12', 'Statistics'),
-                    ('通风机累计运行时间-U2-1', 'dwef_op_tm_u21', 'Statistics'),
-                    ('冷凝风机累计运行时间-U2-1', 'dwcf_op_tm_u21', 'Statistics'),
-                    ('冷凝风机累计运行时间-U2-2', 'dwcf_op_tm_u22', 'Statistics'),
-                    ('压缩机累计运行时间-U2-1', 'dwcp_op_tm_u21', 'Statistics'),
-                    ('压缩机累计运行时间-U2-2', 'dwcp_op_tm_u22', 'Statistics'),
-                    ('空气净化器累计运行时间-U2-1', 'dwap_op_tm_u21', 'Statistics'),
-                    ('空气净化器累计运行时间-U2-2', 'dwap_op_tm_u22', 'Statistics'),
+                    ('空气净化器累计开关次数-U11', 'dwap_op_cnt_u11', 'Statistics'),
+                    ('空气净化器累计开关次数-U12', 'dwap_op_cnt_u12', 'Statistics'),
+                    ('通风机累计运行时间-U21', 'dwef_op_tm_u21', 'Statistics'),
+                    ('冷凝风机累计运行时间-U21', 'dwcf_op_tm_u21', 'Statistics'),
+                    ('冷凝风机累计运行时间-U22', 'dwcf_op_tm_u22', 'Statistics'),
+                    ('压缩机累计运行时间-U21', 'dwcp_op_tm_u21', 'Statistics'),
+                    ('压缩机累计运行时间-U22', 'dwcp_op_tm_u22', 'Statistics'),
+                    ('空气净化器累计运行时间-U21', 'dwap_op_tm_u21', 'Statistics'),
+                    ('空气净化器累计运行时间-U22', 'dwap_op_tm_u22', 'Statistics'),
                     ('新风阀开关次数-U2', 'dwfad_op_cnt_u2', 'Statistics'),
                     ('回风阀开关次数-U2', 'dwrrad_op_cnt_u2', 'Statistics'),
-                    ('通风机累计开关次数-U2-1', 'dwef_op_cnt_u21', 'Statistics'),
-                    ('冷凝风机累计开关次数-U2-1', 'dwcf_op_cnt_u21', 'Statistics'),
-                    ('冷凝风机累计开关次数-U2-2', 'dwcf_op_cnt_u22', 'Statistics'),
-                    ('压缩机累计开关次数-U2-1', 'dwcp_op_cnt_u21', 'Statistics'),
-                    ('压缩机累计开关次数-U2-2', 'dwcp_op_cnt_u22', 'Statistics'),
-                    ('空气净化器累计开关次数-U2-1', 'dwap_op_cnt_u21', 'Statistics'),
-                    ('空气净化器累计开关次数-U2-2', 'dwap_op_cnt_u22', 'Statistics'),
+                    ('通风机累计开关次数-U21', 'dwef_op_cnt_u21', 'Statistics'),
+                    ('冷凝风机累计开关次数-U21', 'dwcf_op_cnt_u21', 'Statistics'),
+                    ('冷凝风机累计开关次数-U22', 'dwcf_op_cnt_u22', 'Statistics'),
+                    ('压缩机累计开关次数-U21', 'dwcp_op_cnt_u21', 'Statistics'),
+                    ('压缩机累计开关次数-U22', 'dwcp_op_cnt_u22', 'Statistics'),
+                    ('空气净化器累计开关次数-U21', 'dwap_op_cnt_u21', 'Statistics'),
+                    ('空气净化器累计开关次数-U22', 'dwap_op_cnt_u22', 'Statistics'),
                     ('冷媒泄露预警 U-11', 'ref_leak_u11', 'predict'),
                     ('冷媒泄露预警 U-12', 'ref_leak_u12', 'predict'),
                     ('冷媒泄露预警 U-21', 'ref_leak_u21', 'predict'),
@@ -1157,22 +1157,22 @@ class TSutil(metaclass=Cached):
                 device_name, baseline_data, associated_data, processing_measures,
                 health_threshold, sub_health_threshold
             )
-            SELECT '机组1通风机', '90000000', '通风机累计运行时间-U1-1', '更换风机轴承', 0.7, 0.85
+            SELECT '机组1通风机', '90000000', '通风机累计运行时间-U11', '更换风机轴承', 0.7, 0.85
             WHERE NOT EXISTS (SELECT 1 FROM equipment_management WHERE device_name = '机组1通风机')
             UNION ALL
-            SELECT '机组2通风机', '90000000', '通风机累计运行时间-U2-1', '更换风机轴承', 0.7, 0.85
+            SELECT '机组2通风机', '90000000', '通风机累计运行时间-U21', '更换风机轴承', 0.7, 0.85
             WHERE NOT EXISTS (SELECT 1 FROM equipment_management WHERE device_name = '机组2通风机')
             UNION ALL
-            SELECT '机组1冷凝风机1', '90000000', '冷凝风机累计运行时间-U1-1', '更换风机轴承', 0.7, 0.85
+            SELECT '机组1冷凝风机1', '90000000', '冷凝风机累计运行时间-U11', '更换风机轴承', 0.7, 0.85
             WHERE NOT EXISTS (SELECT 1 FROM equipment_management WHERE device_name = '机组1冷凝风机1')
             UNION ALL
-            SELECT '机组1冷凝风机2', '90000000', '冷凝风机累计运行时间-U1-2', '更换风机轴承', 0.7, 0.85
+            SELECT '机组1冷凝风机2', '90000000', '冷凝风机累计运行时间-U12', '更换风机轴承', 0.7, 0.85
             WHERE NOT EXISTS (SELECT 1 FROM equipment_management WHERE device_name = '机组1冷凝风机2')
             UNION ALL
-            SELECT '机组2冷凝风机1', '90000000', '冷凝风机累计运行时间-U2-1', '更换风机轴承', 0.7, 0.85
+            SELECT '机组2冷凝风机1', '90000000', '冷凝风机累计运行时间-U21', '更换风机轴承', 0.7, 0.85
             WHERE NOT EXISTS (SELECT 1 FROM equipment_management WHERE device_name = '机组2冷凝风机1')
             UNION ALL
-            SELECT '机组2冷凝风机2', '90000000', '冷凝风机累计运行时间-U2-2', '更换风机轴承', 0.7, 0.85
+            SELECT '机组2冷凝风机2', '90000000', '冷凝风机累计运行时间-U22', '更换风机轴承', 0.7, 0.85
             WHERE NOT EXISTS (SELECT 1 FROM equipment_management WHERE device_name = '机组2冷凝风机2')
             UNION ALL
             SELECT '机组1压缩机1', '180000000', '压缩机累计运行时间-U11', '更换压缩机', 0.7, 0.85
