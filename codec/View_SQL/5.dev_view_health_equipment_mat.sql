@@ -73,3 +73,13 @@ CREATE INDEX idx_dev_stats_param_time ON dev_statistics_transposed (
 );
 
 CREATE INDEX idx_equipment_associated ON equipment_management (associated_data);
+
+CREATE UNIQUE INDEX idx_dev_unique_health_equipment ON dev_view_health_equipment_mat (
+    msg_calc_dvc_no,
+    msg_calc_train_no,
+    dvc_train_no,
+    dvc_carriage_no,
+    param_name,
+    msg_calc_parse_time,
+    health_status
+);
