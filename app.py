@@ -40,6 +40,9 @@ if run_mode.strip().lower() == 'parse':
 elif run_mode.strip().lower() == 'store':
     # run store
     app.discover('pipeline.batchstore')
+elif run_mode.strip().lower() == 'refresh':
+    # run refresh
+    app.discover('pipeline.refresh_mview')
 else:
     # run predict
     #app.discover('pipeline.status')

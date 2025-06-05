@@ -1910,9 +1910,57 @@ class TSutil(metaclass=Cached):
         hour_s, minute_s, second_s = time_s.split(':')
         return datetime(int(year_s), int(mon_s), int(day_s), int(hour_s), int(minute_s), int(second_s))
 
+    def refresh_materialized_view(self, view_name: str, concurrently: bool = True) -> None:
+        """
+        刷新PostgreSQL中的物化视图
+
+        参数:
+            view_name: 物化视图名称（带模式名，如 public.view_name）
+            concurrently: 是否使用CONCURRENTLY选项（需要唯一索引）
+        """
+        conn = self.conn_pool.getconn()
+        try:
+            with conn.cursor() as cursor:
+                # 拆分模式名和视图名
+                parts = view_name.split('.')
+                if len(parts) == 2:
+                    schema_name, view_name = parts
+                else:
+                    schema_name = "public"
+                    view_name = parts[0]
+                # 构建刷新语句
+                base_stmt = sql.SQL("REFRESH MATERIALIZED VIEW {} {}").format(
+                    sql.SQL("CONCURRENTLY") if concurrently else sql.SQL(""),
+                    sql.Identifier(schema_name, view_name)
+                )
+                cursor.execute(base_stmt)
+                conn.commit()
+                log.debug(f"成功刷新物化视图: {view_name}")
+        except Exception as exp:
+            log.error(f"刷新视图失败: {view_name}, 错误: {exp}")
+            traceback.print_exc()
+        finally:
+            self.conn_pool.putconn(conn)  # 归还连接到池
+
+    def refresh_all_materialized_views(self) -> None:
+        """刷新所有物化视图"""
+        views_to_refresh = [
+            "public.dev_view_error_timed_mat",
+            "public.pro_view_error_timed_mat",
+            "public.dev_view_predict_timed_mat",
+            "public.pro_view_predict_timed_mat"
+        ]
+
+        for view in views_to_refresh:
+            try:
+                self.refresh_materialized_view(view)
+            except Exception as exp:
+                log.error(f"刷新视图失败: {view}, 错误: {exp}")
+
 if __name__ == '__main__':
     tu = TSutil()
-    tu.predict('dev', '1210106')
+    #tu.predict('dev', '1210106')
+    tu.refresh_all_materialized_views()
     '''
     tu = TSutil()
     jobj = {"schema":"s1","playload":"p1"}
