@@ -837,7 +837,7 @@ class TSutil(metaclass=Cached):
                     ('空气净化器累计运行时间-U21', 'dwap_op_tm_u21', 'Statistics'),
                     ('空气净化器累计运行时间-U22', 'dwap_op_tm_u22', 'Statistics'),
                     ('新风阀开关次数-U2', 'dwfad_op_cnt_u2', 'Statistics'),
-                    ('回风阀开关次数-U2', 'dwrrad_op_cnt_u2', 'Statistics'),
+                    ('回风阀开关次数-U2', 'dwrad_op_cnt_u2', 'Statistics'),
                     ('通风机累计开关次数-U21', 'dwef_op_cnt_u21', 'Statistics'),
                     ('冷凝风机累计开关次数-U21', 'dwcf_op_cnt_u21', 'Statistics'),
                     ('冷凝风机累计开关次数-U22', 'dwcf_op_cnt_u22', 'Statistics'),
