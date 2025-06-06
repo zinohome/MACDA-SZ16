@@ -1187,16 +1187,16 @@ class TSutil(metaclass=Cached):
             SELECT '机组2压缩机2', '180000000', '压缩机累计运行时间-U22', '更换压缩机', 0.7, 0.85
             WHERE NOT EXISTS (SELECT 1 FROM equipment_management WHERE device_name = '机组2压缩机2')
             UNION ALL
-            SELECT '机组1新风阀', '10000000', '新风阀开关次数-U1', '更换风阀执行器', 0.7, 0.85
+            SELECT '机组1新风阀', '1000000', '新风阀开关次数-U1', '更换风阀执行器', 0.7, 0.85
             WHERE NOT EXISTS (SELECT 1 FROM equipment_management WHERE device_name = '机组1新风阀')
             UNION ALL
-            SELECT '机组1回风阀', '10000000', '回风阀开关次数-U1', '更换风阀执行器', 0.7, 0.85
+            SELECT '机组1回风阀', '1000000', '回风阀开关次数-U1', '更换风阀执行器', 0.7, 0.85
             WHERE NOT EXISTS (SELECT 1 FROM equipment_management WHERE device_name = '机组1回风阀')
             UNION ALL
-            SELECT '机组2新风阀', '10000000', '新风阀开关次数-U2', '更换风阀执行器', 0.7, 0.85
+            SELECT '机组2新风阀', '1000000', '新风阀开关次数-U2', '更换风阀执行器', 0.7, 0.85
             WHERE NOT EXISTS (SELECT 1 FROM equipment_management WHERE device_name = '机组2新风阀')
             UNION ALL
-            SELECT '机组2回风阀', '10000000', '回风阀开关次数-U2', '更换风阀执行器', 0.7, 0.85
+            SELECT '机组2回风阀', '1000000', '回风阀开关次数-U2', '更换风阀执行器', 0.7, 0.85
             WHERE NOT EXISTS (SELECT 1 FROM equipment_management WHERE device_name = '机组2回风阀');   
             """
             cur.execute(create_dev_status_transposed)
