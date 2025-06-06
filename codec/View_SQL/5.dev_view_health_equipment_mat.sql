@@ -38,6 +38,7 @@ equipment_health AS (
             WHEN ls.param_value::numeric > em.baseline_data::numeric * em.sub_health_threshold::numeric THEN '非健康'
             ELSE '评估失败'
         END AS health_status,
+        ROUND(ls.param_value::numeric / em.baseline_data::numeric, 2) AS life_ratio, -- 新增寿命比例字段(两位小数)
         CASE
             WHEN ls.param_name IS NULL THEN '无匹配数据'
             WHEN NOT (ls.param_value::text ~ '^[0-9]+(\.[0-9]+)?$') THEN '数据格式错误'
@@ -54,10 +55,27 @@ SELECT
     dvc_train_no,
     dvc_carriage_no,
     param_name,
-    msg_calc_parse_time, -- 新增到最终结果
-    health_status
+    msg_calc_parse_time,
+    health_status,
+    actual_value AS param_value, -- 修正：使用actual_value列并将其重命名为param_value
+    CASE
+        WHEN baseline_data::numeric IN (90000000, 180000000) THEN ROUND(baseline_data::numeric / 3600, 0)
+        WHEN baseline_data::numeric = 10000000 THEN ROUND(baseline_data::numeric / 10000, 0)
+        ELSE baseline_data::numeric
+    END AS baseline_data,
+    life_ratio
 FROM equipment_health
 WHERE failure_reason IS NULL;
+
+CREATE UNIQUE INDEX idx_dev_unique_health_equipment ON dev_view_health_equipment_mat (
+    msg_calc_dvc_no,
+    msg_calc_train_no,
+    dvc_train_no,
+    dvc_carriage_no,
+    param_name,
+    msg_calc_parse_time,
+    health_status
+);
 
 -- 创建必要的索引来提高性能
 CREATE INDEX idx_dev_stats_identification ON dev_statistics_transposed (
@@ -73,13 +91,3 @@ CREATE INDEX idx_dev_stats_param_time ON dev_statistics_transposed (
 );
 
 CREATE INDEX idx_equipment_associated ON equipment_management (associated_data);
-
-CREATE UNIQUE INDEX idx_dev_unique_health_equipment ON dev_view_health_equipment_mat (
-    msg_calc_dvc_no,
-    msg_calc_train_no,
-    dvc_train_no,
-    dvc_carriage_no,
-    param_name,
-    msg_calc_parse_time,
-    health_status
-);
