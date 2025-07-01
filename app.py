@@ -43,13 +43,16 @@ elif run_mode.strip().lower() == 'store':
 elif run_mode.strip().lower() == 'refresh':
     # run refresh
     app.discover('pipeline.refresh_mview')
+elif run_mode.strip().lower() == 'predict':
+    # run refresh
+    app.discover('pipeline.predict')
 else:
     # run predict
     #app.discover('pipeline.status')
     #app.discover('pipeline.lifereport')
-    app.discover('pipeline.predict')
-    #app.discover('pipeline.faultreport')
-    #app.discover('pipeline.status','pipeline.lifereport','pipeline.predict', 'pipeline.faultreport')
+    #app.discover('pipeline.predict')
+    app.discover('pipeline.faultreport')
+    #app.discover('pipeline.predict', 'pipeline.faultreport')
 
 
     #app.discover('pipeline.predict', 'pipeline.faultreport','pipeline.statisreport')

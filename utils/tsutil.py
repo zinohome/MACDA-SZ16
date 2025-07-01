@@ -9,6 +9,8 @@
 #  @Software: MACDA
 import traceback
 import weakref
+from typing import List, Dict
+
 import psycopg2
 from datetime import datetime
 from pgcopy import CopyManager
@@ -33,6 +35,7 @@ class Cached(type):
             return obj
 class TSutil(metaclass=Cached):
     def __init__(self):
+        self.conn_pool = None
         log.debug('Connect to timescaledb uri [ %s ]' % settings.TSDB_URL)
         self.conn_pool = psycopg2.pool.SimpleConnectionPool(1, settings.TSDB_POOL_SIZE, settings.TSDB_URL)
         if (self.conn_pool):
@@ -1959,11 +1962,6 @@ class TSutil(metaclass=Cached):
             log.error('Exception at tsutil.insert_predictdata() %s ' % exp)
             traceback.print_exc()
 
-    def __del__(self):
-        if self.conn_pool:
-            self.conn_pool.closeall
-        log.debug("PostgreSQL connection pool is closed")
-
     def parse_time(self, txt):
         date_s,time_s = txt.split(' ')
         year_s, mon_s, day_s = date_s.split('-')
@@ -2019,10 +2017,48 @@ class TSutil(metaclass=Cached):
             except Exception as exp:
                 log.error(f"刷新视图失败: {view}, 错误: {exp}")
 
+    def get_fault(self, tablename) -> List[Dict]:
+        """
+        从 dev_view_fault_timed_mat 视图获取所有故障记录
+
+        Returns:
+            包含故障记录的字典列表，每个字典对应一条记录
+        """
+        conn = self.conn_pool.getconn()
+        try:
+            with conn.cursor() as cursor:
+                # 构建SQL查询
+                query = sql.SQL(f'SELECT * FROM {tablename};')
+                cursor.execute(query)
+                columns = [desc[0] for desc in cursor.description]
+                records = [dict(zip(columns, row)) for row in cursor.fetchall()]
+                # 打印前5条记录用于调试
+                if records:
+                    log.debug(f"成功获取 {len(records)} 条故障记录")
+                    log.debug("前5条记录示例:")
+                    for i, record in enumerate(records[:5]):
+                        log.debug(f"记录 {i + 1}: {record}")
+                else:
+                    log.debug("未找到故障记录")
+                return records
+        except Exception as exp:
+            log.error(f"获取故障数据失败, 错误: {exp}")
+            traceback.print_exc()
+            return []
+        finally:
+            self.conn_pool.putconn(conn)  # 归还连接到池
+
+    def __del__(self):
+        if (self.conn_pool):
+            self.conn_pool.closeall
+        log.debug("PostgreSQL connection pool is closed")
+
+
 if __name__ == '__main__':
     tu = TSutil()
     #tu.predict('dev', '1210106')
-    tu.refresh_all_materialized_views()
+    #tu.refresh_all_materialized_views()
+    fault_records = tu.get_fault('dev_view_fault_timed_mat')
     '''
     tu = TSutil()
     jobj = {"schema":"s1","playload":"p1"}

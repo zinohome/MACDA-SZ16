@@ -60,6 +60,10 @@ def format_prepared_request(req):
 @request_map("/gate/METRO-PHM/api/faultRecordsSubsystem/saveRecord", method=["GET", "POST", "PUT"])
 @request_map("/gate/METRO-PHM/api/devices/status/train/saveOrUpdate", method=["GET", "POST", "PUT"])
 @request_map("/gate/METRO-SELFCHECK-SUBSYSTEM/api/faultRecordsSubsystem/saveStatus", method=["GET", "POST", "PUT"])
+@request_map("/biz/faultInfo/addFaultInfo", method=["POST"])
+@request_map("/biz/faultInfo/updateFaultInfo", method=["POST"])
+@request_map("/biz/faultInfo/addLifePredictionInfo", method=["POST"])
+
 def hello(req=Request()):
     raw_request = format_prepared_request(req)
     log.debug(raw_request)
