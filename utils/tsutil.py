@@ -12,7 +12,7 @@ import weakref
 from typing import List, Dict
 
 import psycopg2
-from datetime import datetime
+from datetime import datetime, timezone
 from pgcopy import CopyManager
 from psycopg2 import pool, sql
 from core.settings import settings
@@ -2017,6 +2017,22 @@ class TSutil(metaclass=Cached):
             except Exception as exp:
                 log.error(f"刷新视图失败: {view}, 错误: {exp}")
 
+    def _format_datetime_fields(self, record: Dict) -> Dict:
+        """将记录中的datetime类型字段格式化为字符串"""
+        formatted_record = {}
+        for key, value in record.items():
+            if isinstance(value, datetime):
+                # 确保转换带时区的datetime
+                if value.tzinfo:
+                    # 转换为UTC时间后格式化
+                    utc_time = value.astimezone(timezone.utc)
+                    formatted_record[key] = utc_time.strftime("%Y-%m-%d %H:%M:%S")
+                else:
+                    formatted_record[key] = value.strftime("%Y-%m-%d %H:%M:%S")
+            else:
+                formatted_record[key] = value
+        return formatted_record
+
     def get_fault(self, tablename) -> List[Dict]:
         """
         从 dev_view_fault_timed_mat 视图获取所有故障记录
@@ -2032,17 +2048,46 @@ class TSutil(metaclass=Cached):
                 cursor.execute(query)
                 columns = [desc[0] for desc in cursor.description]
                 records = [dict(zip(columns, row)) for row in cursor.fetchall()]
+                # 格式化datetime类型字段
+                formatted_records = [self._format_datetime_fields(record) for record in records]
                 # 打印前5条记录用于调试
-                if records:
-                    log.debug(f"成功获取 {len(records)} 条故障记录")
+                if formatted_records:
+                    log.debug(f"成功获取 {len(formatted_records)} 条故障记录")
                     log.debug("前5条记录示例:")
-                    for i, record in enumerate(records[:5]):
+                    for i, record in enumerate(formatted_records[:5]):
                         log.debug(f"记录 {i + 1}: {record}")
                 else:
                     log.debug("未找到故障记录")
-                return records
+                return formatted_records
         except Exception as exp:
             log.error(f"获取故障数据失败, 错误: {exp}")
+            traceback.print_exc()
+            return []
+        finally:
+            self.conn_pool.putconn(conn)  # 归还连接到池
+
+    def get_statistic(self, tablename) -> List[Dict]:
+        conn = self.conn_pool.getconn()
+        try:
+            with conn.cursor() as cursor:
+                # 构建SQL查询
+                query = sql.SQL(f'SELECT * FROM {tablename};')
+                cursor.execute(query)
+                columns = [desc[0] for desc in cursor.description]
+                records = [dict(zip(columns, row)) for row in cursor.fetchall()]
+                # 格式化datetime类型字段
+                formatted_records = [self._format_datetime_fields(record) for record in records]
+                # 打印前5条记录用于调试
+                if formatted_records:
+                    log.debug(f"成功获取 {len(formatted_records)} 条寿命记录")
+                    log.debug("前5条记录示例:")
+                    for i, record in enumerate(formatted_records[:5]):
+                        log.debug(f"记录 {i + 1}: {record}")
+                else:
+                    log.debug("未找到寿命记录")
+                return formatted_records
+        except Exception as exp:
+            log.error(f"获取寿命数据失败, 错误: {exp}")
             traceback.print_exc()
             return []
         finally:
@@ -2059,6 +2104,7 @@ if __name__ == '__main__':
     #tu.predict('dev', '1210106')
     #tu.refresh_all_materialized_views()
     fault_records = tu.get_fault('dev_view_fault_timed_mat')
+    statistic_recordes = tu.get_statistic('dev_view_health_equipment_mat')
     '''
     tu = TSutil()
     jobj = {"schema":"s1","playload":"p1"}
