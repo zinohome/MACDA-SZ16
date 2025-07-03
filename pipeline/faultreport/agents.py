@@ -23,3 +23,6 @@ async def on_started():
     log.debug("==========********** Get Fault report data batch ==========**********")
     tu = TSutil()
     au = Alertutil()
+    au.send_fault()
+    au.send_fault_update()
+    au.send_life_report()
