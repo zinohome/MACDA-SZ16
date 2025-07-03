@@ -2033,7 +2033,7 @@ class TSutil(metaclass=Cached):
                 formatted_record[key] = value
         return formatted_record
 
-    def get_fault(self, tablename) -> List[Dict]:
+    def get_fault_statistic(self, tablename) -> List[Dict]:
         """
         从 dev_view_fault_timed_mat 视图获取所有故障记录
 
@@ -2052,42 +2052,15 @@ class TSutil(metaclass=Cached):
                 formatted_records = [self._format_datetime_fields(record) for record in records]
                 # 打印前5条记录用于调试
                 if formatted_records:
-                    log.debug(f"成功获取 {len(formatted_records)} 条故障记录")
+                    log.debug(f"成功获取 {len(formatted_records)} 条记录")
                     log.debug("前5条记录示例:")
                     for i, record in enumerate(formatted_records[:5]):
                         log.debug(f"记录 {i + 1}: {record}")
                 else:
-                    log.debug("未找到故障记录")
+                    log.debug("未找到记录")
                 return formatted_records
         except Exception as exp:
-            log.error(f"获取故障数据失败, 错误: {exp}")
-            traceback.print_exc()
-            return []
-        finally:
-            self.conn_pool.putconn(conn)  # 归还连接到池
-
-    def get_statistic(self, tablename) -> List[Dict]:
-        conn = self.conn_pool.getconn()
-        try:
-            with conn.cursor() as cursor:
-                # 构建SQL查询
-                query = sql.SQL(f'SELECT * FROM {tablename};')
-                cursor.execute(query)
-                columns = [desc[0] for desc in cursor.description]
-                records = [dict(zip(columns, row)) for row in cursor.fetchall()]
-                # 格式化datetime类型字段
-                formatted_records = [self._format_datetime_fields(record) for record in records]
-                # 打印前5条记录用于调试
-                if formatted_records:
-                    log.debug(f"成功获取 {len(formatted_records)} 条寿命记录")
-                    log.debug("前5条记录示例:")
-                    for i, record in enumerate(formatted_records[:5]):
-                        log.debug(f"记录 {i + 1}: {record}")
-                else:
-                    log.debug("未找到寿命记录")
-                return formatted_records
-        except Exception as exp:
-            log.error(f"获取寿命数据失败, 错误: {exp}")
+            log.error(f"获取数据失败, 错误: {exp}")
             traceback.print_exc()
             return []
         finally:
@@ -2103,8 +2076,10 @@ if __name__ == '__main__':
     tu = TSutil()
     #tu.predict('dev', '1210106')
     #tu.refresh_all_materialized_views()
-    fault_records = tu.get_fault('dev_view_fault_timed_mat')
-    statistic_recordes = tu.get_statistic('dev_view_health_equipment_mat')
+    fault_records = tu.get_fault_statistic('dev_view_fault_timed')
+    statistic_recordes = tu.get_fault_statistic('dev_view_health_equipment_mat')
+    fault_records = tu.get_fault_statistic('pro_view_fault_timed')
+    statistic_recordes = tu.get_fault_statistic('pro_view_health_equipment_mat')
     '''
     tu = TSutil()
     jobj = {"schema":"s1","playload":"p1"}
