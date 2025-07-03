@@ -2076,10 +2076,10 @@ if __name__ == '__main__':
     tu = TSutil()
     #tu.predict('dev', '1210106')
     #tu.refresh_all_materialized_views()
-    fault_records = tu.get_fault_statistic('dev_view_fault_timed')
+    #fault_records = tu.get_fault_statistic('dev_view_fault_timed_mat')
     statistic_recordes = tu.get_fault_statistic('dev_view_health_equipment')
-    fault_records = tu.get_fault_statistic('pro_view_fault_timed')
-    statistic_recordes = tu.get_fault_statistic('pro_view_health_equipment')
+    #fault_records = tu.get_fault_statistic('pro_view_fault_timed_mat')
+    #statistic_recordes = tu.get_fault_statistic('pro_view_health_equipment')
     '''
     tu = TSutil()
     jobj = {"schema":"s1","playload":"p1"}

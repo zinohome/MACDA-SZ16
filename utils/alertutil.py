@@ -5,6 +5,7 @@ import shelve
 import traceback
 import uuid
 from datetime import datetime
+from decimal import Decimal
 
 import requests
 
@@ -39,6 +40,7 @@ class Alertutil(metaclass=Cached):
         alertcodefile = os.path.join(DATA_DIR, 'alertcode.xlsx')
         partcodefile = os.path.join(DATA_DIR, 'partcode.xlsx')
         self.cache_file = os.path.join(DATA_DIR, 'cache')
+        self.send_cache_file = os.path.join(DATA_DIR, 'send_cache')
         self.__alertcode__ = pd.read_excel(alertcodefile)
         self.__alertcode__['name'] = self.__alertcode__['name'].apply(str.lower)
         self.__partcode__ = pd.read_excel(partcodefile)
@@ -318,6 +320,80 @@ class Alertutil(metaclass=Cached):
                 except Exception as e:
                     log.error(f"处理故障记录时出错: {e}, 记录: {record}")
         return message_list
+
+    def build_life_list(self):  # 方法名已更改
+        tu = TSutil()
+        try:
+            dev_mode = settings.DEV_MODE
+            if dev_mode:
+                statistic_records = tu.get_fault_statistic('dev_view_health_equipment')
+            else:
+                statistic_records = tu.get_fault_statistic('pro_view_health_equipment')
+        except Exception as e:
+            log.error(f"获取故障统计数据失败: {e}")
+            return []
+
+        message_list = []
+
+        for record in statistic_records:
+            try:
+                # 获取列车号和车厢号
+                dvc_train_no = record.get('dvc_train_no')
+                dvc_carriage_no = record.get('dvc_carriage_no')
+
+                if dvc_train_no is None or dvc_carriage_no is None:
+                    self.logger.warning(f"记录缺失列车号或车厢号: {record}")
+                    continue
+                # 转换为字符串类型
+                train_no_str = str(dvc_train_no)
+                carriage_no_str = str(dvc_carriage_no)
+
+                # 获取车厢编码，如果不存在则使用默认值
+                coach_no = self.__carriagecode__.get(carriage_no_str, carriage_no_str)
+
+                # 获取参数名称
+                param_name = record.get('param_name', '')
+                # 获取寿命比例，确保转换为字符串
+                life_ratio = str(record.get('life_ratio', '0.00'))
+                # 计算剩余时间 = baseline_data - param_value
+                baseline_data = record.get('baseline_data', Decimal('0'))
+                param_value = record.get('param_value', 0.0)
+
+                # 处理Decimal类型和浮点数计算
+                if isinstance(baseline_data, Decimal):
+                    baseline_data = float(baseline_data)
+
+                component_surplus_time = str(round(baseline_data - param_value, 0))
+                component_rated_time = str(round(baseline_data, 0))
+
+                # 获取健康状态
+                health_status = record.get('health_status', '')
+
+                # 获取当前时间作为报文发送时间
+                create_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+                # 构建单个报文
+                message = {
+                    "lineId": "16号线",
+                    "trainId": train_no_str,
+                    "coachNo": coach_no,
+                    "sysCode": self.__subsyscode__,
+                    "componentCode": param_name,
+                    "componentName": param_name,
+                    "predictionResult": life_ratio,
+                    "componentSurplusTime": component_surplus_time,
+                    "componentRatedTime": component_rated_time,
+                    "componentSurplusKilo": "0",
+                    "componentRatedKilo": "0",
+                    "componentStatus": health_status,
+                    "createDate": create_date
+                }
+
+                message_list.append(message)
+            except Exception as e:
+                self.logger.error(f"处理设备寿命记录时出错: {e}, 记录: {record}")
+
+        return message_list
     def _is_valid_datetime(self, time_str):
         """验证字符串是否为有效的日期时间格式"""
         try:
@@ -326,6 +402,163 @@ class Alertutil(metaclass=Cached):
         except ValueError:
             return False
 
+    def send_fault(self):
+        """发送故障信息到指定URL"""
+        # 获取故障列表
+        message_list = self.build_fault_list()
+        if not message_list:
+            log.info("没有故障信息需要发送")
+            return
+
+        srvurl = settings.FAULT_RECORD_URL
+        log.info(f"开始发送故障信息到: {srvurl}，共{len(message_list)}条")
+
+        # 逐一发送消息
+        for idx, message in enumerate(message_list, 1):
+            try:
+                # 发送POST请求
+                response = requests.post(
+                    srvurl,
+                    json=message,
+                    headers={"content-type": "application/json"},
+                    timeout=10  # 设置超时时间为10秒
+                )
+                # 获取JSON响应
+                response_data = response.json()
+                # 检查业务状态
+                http_status = response_data.get('httpStatus')
+                if http_status == 'OK':
+                    log.debug(f"第{idx}/{len(message_list)}条发送成功: {message.get('faultId')}")
+                else:
+                    error_msg = response_data.get('message', '未知错误')
+                    log.debug(f"第{idx}/{len(message_list)}条发送失败: {error_msg}")
+
+            except requests.exceptions.RequestException as e:
+                log.error(f"第{idx}/{len(message_list)}条请求异常: {e}")
+            except ValueError as e:
+                log.error(f"第{idx}/{len(message_list)}条响应解析失败: {e}")
+            except Exception as e:
+                log.error(f"第{idx}/{len(message_list)}条发送时发生未知错误: {e}")
+
+        log.info("故障信息发送完成")
+
+    def send_fault_update(self):
+        """发送故障信息到指定URL"""
+        # 获取故障列表
+        message_list = self.build_fault_update_list()
+        if not message_list:
+            log.info("没有故障信息需要发送")
+            return
+
+        srvurl = settings.FAULT_UPDATE_URL
+        log.info(f"开始发送故障信息到: {srvurl}，共{len(message_list)}条")
+
+        # 逐一发送消息
+        for idx, message in enumerate(message_list, 1):
+            try:
+                # 发送POST请求
+                response = requests.post(
+                    srvurl,
+                    json=message,
+                    headers={"content-type": "application/json"},
+                    timeout=10  # 设置超时时间为10秒
+                )
+                # 获取JSON响应
+                response_data = response.json()
+                # 检查业务状态
+                http_status = response_data.get('httpStatus')
+                if http_status == 'OK':
+                    log.debug(f"第{idx}/{len(message_list)}条发送成功: {message.get('faultId')}")
+                else:
+                    error_msg = response_data.get('message', '未知错误')
+                    log.debug(f"第{idx}/{len(message_list)}条发送失败: {error_msg}")
+
+            except requests.exceptions.RequestException as e:
+                log.error(f"第{idx}/{len(message_list)}条请求异常: {e}")
+            except ValueError as e:
+                log.error(f"第{idx}/{len(message_list)}条响应解析失败: {e}")
+            except Exception as e:
+                log.error(f"第{idx}/{len(message_list)}条发送时发生未知错误: {e}")
+
+        log.info("故障信息发送完成")
+
+    def send_life_report(self):
+        """发送寿命信息到指定URL"""
+        # 检查当前时间是否在允许的时间窗口内
+        # 获取当前时间字符串（格式：HH:MM）
+        current_time = datetime.now().strftime('%H:%M')
+
+        # 定义时间窗口
+        start_time = '14:00'
+        end_time = '17:00'
+
+        # 直接比较字符串大小
+        if not (start_time <= current_time < end_time):
+            log.info(f"当前时间 {current_time} 不在发送时间窗口 (16:30-17:00) 内，不发送")
+            return
+
+        # 获取今天的日期作为键（格式：YYYY-MM-DD）
+        today = datetime.now().strftime('%Y-%m-%d')
+
+        # 检查今天是否已经发送过
+        try:
+            with shelve.open(self.send_cache_file) as send_cache:
+                if send_cache.get(today) == 1:
+                    log.info(f"今天 ({today}) 已经发送过故障信息，不再重复发送")
+                    return
+        except Exception as e:
+            log.error(f"检查发送记录失败: {e}")
+            return  # 缓存操作失败时，为避免重复发送，直接返回
+        # 获取寿命列表
+        message_list = self.build_life_list()
+        if not message_list:
+            log.info("没有寿命信息需要发送")
+            return
+
+        srvurl = settings.LIFE_RECORD_URL
+        log.info(f"开始发送寿命信息到: {srvurl}，共{len(message_list)}条")
+
+        all_success = True  # 标记是否全部发送成功
+        # 逐一发送消息
+        for idx, message in enumerate(message_list, 1):
+            try:
+                # 发送POST请求
+                response = requests.post(
+                    srvurl,
+                    json=message,
+                    headers={"content-type": "application/json"},
+                    timeout=10  # 设置超时时间为10秒
+                )
+                # 获取JSON响应
+                response_data = response.json()
+                # 检查业务状态
+                http_status = response_data.get('httpStatus')
+                if http_status == 'OK':
+                    log.debug(f"第{idx}/{len(message_list)}条发送成功: {message.get('faultId')}")
+                else:
+                    error_msg = response_data.get('message', '未知错误')
+                    log.debug(f"第{idx}/{len(message_list)}条发送失败: {error_msg}")
+                    all_success = False
+
+            except requests.exceptions.RequestException as e:
+                log.error(f"第{idx}/{len(message_list)}条请求异常: {e}")
+                all_success = False
+            except ValueError as e:
+                log.error(f"第{idx}/{len(message_list)}条响应解析失败: {e}")
+                all_success = False
+            except Exception as e:
+                log.error(f"第{idx}/{len(message_list)}条发送时发生未知错误: {e}")
+                all_success = False
+
+        # 如果全部发送成功，记录今天已发送
+        if all_success:
+            try:
+                with shelve.open(self.send_cache_file) as send_cache:
+                    send_cache[today] = 1  # 标记今天已发送
+                log.info(f"所有故障信息发送成功，已记录今日（{today}）发送状态")
+            except Exception as e:
+                log.error(f"记录发送状态失败: {e}")
+        log.info("寿命信息发送完成")
 if __name__ == '__main__':
     au = Alertutil()
     #log.debug(str(au.getvalue('partcode', 'dwOPCount_FAD_U1'.lower(), 'part_code')))
@@ -335,5 +568,9 @@ if __name__ == '__main__':
     #log.debug(au.__carriagecode__.get('6'))
     #log.debug(au.__subsyscode__)
     #log.debug(str(uuid.uuid4()).replace('-', ''))
-    log.debug(au.build_fault_list())
-    log.debug(au.build_fault_update_list())
+    #log.debug(au.build_fault_list())
+    #log.debug(au.build_fault_update_list())
+    #log.debug(au.build_life_list())
+    #au.send_fault()
+    #au.send_fault_update()
+    au.send_life_report()
