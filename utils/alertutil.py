@@ -17,6 +17,7 @@ import numpy as np
 import pandas as pd
 import time
 
+from utils.ptcode import PTCode
 from utils.tsutil import TSutil
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -163,6 +164,7 @@ class Alertutil(metaclass=Cached):
 
     def build_fault_list(self):
         tu = TSutil()
+        pt_code = PTCode()
         try:
             dev_mode = settings.DEV_MODE
             if dev_mode:
@@ -207,7 +209,8 @@ class Alertutil(metaclass=Cached):
                     end_time = record.get('end_time', '')
                     #log.debug(end_time)
                     # 获取故障编码
-                    fault_code = record.get('param_name', '')
+                    #fault_code = record.get('param_name', '')
+                    fault_code = pt_code.get_predict_code(record.get('param_name', ''),dvc_carriage_no)
                     # 处理begin_time，去除冒号和空格
                     clean_begin_time = begin_time.replace(':', '').replace(' ', '')
                     # 生成缓存键
@@ -246,6 +249,7 @@ class Alertutil(metaclass=Cached):
 
     def build_fault_update_list(self):
         tu = TSutil()
+        pt_code = PTCode()
         try:
             dev_mode = settings.DEV_MODE
             if dev_mode:
@@ -290,7 +294,8 @@ class Alertutil(metaclass=Cached):
                     end_time = record.get('end_time', '')
                     if end_time and self._is_valid_datetime(end_time):
                         # 获取故障编码
-                        fault_code = record.get('param_name', '')
+                        #fault_code = record.get('param_name', '')
+                        fault_code = pt_code.get_predict_code(record.get('param_name', ''),dvc_carriage_no)
                         # 处理begin_time，去除冒号和空格
                         clean_begin_time = begin_time.replace(':', '').replace(' ', '')
                         # 生成缓存键
@@ -323,6 +328,7 @@ class Alertutil(metaclass=Cached):
 
     def build_life_list(self):  # 方法名已更改
         tu = TSutil()
+        pt_code = PTCode()
         try:
             dev_mode = settings.DEV_MODE
             if dev_mode:
@@ -353,6 +359,9 @@ class Alertutil(metaclass=Cached):
 
                 # 获取参数名称
                 param_name = record.get('param_name', '')
+                # 获取部件编码
+                componentCode = pt_code.get_part_code(param_name,dvc_carriage_no)
+                componentName = pt_code.get_component_map(param_name)
                 # 获取寿命比例，确保转换为字符串
                 life_ratio = str(record.get('life_ratio', '0.00'))
                 # 计算剩余时间 = baseline_data - param_value
@@ -378,8 +387,8 @@ class Alertutil(metaclass=Cached):
                     "trainId": train_no_str,
                     "coachNo": coach_no,
                     "sysCode": self.__subsyscode__,
-                    "componentCode": param_name,
-                    "componentName": param_name,
+                    "componentCode": componentCode,
+                    "componentName": componentName,
                     "predictionResult": life_ratio,
                     "componentSurplusTime": component_surplus_time,
                     "componentRatedTime": component_rated_time,
@@ -569,8 +578,8 @@ if __name__ == '__main__':
     log.debug(au.__subsyscode__)
     log.debug(str(uuid.uuid4()).replace('-', ''))
     log.debug(au.build_fault_list())
-    #log.debug(au.build_fault_update_list())
-    #log.debug(au.build_life_list())
+    log.debug(au.build_fault_update_list())
+    log.debug(au.build_life_list())
     #au.send_fault()
     #au.send_fault_update()
     #au.send_life_report()

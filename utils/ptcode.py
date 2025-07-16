@@ -88,6 +88,21 @@ class PTCode:
         }
         return part_mapping.get(part_name, "未知部件")
 
+    def get_component_map(self, part_name):
+        component_mapping = {
+            "通风机累计运行时间-U11": "机组1通风机",
+            "通风机累计运行时间-U21": "机组2通风机",
+            "冷凝风机累计运行时间-U11": "机组1冷凝风机1",
+            "冷凝风机累计运行时间-U12": "机组1冷凝风机2",
+            "冷凝风机累计运行时间-U21": "机组2冷凝风机1",
+            "冷凝风机累计运行时间-U22": "机组2冷凝风机2",
+            "压缩机累计运行时间-U11": "机组1压缩机1",
+            "压缩机累计运行时间-U12": "机组1压缩机2",
+            "压缩机累计运行时间-U21": "机组2压缩机1",
+            "压缩机累计运行时间-U22": "机组2压缩机2"
+        }
+        return component_mapping.get(part_name, "未知部件")
+
     def get_part_code(self, part_name, carriage_no):
         """根据车厢号和部件名称获取对应的 part_code"""
         if self.get_part_map(part_name) == '未知部件':
